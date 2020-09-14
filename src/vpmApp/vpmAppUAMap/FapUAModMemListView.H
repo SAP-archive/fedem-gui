@@ -18,7 +18,6 @@ public:
   FapUAModMemListView(FuiItemsListView* ui);
   virtual ~FapUAModMemListView() {}
 
-  // only responds to fmm or ffl selection, if not sgl selection, lv is emptied
   void setShowModelPermSelectionAsTopLevelItem(bool show)
   { this->showModelPermSelectionAsTopLevelItem = show; }
 

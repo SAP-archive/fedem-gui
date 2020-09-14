@@ -8,7 +8,6 @@
 #include "vpmApp/vpmAppUAMap/FapUAModMemListView.H"
 #include "vpmUI/vpmUIComponents/FuiItemsListView.H"
 #include "vpmDB/FmModelMemberBase.H"
-#include "FFlLib/FFlPartBase.H"
 #include "FFaLib/FFaDefinitions/FFaListViewItem.H"
 
 
@@ -52,8 +51,7 @@ void FapUAModMemListView::onPermTotSelectionChanged(const std::vector<FFaViewIte
     if (!this->selectionInMyself) {
       if (totalSelection.size() != 1)
 	this->setTopLevelItem(NULL);
-      else if (dynamic_cast<FmModelMemberBase*>(totalSelection.front()) ||
-	       dynamic_cast<FFlPartBase*>(totalSelection.front())) {
+      else if (dynamic_cast<FmModelMemberBase*>(totalSelection.front())) {
 	this->setTopLevelItem((FFaListViewItem*)totalSelection.front(),true);
 	this->ui->permSelectItem(this->getMapItem(totalSelection.front()));
       }
