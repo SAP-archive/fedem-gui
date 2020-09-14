@@ -306,8 +306,9 @@ std::string FapRecoveryBase::getFRSfiles(const std::string& solveTask) const
 std::string FapRecoveryBase::getFEDataFile(const std::string& rdbPath) const
 {
   const std::string& partFile = myWorkPart->reducedFTLFile.getValue();
-  if (!partFile.empty() && myWorkPart->isFELoaded() && FmFileSys::isReadable(rdbPath + partFile))
-    return rdbPath + partFile; // Use input file from the reducer process
+  if (!partFile.empty() && myWorkPart->isFELoaded(true))
+    if (FmFileSys::isReadable(rdbPath + partFile))
+      return rdbPath + partFile; // Use input file from the reducer process
 
   // Use the FE data file from the FE part repository
   return myWorkPart->getBaseFTLFile();

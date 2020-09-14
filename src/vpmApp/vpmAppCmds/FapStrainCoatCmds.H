@@ -22,11 +22,8 @@ public:
   static void makeFullStrainCoat();
   static void makeStrainCoatOnSelection();
 
-  static void makeStrainCoat(FmPart* part);
-  static void makeStrainCoat(const std::vector<FmElementGroupProxy*>& groups,
-			     bool showProgress = false);
-
-  static void addFatigueProps(const std::vector<FmElementGroupProxy*>& groups);
+  static int makeStrainCoat(bool autoCreate, FmPart* fmPart,
+                            const std::vector<FmElementGroupProxy*>& groups);
 
 private:
   static void init();
@@ -34,9 +31,13 @@ private:
   static void getSensitivity(bool& isSensitive);
   static void getOnSelectionSensitivity(bool& isSensitive);
 
-  static void makeStrainCoat(const std::vector<FmPart*>& parts);
-  static bool makeStrainCoat(FmPart* part, FmElementGroupProxy* group);
+  static void makeStrainCoat(const std::vector<FmElementGroupProxy*>& groups,
+                             bool showProgress = false);
 
+  static void makeStrainCoat(const std::vector<FmPart*>& parts);
+  static bool makeStrainCoat(FmPart* part, FmElementGroupProxy* group = NULL);
+
+  static void addFatigueProps(FmPart* part);
   static void addFatigueProps(FmPart* part, FmElementGroupProxy* group);
 
   friend class FFaInitialisation<FapStrainCoatCmds>;

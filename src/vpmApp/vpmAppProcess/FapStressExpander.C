@@ -20,9 +20,6 @@
 #include "vpmDB/FmPart.H"
 #include "vpmDB/FmElementGroupProxy.H"
 
-#include "FFlLib/FFlIOAdaptors/FFlFedemWriter.H"
-#include "FFlLib/FFlAttributeBase.H"
-#include "FFlLib/FFlPartBase.H"
 #include "FFaLib/FFaCmdLineArg/FFaOptionFileCreator.H"
 #include "FFaLib/FFaOS/FFaFilePath.H"
 #include "FFaLib/FFaString/FFaStringExt.H"
@@ -93,7 +90,7 @@ size_t FapStressExpander::nPartsVTF      = 0;
 
 
 FapStressExpander::FapStressExpander(FmPart* aPart, FmSimulationEvent* event,
-				     bool preBatch, bool ImSolvingLastPart)
+                                     bool preBatch, bool ImSolvingLastPart)
   : FapRecoveryBase(aPart,event)
 {
   mySolverName = "fedem_stress";
@@ -105,8 +102,8 @@ FapStressExpander::FapStressExpander(FmPart* aPart, FmSimulationEvent* event,
 
 
 FapStressExpander::FapStressExpander(FmPart* aPart,
-				     const std::vector<FmElementGroupProxy*>& groups,
-				     bool ImSolvingLastPart)
+                                     const std::vector<FmElementGroupProxy*>& groups,
+                                     bool ImSolvingLastPart)
   : FapRecoveryBase(aPart)
 {
   mySelectedGroups = groups;
@@ -202,12 +199,11 @@ int FapStressExpander::createInput(std::string& rdbPath)
   // Calculation options
   FFaOptionFileCreator fcoArgs(rdbPath + mySolverName + ".fco");
   fcoArgs.add("-linkId", myWorkPart->getBaseID());
-  FFlLinkHandler* FEdata = myWorkPart->getLinkHandler();
-  if (FEdata && myWorkPart->ramUsageLevel.getValue() == FmPart::FULL_FE)
+  if (myWorkPart->isFELoaded(true))
   {
     // Write a local copy of the FE part data currently in core to file
-    FFlFedemWriter writer(FEdata);
-    writer.write(rdbPath + myWorkPart->baseFTLFile.getValue());
+    myWorkPart->exportPart(rdbPath + myWorkPart->baseFTLFile.getValue(),
+                           true, false, true);
     fcoArgs.add("-linkfile", myWorkPart->baseFTLFile.getValue());
   }
   else // use the FE part data file from the part repository
@@ -233,18 +229,13 @@ int FapStressExpander::createInput(std::string& rdbPath)
 
   if (!mySelectedGroups.empty())
   {
-    // build group listing:
-    std::string groupDef = "<";
-    for (size_t i = 0; i < mySelectedGroups.size(); i++)
-    {
-      FFlPartBase* grp = mySelectedGroups[i]->getRealObject();
-      // if groups are attributes, add typename to the option string
-      FFlAttributeBase* agr = dynamic_cast<FFlAttributeBase*>(grp);
-      if (i>0) groupDef += ",";
-      if (agr) groupDef += agr->getTypeName() + " ";
-      if (grp) groupDef += FFaNumStr(grp->getID());
-    }
-    groupDef += ">";
+    std::string groupDef;
+    for (FmElementGroupProxy* group : mySelectedGroups)
+      if (groupDef.empty())
+        groupDef = group->getGroupId();
+      else
+        groupDef += "," + group->getGroupId();
+    groupDef = "<" + groupDef + ">";
     fcoArgs.add("-group", groupDef, false);
   }
   if (myWorkPart->useExternalResFile.getValue())
@@ -314,7 +305,7 @@ int FapStressExpander::startProcess(const std::string& rdbPath)
 
 
 bool FapStressExpander::writeVTFHeader(std::vector<FmPart*>& feParts,
-				       const std::string& vtfName)
+                                       const std::string& vtfName)
 {
   startVTFblock = 0;
   initStateOnVTF = false;
