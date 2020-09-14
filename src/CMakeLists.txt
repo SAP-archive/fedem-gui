@@ -53,6 +53,7 @@ endif ( "${USE_QWTLIB}" STREQUAL "External" )
 #
 
 set ( USE_QT TRUE )
+set ( USE_VISUALS TRUE )
 set ( USE_VERTEXOBJ TRUE )
 set ( SUBFOLDER_LIST Admin FFaLib FFlLib FFrLib
                      FFlrLib FFaFunctionLib FFaMathExpr
