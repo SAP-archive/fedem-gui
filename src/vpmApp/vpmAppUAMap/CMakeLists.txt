@@ -88,7 +88,7 @@ endforeach ( FILE ${SOURCE_FILE_LIST} )
 
 set ( DEPENDENCY_LIST vpmPM vpmUI vpmUITopLevels vpmUIComponents
                       vpmApp vpmAppCmds vpmAppProcess vpmAppDisplay
-                      vpmDB FFrLib FFlLib )
+                      vpmDB FFrLib )
 
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )

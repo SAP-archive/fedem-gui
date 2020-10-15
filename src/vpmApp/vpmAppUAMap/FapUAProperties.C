@@ -89,7 +89,6 @@
 #include "vpmPM/FpPM.H"
 #include "vpmPM/FpFileSys.H"
 #include "vpmPM/FpRDBExtractorManager.H"
-#include "FFlLib/FFlFEParts/FFlNode.H"
 #include "FFaLib/FFaString/FFaStringExt.H"
 #include "FFaLib/FFaOS/FFaFilePath.H"
 #include "FFaLib/FFaDynCalls/FFaDynCB.H"
@@ -895,8 +894,8 @@ void FapUAProperties::getDBValues(FFuaUIValues* values)
         if ((pv->myLinkValues.feNode = FdPickedPoints::getSelectedNode()) > 0)
         {
           // Picked FE node
-          FFlNode* node = item->getNode(pv->myLinkValues.feNode);
-          if (node) pv->myLinkValues.feNodePos = node->getPos();
+          double* X = pv->myLinkValues.feNodePos.getPt();
+          item->getNodePos(pv->myLinkValues.feNode,X,X+1,X+2);
         }
 #endif
 
