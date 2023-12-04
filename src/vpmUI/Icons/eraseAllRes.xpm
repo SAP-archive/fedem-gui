@@ -1,0 +1,34 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* eraseAllRes_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1",
+"  c gray0",
+". c #008000",
+"X c none",
+"o c red",
+"O c #808080",
+"+ c silver",
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"XXooooooooooooXX",
+"XXoXXXXXXXXXXXXX",
+"XXoXXXXXX    XXX",
+"XXoXXXXX OOOO XX",
+"XXoXXXXX      XX",
+"XXoXXXX    +O XX",
+"XXoXXX OOOO O XX",
+"XXoXXX      O XX",
+"XXoXXX .O+O O XX",
+"XXoXXX .O+O  XXX",
+"XXoXXX .O+O XXXX",
+"oooooX .O+O XXXX",
+"XoooXXX    XXXXX",
+"XXoXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX"
+};

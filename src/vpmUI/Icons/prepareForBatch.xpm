@@ -1,0 +1,32 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* prepareForBatch_xpm[] = {
+"16 16 7 1",
+". c None",
+"# c #000000",
+"d c #3b3b3b",
+"a c #cccc00",
+"c c #ffff00",
+"b c #ffff99",
+"e c #ffffff",
+".........##.....",
+".........#a#....",
+".........#ab#...",
+".#########abb#..",
+".#ccccccccacbb#.",
+".#bbbbbbbbaccbb#",
+".#ccccccccaccaa#",
+".#aaaaaaaaacaa#.",
+".#########aaa##.",
+"..#ddeded#aa#d#.",
+"..#dededd#a#ed#.",
+"..#dddddd##edd#.",
+"..#dddddddeddd#.",
+"..#ddddddedddd#.",
+"..#############.",
+"................"};

@@ -1,0 +1,38 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+static const char* startGuideBorderRight_xpm[] = {
+"4 27 2 1",
+" 	c None",
+".	c #71B2FE",
+"..  ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"... ",
+"....",
+"....",
+" ..."};

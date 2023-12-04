@@ -1,0 +1,1626 @@
+// SPDX-FileCopyrightText: 2023 SAP SE
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// This file is part of FEDEM - https://openfedem.org
+////////////////////////////////////////////////////////////////////////////////
+
+// Defines the COM-API interface.
+
+#include "olectl.h"
+
+[ uuid(F45EE5DB-75BF-4CBA-B5DC-2CE97B1A605F),
+  version(7.3),
+  helpfile("Fedem.chm"),
+  helpstring("FEDEM 7.3 Object Library") ]
+library FEDEM
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    interface IApplication;
+    interface ITriad;
+    interface IJoint;
+    interface ICamJoint;
+    interface ICylindricJoint;
+    interface IAxialSpring;
+    interface IAxialDamper;
+    interface IPart;
+    interface IBeam;
+    interface IStrainRosette;
+    interface ISubAssembly;
+    interface IUserDefinedElement;
+    interface ICrossSection;
+    interface IMaterial;
+    interface IFmObject;
+    interface IFriction;
+    interface IDOF;
+    interface IFunction;
+    interface IGraph;
+    interface ICurve;
+    interface IResultExtractor;
+    interface ISimulationEvent;
+    interface ISimulationEventManager;
+    interface ISelectionManager;
+    interface ISolverManager;
+    interface ISeaEnvironment;
+    interface IGenericObject;
+    interface IVesselMotion;
+
+
+    //////////////////////////////////////////////////
+    // Enums
+
+    typedef enum DOFConstraintType 
+      { Fixed, Prescribed, Free, SpringDamper } DOFConstraintType;
+    typedef enum DOFPrescribedMotionType
+      { Deflection, Velocity, Acceleration } DOFPrescribedMotionType;
+    typedef enum CrossSectionType 
+      { Pipe, Generic } CrossSectionType;
+    typedef enum FunctionType 
+      { fConstant, fLinear, fSin, fCombinedSin, fPolyline, fPolylineFromFile, 
+        fJonswap, fUserDefined, fMathExpr, fExternal } FunctionType;
+    typedef enum FunctionArgSingleDOFType 
+      { faTX, faTY, faTZ, faRX, faRY, faRZ } FunctionArgSingleDOFType;
+    typedef enum FunctionArgRelativeDOFType 
+      { faDX, faDY, faDZ, faRelRX, faRelRY, faRelRZ, faLength } FunctionArgRelativeDOFType;
+    typedef enum FunctionArgVariableType 
+      { faTriadPos, faTriadLocalVel, faTriadGlobalVel, faTriadLocalAccel, faTriadGlobalAccel, 
+        faTriadLocalForce, faTriadGlobalForce, faDistance, faVelocity, faAcceleration, faRelativePos,
+        faJointSpringAngle, faJointSpringDefl, faJointSpringForce, faJointDampAngle, faJointDampVel,
+        faJointDampForce, faSpringDamperLength, faSpringDefl, faSpringDamperForce
+      } FunctionArgVariableType;
+    typedef enum FunctionUsageType
+      { fuNone, fuGeneral, fuDriveFile, fuRoadFunction, fuWaveFunction,
+        fuCurrentFunction, fuSpringTransStiffness, fuSpringTransForce,
+        fuSpringRotStiffness, fuSpringRotTorque, fuDamperTransCoeff,
+        fuDamperTransForce, fuDamperRotCoeff, fuDamperRotTorque } FunctionUsageType;
+    typedef enum FunctionExtrapolationType
+      { feNone, feFlat, feLinear } FunctionExtrapolationType;
+    typedef enum FrictionType
+      { RotationalFriction, TranslationalFriction,BearingFriction,
+        PrismaticFriction, CamFriction} FrictionType;
+    typedef enum ReferenceCSType 
+      { rcsGlobal, rcsLocalInitial, rcsLocalWithRotated } ReferenceCSType;
+    typedef enum ObjectType 
+      { otTriad=1, otJoint=16, otCamJoint=32, otBeam=256, otCrossSection=1024, 
+        otMaterial=2048, otFunction=8192, otAll=65535 } ObjectType;
+    typedef enum SubAssemblyType 
+      { saGeneral=1, saRiser=16, saJacket=17, saSoilPile=18 } SubAssemblyType;
+    typedef enum SpringCouplingType
+      { scNone, scXY, scYZ, scZX, scXYZ } SpringCouplingType;
+    typedef enum StrainRosetteType
+      { srSingleGage, srDoubleGage90, srTripleGage60, srTripleGage45 } StrainRosetteType;
+
+
+    //////////////////////////////////////////////////
+    // Interface
+
+    [ uuid(9A4BB431-B4D5-482A-A769-431B3263EFBA),
+      oleautomation,
+      dual
+    ]
+    interface IApplication : IDispatch
+    {
+        [propget, id(DISPID_VALUE)]
+        HRESULT Item([in] long Index, [out, retval] IDispatch** ppObj);
+        [propget, id(1)]
+        HRESULT ExePath([out,retval] BSTR* pVal);
+        [propget, id(2)]
+        HRESULT ModelFileName([out, retval] BSTR* pVal);
+        [propget, id(3)]
+        HRESULT Count([out, retval] long* pnVal);
+        [propget, id(10)]
+        HRESULT SimulationEvents([out,retval] ISimulationEventManager** ppRet);
+        [propget, id(11)]
+        HRESULT Selection([out, retval] ISelectionManager** ppRet);
+        [propget, id(12)]
+        HRESULT Solvers([out, retval] ISolverManager** ppRet);
+        [propget, id(20)]
+        HRESULT SeaEnvironment([out,retval] ISeaEnvironment** ppRet);
+        [id(100)] 
+        HRESULT Open([in] BSTR FileName, [in] VARIANT_BOOL LoadLinks, 
+            [out,retval] VARIANT_BOOL* pbRet);
+        [id(101)] 
+        HRESULT Save([out, retval] VARIANT_BOOL* pbRet);
+        [id(102)]
+        HRESULT SaveAs([in] BSTR FileName, [in] VARIANT_BOOL SaveResults, 
+            [in] VARIANT_BOOL SaveReducedParts, [out, retval] VARIANT_BOOL* pbRet);
+        [id(103)] 
+        HRESULT Close([out,retval] VARIANT_BOOL* pbRet);
+        [id(104)] 
+        HRESULT Exit(void);
+        [id(105)] 
+        HRESULT Show([in] VARIANT_BOOL ShowWindow);
+        [id(200)] 
+        HRESULT CreateTriad([in] double X, [in] double Y, [in] double Z, 
+            [in,optional] VARIANT Rx, [in,optional] VARIANT Ry, [in,optional] VARIANT Rz, 
+            [in,optional] VARIANT Desc, [out,retval] ITriad** ppTriad);
+        [id(201)] 
+        HRESULT CreateJoint([in] ITriad* MasterTriad, [in] ITriad* SlaveTriad,
+            [in,optional] VARIANT Desc, [out,retval] IJoint** ppJoint);
+        [id(202)] 
+        HRESULT CreateCamJoint([in] ITriad* SlaveTriad,
+            [in,optional] VARIANT Desc, [out,retval] ICamJoint** ppCamJoint);
+        [id(203)] 
+        HRESULT CreateCylindricJoint([in] ITriad* SlaveTriad,
+            [in,optional] VARIANT Desc, [out,retval] ICylindricJoint** ppCylindricJoint);
+        [id(204)] 
+        HRESULT CreatePart([in] double X, [in] double Y, [in] double Z, 
+            [in,optional] VARIANT Rx, [in,optional] VARIANT Ry, [in,optional] VARIANT Rz, 
+            [in,optional] VARIANT Desc, [out,retval] IPart** ppPart);
+        [id(205)] 
+        HRESULT CreateBeam([in] ITriad* Triad1, [in] ITriad* Triad2, [in,optional] VARIANT CrossSection,
+            [in,optional] VARIANT Desc, [out,retval] IBeam** ppBeam);
+        [id(206)] 
+        HRESULT CreateFunction([in] FunctionUsageType Usage, [in,optional] VARIANT Desc, 
+            [out,retval] IFunction** ppFunction);
+        [id(207)] 
+        HRESULT CreateStrainRosette([in] StrainRosetteType SRType, [in] IPart* Part,
+            [in] long Node1, [in] long Node2, [in] long Node3, [in] long Node4,
+            [in,optional] VARIANT Desc, [out,retval] IStrainRosette** ppStrainRosette);
+        [id(210)] 
+        HRESULT CreateCrossSection([in] CrossSectionType CSType, [in] IMaterial* Material,
+            [in,optional] VARIANT Desc, [out,retval] ICrossSection** ppCrossSection);
+        [id(211)] 
+        HRESULT CreateMaterial([in] double Rho, [in] double E, [in] double nu,
+            [in,optional] VARIANT Desc, [out,retval] IMaterial** ppMaterial);
+        [id(212)] 
+        HRESULT CreateFriction([in] FrictionType FricType,[in] double PrestressForce, [in] double CoulombCoefficient, 
+            [in] double StribeckMagnitude, [in] double CriticalStribeckSpeed, 
+            [in,optional] VARIANT Desc, [out,retval] IFriction** ppFriction);
+        [id(220)] 
+        HRESULT CreateAxialSpring([in] ITriad* Triad1, [in] ITriad* Triad2, [in] VARIANT Stiffness,
+            [in,optional] VARIANT Desc, [out,retval] IAxialSpring** ppAxialSpring);
+        [id(221)] 
+        HRESULT CreateAxialDamper([in] ITriad* Triad1, [in] ITriad* Triad2, [in] VARIANT Damper,
+            [in,optional] VARIANT Desc, [out,retval] IAxialDamper** ppAxialDamper);
+        [id(250)] 
+        HRESULT CreateResultExtractor([in] BSTR FRSFileNames,
+            [out,retval] IResultExtractor** ppResultExtractor);
+        [id(300)] 
+        HRESULT CreateSubAssembly([in] SubAssemblyType SAType,
+            [in,optional] VARIANT X, [in,optional] VARIANT Y, [in,optional] VARIANT Z, 
+            [in,optional] VARIANT Rx, [in,optional] VARIANT Ry, [in,optional] VARIANT Rz, 
+            [in,optional] VARIANT Desc, [out,retval] ISubAssembly** ppSubAssembly);
+        [id(301)] 
+        HRESULT SetCurrentSubAssembly([in, optional] VARIANT SubAssembly);
+        [id(302)]
+        HRESULT CreateUserDefinedElement([in] long ElementType, [in, optional] VARIANT Desc, 
+            [out, retval] IUserDefinedElement** ppUserDefinedElement);
+        [id(303)]
+        HRESULT CreateGenericObject([in] BSTR ObjectType, [in] BSTR ObjectDefinition, 
+            [in, optional] VARIANT Desc, [out, retval] IGenericObject** ppGenericObject);
+        [id(304)]
+        HRESULT CreateVesselMotion([in, optional] VARIANT Desc, [out, retval] IVesselMotion** ppVesselMotion);
+        [id(305)]
+        HRESULT CreateMooringLine([in] ITriad* Triad1, [in] ITriad* Triad2, [in] double Length, [in] double NumSegments, [in] long ElementType, [out, retval] VARIANT_BOOL* pbRet);
+        [id(500)]
+        HRESULT GetCount([in] VARIANT_BOOL Recursive, [out, retval] long* pnVal);
+        [id(501)]
+        HRESULT GetItem([in] long Index, [in] VARIANT_BOOL Recursive, [out, retval] IDispatch** ppObj);
+        [id(502)] 
+        HRESULT FindByBaseID([in] long BaseID, [out,retval] IDispatch** ppRet);
+        [id(503)] 
+        HRESULT FindByDescription([in] BSTR UserDescription, [out, retval] IDispatch** ppRet);
+        [id(504)] 
+        HRESULT Remove([in] IDispatch* Child, [in] VARIANT_BOOL Recursive);
+        [id(510)]
+        HRESULT AttachToGround([in] ITriad* AttachToGround);
+        [id(511)] 
+        HRESULT LoadFEPart([in] BSTR FileName, [in] VARIANT_BOOL RelativePath, [out, retval] IPart** ppRet);
+        [id(512)]
+        HRESULT GetItemType([in] long Index, [in] VARIANT_BOOL Recursive, [out, retval] BSTR* pVal);
+        [id(700)]
+        HRESULT GetFmObject([in] IDispatch* Object, [out, retval] IFmObject** ppRet);
+    };
+
+    [ uuid(42F7B4D3-8262-4290-874B-39F96AD3AA60),
+      oleautomation,
+      dual
+    ]
+    interface ITriad : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT X([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT X([in] double val);
+        [propget, id(2)]
+        HRESULT Y([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Y([in] double val);
+        [propget, id(3)]
+        HRESULT Z([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT Z([in] double val);
+        [propget, id(4)]
+        HRESULT Mass([out,retval] double* pVal);
+        [propput, id(4)]
+        HRESULT Mass([in] double val);
+        [propget, id(5)]
+        HRESULT Ix([out,retval] double* pVal);
+        [propput, id(5)]
+        HRESULT Ix([in] double val);
+        [propget, id(6)]
+        HRESULT Iy([out,retval] double* pVal);
+        [propput, id(6)]
+        HRESULT Iy([in] double val);
+        [propget, id(7)]
+        HRESULT Iz([out,retval] double* pVal);
+        [propput, id(7)]
+        HRESULT Iz([in] double val);
+        [propget, id(8)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(8)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(9)]
+        HRESULT DOF([in] long DOFIndex, [out,retval] IDOF** ppRet);
+        [propget, id(10)]
+        HRESULT ReferenceCS([out,retval] ReferenceCSType* pVal);
+        [propput, id(10)]
+        HRESULT ReferenceCS([in] ReferenceCSType val);
+        [propget, id(11)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(12)]
+        HRESULT Tag([out,retval] BSTR* pVal);
+        [propput, id(12)]
+        HRESULT Tag([in] BSTR val);
+        [propget, id(13)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(101)] 
+        HRESULT SetEulerRotationZYX([in] double Rx, [in] double Ry, [in] double Rz);
+        [id(102)] 
+        HRESULT GetRotationMatrix([out] VARIANT* Array3x3);
+        [id(103)] 
+        HRESULT SetRotationMatrix([in] VARIANT Array3x3);
+        [id(104)] 
+        HRESULT SetMass([in] double Mass, [in] double Ix, [in] double Iy, [in] double Iz);
+        [id(105)] 
+        HRESULT SetPosition([in] double X, [in] double Y, [in] double Z);
+        [id(106)] 
+        HRESULT GetAttachedObjects([in] ObjectType ObjectTypeFlags, [out,retval] VARIANT* pVal);
+        [id(800)] 
+        HRESULT Delete();
+    };
+
+    [ uuid(B7CFB841-3694-4F9E-97C7-0EB5F3CCF4CA),
+      oleautomation,
+      dual
+    ]
+    interface IJoint : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT X([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT X([in] double val);
+        [propget, id(2)]
+        HRESULT Y([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Y([in] double val);
+        [propget, id(3)]
+        HRESULT Z([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT Z([in] double val);
+        [propget, id(4)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(4)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(5)]
+        HRESULT DOF([in] long DOFIndex, [out,retval] IDOF** ppRet);
+        [propget, id(6)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(7)]
+        HRESULT MasterMovedAlong([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(7)]
+        HRESULT MasterMovedAlong([in] VARIANT_BOOL val);
+        [propget, id(8)]
+        HRESULT SlaveMovedAlong([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(8)]
+        HRESULT SlaveMovedAlong([in] VARIANT_BOOL val);
+        [propget, id(9)]
+        HRESULT TranslationalCoupling([out, retval] SpringCouplingType* pVal);
+        [propput, id(9)]
+        HRESULT TranslationalCoupling([in] SpringCouplingType val);
+        [propget, id(10)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(101)] 
+        HRESULT SetEulerRotationZYX([in] double Rx, [in] double Ry, [in] double Rz);
+        [id(102)] 
+        HRESULT GetRotationMatrix([out] VARIANT* Array3x3);
+        [id(103)] 
+        HRESULT SetRotationMatrix([in] VARIANT Array3x3);
+        [id(105)] 
+        HRESULT SetPosition([in] double X, [in] double Y, [in] double Z);
+        [id(106)] 
+        HRESULT GetFriction([in,out] long* DOFIndex, [out,retval] IFriction** pRet);
+        [id(107)] 
+        HRESULT SetFriction([in] long DOFIndex, [in] IFriction* Friction);
+        [id(108)] 
+        HRESULT GetMasterTriad([out,retval] ITriad** ppRet);
+        [id(109)] 
+        HRESULT SetMasterTriad([in] ITriad* Triad);
+        [id(110)] 
+        HRESULT GetSlaveTriad([out,retval] ITriad** ppRet);
+        [id(111)] 
+        HRESULT SetSlaveTriad([in] ITriad* Triad);
+        [id(112)]
+        HRESULT GetGlobalCS([out] VARIANT* Array4x3);
+        [id(113)]
+        HRESULT SetGlobalCS([in] VARIANT Array4x3);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(DB3DF235-A961-40AB-9AAA-4F5AA4A127BB),
+      oleautomation,
+      dual
+    ]
+    interface ICamJoint : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT X([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT X([in] double val);
+        [propget, id(2)]
+        HRESULT Y([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Y([in] double val);
+        [propget, id(3)]
+        HRESULT Z([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT Z([in] double val);
+        [propget, id(4)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(4)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(5)]
+        HRESULT DOF([in] long DOFIndex, [out,retval] IDOF** ppRet);
+        [propget, id(6)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(7)]
+        HRESULT Thickness([out,retval] double* pVal);
+        [propput, id(7)]
+        HRESULT Thickness([in] double val);
+        [propget, id(8)]
+        HRESULT Width([out,retval] double* pVal);
+        [propput, id(8)]
+        HRESULT Width([in] double val);
+        [propget, id(9)]
+        HRESULT UseRadialStiffness([out,retval] VARIANT_BOOL* pVal);
+        [propput, id(9)]
+        HRESULT UseRadialStiffness([in] VARIANT_BOOL val);
+        [propget, id(10)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(101)] 
+        HRESULT SetEulerRotationZYX([in] double Rx, [in] double Ry, [in] double Rz);
+        [id(102)] 
+        HRESULT GetRotationMatrix([out] VARIANT* Array3x3);
+        [id(103)] 
+        HRESULT SetRotationMatrix([in] VARIANT Array3x3);
+        [id(105)] 
+        HRESULT SetPosition([in] double X, [in] double Y, [in] double Z);
+        [id(106)] 
+        HRESULT GetFriction([in,out] long* DOFIndex, [out,retval] IFriction** pRet);
+        [id(107)] 
+        HRESULT SetFriction([in] long DOFIndex, [in] IFriction* Friction);
+        [id(108)] 
+        HRESULT AddMasterTriad([in] ITriad* MasterTriad);
+        [id(109)] 
+        HRESULT SetMasterArcFromJoint([in] ICamJoint* CamJoint);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(A5138D25-C3E4-43A1-A623-0FF2F999CFAC),
+      oleautomation,
+      dual
+    ]
+    interface ICylindricJoint : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT X([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT X([in] double val);
+        [propget, id(2)]
+        HRESULT Y([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Y([in] double val);
+        [propget, id(3)]
+        HRESULT Z([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT Z([in] double val);
+        [propget, id(4)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(4)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(5)]
+        HRESULT DOF([in] long DOFIndex, [out,retval] IDOF** ppRet);
+        [propget, id(6)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(7)]
+        HRESULT ScrewRatio([out,retval] double* pVal);
+        [propput, id(7)]
+        HRESULT ScrewRatio([in] double val);
+        [propget, id(8)]
+        HRESULT ScrewTransmission([out,retval] VARIANT_BOOL* pVal);
+        [propput, id(8)]
+        HRESULT ScrewTransmission([in] VARIANT_BOOL val);
+        [propget, id(9)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(101)] 
+        HRESULT SetEulerRotationZYX([in] double Rx, [in] double Ry, [in] double Rz);
+        [id(102)] 
+        HRESULT GetRotationMatrix([out] VARIANT* Array3x3);
+        [id(103)] 
+        HRESULT SetRotationMatrix([in] VARIANT Array3x3);
+        [id(105)] 
+        HRESULT SetPosition([in] double X, [in] double Y, [in] double Z);
+        [id(106)] 
+        HRESULT AddMasterTriad([in] ITriad* MasterTriad);
+        [id(107)] 
+        HRESULT SetMasterArcFromJoint([in] ICylindricJoint* CylJoint);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(D8DEBC23-8E80-4AB9-8184-6101B3ACFC9A),
+      oleautomation,
+      dual
+    ]
+    interface IAxialSpring : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetTriad1([out,retval] ITriad** ppRet);
+        [id(101)] 
+        HRESULT SetTriad1([in] ITriad* Triad);
+        [id(102)] 
+        HRESULT GetTriad2([out,retval] ITriad** ppRet);
+        [id(103)] 
+        HRESULT SetTriad2([in] ITriad* Triad);
+        [id(104)]
+        HRESULT GetStiffnessScale([out,retval] IFunction** ppObj);
+        [id(105)]
+        HRESULT SetStiffnessScale([in] IFunction* Function);
+        [id(106)]
+        HRESULT GetStiffnessFunction([out,retval] IFunction** ppObj);
+        [id(107)]
+        HRESULT SetStiffnessFunction([in] IFunction* Function);
+        [id(108)]
+        HRESULT GetStiffnessCoefficient([out,retval] double* pVal);
+        [id(109)]
+        HRESULT SetStiffnessCoefficient([in] double Value);
+        [id(110)]
+        HRESULT GetStressFreeLengthOrDeflection([out] VARIANT_BOOL* IsDeflection, [out,retval] double* pVal);
+        [id(111)]
+        HRESULT SetStressFreeLengthOrDeflection([in] VARIANT_BOOL IsDeflection, [in] double Value);
+        [id(112)]
+        HRESULT GetStressFreeLengthChange([out,retval] IFunction** ppObj);
+        [id(113)]
+        HRESULT SetStressFreeLengthChange([in] IFunction* Function);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(090129BF-C9EA-44EF-B48D-A8D34C28D47C),
+      oleautomation,
+      dual
+    ]
+    interface IAxialDamper : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [propget, id(4)]
+        HRESULT IsDefDamper([out,retval] VARIANT_BOOL* pVal);
+        [propput, id(4)]
+        HRESULT IsDefDamper([in] VARIANT_BOOL val);
+        [id(100)] 
+        HRESULT GetTriad1([out,retval] ITriad** ppRet);
+        [id(101)] 
+        HRESULT SetTriad1([in] ITriad* Triad);
+        [id(102)] 
+        HRESULT GetTriad2([out,retval] ITriad** ppRet);
+        [id(103)] 
+        HRESULT SetTriad2([in] ITriad* Triad);
+        [id(104)]
+        HRESULT GetDampingScale([out,retval] IFunction** ppObj);
+        [id(105)]
+        HRESULT SetDampingScale([in] IFunction* Function);
+        [id(106)]
+        HRESULT GetDampingFunction([out,retval] IFunction** ppObj);
+        [id(107)]
+        HRESULT SetDampingFunction([in] IFunction* Function);
+        [id(108)]
+        HRESULT GetDampingCoefficient([out,retval] double* pVal);
+        [id(109)]
+        HRESULT SetDampingCoefficient([in] double Value);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(230668CF-4C1B-4D6C-B37C-839E981CE2B2),
+      oleautomation,
+      dual
+    ]
+    interface IPart : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT X([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT X([in] double val);
+        [propget, id(2)]
+        HRESULT Y([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Y([in] double val);
+        [propget, id(3)]
+        HRESULT Z([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT Z([in] double val);
+        [propget, id(4)]
+        HRESULT Mass([out,retval] double* pVal);
+        [propput, id(4)]
+        HRESULT Mass([in] double val);
+        [propget, id(5)]
+        HRESULT Ix([out,retval] double* pVal);
+        [propput, id(5)]
+        HRESULT Ix([in] double val);
+        [propget, id(6)]
+        HRESULT Iy([out,retval] double* pVal);
+        [propput, id(6)]
+        HRESULT Iy([in] double val);
+        [propget, id(7)]
+        HRESULT Iz([out,retval] double* pVal);
+        [propput, id(7)]
+        HRESULT Iz([in] double val);
+        [propget, id(8)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(8)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(9)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(10)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [propget, id(20)]
+        HRESULT IsFEPart([out, retval] VARIANT_BOOL* pRet);
+        [propget, id(21)]
+        HRESULT FEComponentModes([out, retval] long* pVal);
+        [propput, id(21)]
+        HRESULT FEComponentModes([in] long val);
+        [id(100)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(101)] 
+        HRESULT SetEulerRotationZYX([in] double Rx, [in] double Ry, [in] double Rz);
+        [id(102)] 
+        HRESULT GetRotationMatrix([out] VARIANT* Array3x3);
+        [id(103)] 
+        HRESULT SetRotationMatrix([in] VARIANT Array3x3);
+        [id(104)] 
+        HRESULT SetPosition([in] double X, [in] double Y, [in] double Z);
+        [id(105)] 
+        HRESULT SetMass([in] double Mass, [in] double Ix, [in] double Iy, [in] double Iz);
+        [id(106)] 
+        HRESULT GetCOG([in,out] double* X, [in,out] double* Y, [in,out] double* Z);
+        [id(107)] 
+        HRESULT SetCOG([in] double X, [in] double Y, [in] double Z);
+        [id(108)] 
+        HRESULT GetPrincipalAxisOfInertia([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(109)] 
+        HRESULT SetPrincipalAxisOfInertia([in] double Rx, [in] double Ry, [in] double Rz);
+        [id(110)] 
+        HRESULT GetStructuralDamping([in,out] double* MassProp, [in,out] double* StiffProp);
+        [id(111)] 
+        HRESULT SetStructuralDamping([in] double MassProp, [in] double StiffProp);
+        [id(112)] 
+        HRESULT GetScaling([in,out] double* StiffScale, [in,out] double* MassScale);
+        [id(113)] 
+        HRESULT SetScaling([in] double StiffScale, [in] double MassScale);
+        [id(114)] 
+        HRESULT AddTriad([in] ITriad* Triad);
+        [id(115)] 
+        HRESULT CalculateCOG();
+        [id(116)]
+        HRESULT GetBoundingBox([in, out] double* MaxX, [in, out] double* MaxY, [in, out] double* MaxZ,
+            [in, out] double* MinX, [in, out] double* MinY, [in, out] double* MinZ, [out, retval] VARIANT_BOOL* pVal);
+        [id(120)]
+        HRESULT FEGetNodeCount([out, retval] long* pnVal);
+        [id(121)]
+        HRESULT FEGetNodePosition([in] long Index, [in, out] double* X, [in, out] double* Y, [in, out] double* Z);
+        [id(122)]
+        HRESULT FEGetNodeStatus([in] long Index, [out, retval] long* pnVal);
+        [id(123)]
+        HRESULT FEGetNodeAtPoint([in] double X, [in] double Y, [in] double Z, [in] double Tolerance, [out, retval] long* pnVal);
+        [id(124)]
+        HRESULT FEAttach([in] IDispatch* Object, [out, retval] VARIANT_BOOL* pVal);
+        [id(125)]
+        HRESULT FECreateSpider([in] long SpiderType, [in] VARIANT NodeIndexList, [in] ITriad* Triad);
+        [id(130)]
+        HRESULT SetTranslationalStiffness([in] double TransStiffness);
+        [id(131)]
+        HRESULT SetRotationalStiffness([in] double RotStiffness);
+        [id(800)]
+        HRESULT Delete();
+        [id(1000)] 
+        HRESULT SetPrincipalAxisOfInertiaExExy([in] double XAxisX, [in] double XAxisY, [in] double XAxisZ, 
+            [in] double XYPlaneX, [in] double XYPlaneY, [in] double XYPlaneZ);
+        [id(1001)]
+        HRESULT SetVisualizationFile([in] BSTR FileName);
+    }
+
+    [ uuid(3F1C2525-979D-40F9-B96F-962D0D12AC4E),
+      oleautomation,
+      dual
+    ]
+    interface IBeam : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Mass([out,retval] double* pVal);
+        [propget, id(2)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(2)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(3)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(4)]
+        HRESULT Visualize3D([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(4)]
+        HRESULT Visualize3D([in] VARIANT_BOOL val);
+        [propget, id(5)]
+        HRESULT Visualize3DStartAngle([out, retval] double* pVal);
+        [propput, id(5)]
+        HRESULT Visualize3DStartAngle([in] double val);
+        [propget, id(6)]
+        HRESULT Visualize3DStopAngle([out, retval] double* pVal);
+        [propput, id(6)]
+        HRESULT Visualize3DStopAngle([in] double val);
+        [propget, id(7)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(10)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz);
+        [id(100)] 
+        HRESULT GetTriad1([out,retval] ITriad** ppRet);
+        [id(101)] 
+        HRESULT SetTriad1([in] ITriad* Triad);
+        [id(102)] 
+        HRESULT GetTriad2([out,retval] ITriad** ppRet);
+        [id(103)] 
+        HRESULT SetTriad2([in] ITriad* Triad);
+        [id(104)] 
+        HRESULT GetCrossSection([out,retval] ICrossSection** ppRet);
+        [id(105)] 
+        HRESULT SetCrossSection([in] ICrossSection* CrossSection);
+        [id(106)] 
+        HRESULT SetLocalZaxis([in] double X, [in] double Y, [in] double Z);
+        [id(107)]
+        HRESULT GetGlobalCS([out] VARIANT* Array4x3);
+        [id(108)] 
+        HRESULT GetLocalCS([out] VARIANT* Array4x3);
+        [id(109)] 
+        HRESULT GetStructuralDamping([in,out] double* MassProp, [in,out] double* StiffProp);
+        [id(110)] 
+        HRESULT SetStructuralDamping([in] double MassProp, [in] double StiffProp);
+        [id(111)] 
+        HRESULT GetScaling([in,out] double* StiffScale, [in,out] double* MassScale);
+        [id(112)] 
+        HRESULT SetScaling([in] double StiffScale, [in] double MassScale);
+        [id(113)] 
+        HRESULT GetLength([out,retval] double* pRet);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(A42885C9-4D27-4077-940C-ABC6A3C70660),
+      oleautomation,
+      dual
+    ]
+    interface IStrainRosette : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out, retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(4)]
+        HRESULT ElasticModulus([out, retval] double* pVal);
+        [propput, id(4)]
+        HRESULT ElasticModulus([in] double val);
+        [propget, id(5)]
+        HRESULT PoissonRatio([out, retval] double* pVal);
+        [propput, id(5)]
+        HRESULT PoissonRatio([in] double val);
+        [propget, id(6)]
+        HRESULT UseFEThickness([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(6)]
+        HRESULT UseFEThickness([in] VARIANT_BOOL val);
+        [propget, id(7)]
+        HRESULT UseFEMaterial([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(7)]
+        HRESULT UseFEMaterial([in] VARIANT_BOOL val);
+        [propget, id(8)]
+        HRESULT StrainRosetteType([out, retval] StrainRosetteType* pVal);
+        [propput, id(8)]
+        HRESULT StrainRosetteType([in] StrainRosetteType val);
+        [propget, id(9)]
+        HRESULT AngleOffset([out, retval] double* pVal);
+        [propput, id(9)]
+        HRESULT AngleOffset([in] double val);
+        [propget, id(10)]
+        HRESULT LayerHeight([out, retval] double* pVal);
+        [propput, id(10)]
+        HRESULT LayerHeight([in] double val);
+        [propget, id(11)]
+        HRESULT Node1([out, retval] long* pVal);
+        [propput, id(11)]
+        HRESULT Node1([in] long val);
+        [propget, id(12)]
+        HRESULT Node2([out, retval] long* pVal);
+        [propput, id(12)]
+        HRESULT Node2([in] long val);
+        [propget, id(13)]
+        HRESULT Node3([out, retval] long* pVal);
+        [propput, id(13)]
+        HRESULT Node3([in] long val);
+        [propget, id(14)]
+        HRESULT Node4([out, retval] long* pVal);
+        [propput, id(14)]
+        HRESULT Node4([in] long val);
+        [propget, id(15)]
+        HRESULT Part([out, retval] IPart** pVal);
+        [propget, id(16)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)]
+        HRESULT GetReferenceDirection([in, out] double* X, [in, out] double* Y, [in, out] double* Z);
+        [id(101)]
+        HRESULT SetReferenceDirection([in] double X, [in] double Y, [in] double Z);
+        [propget, id(102)]
+        HRESULT StartStrainsToZero([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(102)]
+        HRESULT StartStrainsToZero([in] VARIANT_BOOL val);
+        [id(800)]
+        HRESULT Delete();
+    }
+
+    [ uuid(9C3220BC-808B-4880-A436-5D78FA2BE267),
+      oleautomation,
+      dual
+    ]
+    interface ISubAssembly : IDispatch
+    {
+        [propget, id(DISPID_VALUE)]
+        HRESULT Item([in] long Index, [out,retval] IDispatch** ppObj);
+        [propget, id(1)]
+        HRESULT X([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT X([in] double val);
+        [propget, id(2)]
+        HRESULT Y([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Y([in] double val);
+        [propget, id(3)]
+        HRESULT Z([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT Z([in] double val);
+        [propget, id(4)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(4)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(5)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(6)]
+        HRESULT TotalMass([out,retval] double* pVal);
+        [propget, id(7)]
+        HRESULT TotalLength([out,retval] double* pVal);
+        [propget, id(8)]
+        HRESULT Movable([out,retval] VARIANT_BOOL* pVal);
+        [propget, id(9)]
+        HRESULT ModelFileName([out,retval] BSTR* pVal);
+        [propput, id(9)]
+        HRESULT ModelFileName([in] BSTR val);
+        [propget, id(10)]
+        HRESULT Count([out,retval] long* pnVal);
+        [propget, id(11)]
+        HRESULT Tag([out,retval] BSTR* pVal);
+        [propput, id(11)]
+        HRESULT Tag([in] BSTR val);
+        [propget, id(12)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetEulerRotationZYX([in,out] double* Rx, [in,out] double* Ry, [in,out] double* Rz, [in] VARIANT_BOOL Global);
+        [id(101)] 
+        HRESULT SetEulerRotationZYX([in] double Rx, [in] double Ry, [in] double Rz, [in] VARIANT_BOOL Global);
+        [id(102)] 
+        HRESULT GetRotationMatrix([out] VARIANT* Array3x3, [in] VARIANT_BOOL Global);
+        [id(103)] 
+        HRESULT SetRotationMatrix([in] VARIANT Array3x3, [in] VARIANT_BOOL Global);
+        [id(104)] 
+        HRESULT GetPosition([in,out] double* X, [in,out] double* Y, [in,out] double* Z, [in] VARIANT_BOOL Global);
+        [id(105)] 
+        HRESULT SetPosition([in] double X, [in] double Y, [in] double Z, [in] VARIANT_BOOL Global);
+        [id(200)]
+        HRESULT GetItem([in] long Index, [out, retval] IDispatch** ppObj);
+        [id(201)] 
+        HRESULT Remove([in] IDispatch* Child);
+        [id(202)] 
+        HRESULT RemoveAt([in] long Index);
+        [id(203)] 
+        HRESULT Clear();
+        [id(204)]
+        HRESULT GetItemType([in] long Index, [out, retval] BSTR* pVal);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(30519CA5-778E-4919-978A-443059D7AF12),
+        oleautomation,
+        dual
+    ]
+    interface IUserDefinedElement : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out, retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(3)]
+        HRESULT NumElementNodes([out, retval] long* pVal);
+        [propget, id(4)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)]
+        HRESULT GetTriad([in] long Position, [out, retval] ITriad** ppVal);
+        [id(101)]
+        HRESULT SetTriad([in] long Position, [in] ITriad* Triad);
+        [id(102)]
+        HRESULT GetStructuralDamping([in, out] double* MassProp, [in, out] double* StiffProp);
+        [id(103)]
+        HRESULT SetStructuralDamping([in] double MassProp, [in] double StiffProp);
+        [id(104)]
+        HRESULT GetScaling([in, out] double* StiffScale, [in, out] double* MassScale);
+        [id(105)]
+        HRESULT SetScaling([in] double StiffScale, [in] double MassScale);
+        [id(800)]
+        HRESULT Delete();
+    }
+
+    [ uuid(CDD48E0F-2704-4063-BD61-93446EAE29A2),
+      oleautomation,
+      dual
+    ]
+    interface ICrossSection : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetCrossSectionType([out,retval] CrossSectionType* pRet);
+        [id(101)] 
+        HRESULT SetCrossSectionType([in] CrossSectionType CSType);
+        [id(102)] 
+        HRESULT GetMaterial([out,retval] IMaterial** ppRet);
+        [id(103)] 
+        HRESULT SetMaterial([in] IMaterial* Material);
+        [id(104)] 
+        HRESULT GetShearCenterOffset([out] double* sy, [out] double* sz);
+        [id(105)] 
+        HRESULT SetShearCenterOffset([in] double sy, [in] double sz);
+        [id(120)] 
+        HRESULT GetPipeDiameters([out] double* OuterDiameter, [out] double* InnerDiameter);
+        [id(121)] 
+        HRESULT SetPipeDiameters([in] double OuterDiameter, [in] double InnerDiameter);
+        [id(122)] 
+        HRESULT GetPipeDependentProperties([out] double* A, [out] double* Iy, [out] double* Iz, [out] double* Ip);
+        [id(123)] 
+        HRESULT SetPipeDependentProperties([in] double A, [in] double Iy, [in] double Iz, [in] double Ip);
+        [id(124)] 
+        HRESULT GetPipeShearReductionFactors([out] double* ky, [out] double* kz);
+        [id(125)] 
+        HRESULT SetPipeShearReductionFactors([in] double ky, [in] double kz);
+        [id(140)] 
+        HRESULT GetGenericGeometricProperties([out] double* EA, [out] double* EIyy, [out] double* EIzz, [out] double* GIt, [out] double* mL, [out] double* rhoIp);
+        [id(141)] 
+        HRESULT SetGenericGeometricProperties([in] double EA, [in] double EIyy, [in] double EIzz, [in] double GIt, [in] double mL, [in] double rhoIp);
+        [id(142)] 
+        HRESULT GetGenericMomentOfInertia([out] double* Ix, [out] double* Iy, [out] double* Iz);
+        [id(143)] 
+        HRESULT SetGenericMomentOfInertia([in] double Ix, [in] double Iy, [in] double Iz);
+        [id(144)] 
+        HRESULT GetGenericShearStiffness([out] double* GAsy, [out] double* GAsz);
+        [id(145)] 
+        HRESULT SetGenericShearStiffness([in] double GAsy, [in] double GAsz);
+        [id(700)] 
+        HRESULT GetHydroBuoyancyAndDragDiameters([out] double* Db, [out] double* Dd);
+        [id(701)] 
+        HRESULT SetHydroBuoyancyAndDragDiameters([in] double Db, [in] double Dd);
+        [id(702)] 
+        HRESULT GetHydrodynamicCoefficients([out] double* Cd, [out] double* Ca, [out] double* Cm);
+        [id(703)] 
+        HRESULT SetHydrodynamicCoefficients([in] double Cd, [in] double Ca, [in] double Cm);
+        [id(704)] 
+        HRESULT GetHydrodynamicAxialCoefficients([out] double* Cd_axial, [out] double* Ca_axial, [out] double* Cm_axial);
+        [id(705)] 
+        HRESULT SetHydrodynamicAxialCoefficients([in] double Cd_axial, [in] double Ca_axial, [in] double Cm_axial);
+        [id(706)] 
+        HRESULT GetHydroSpinDragCoefficient([out,retval] double* Cd_spin);
+        [id(707)] 
+        HRESULT SetHydroSpinDragCoefficient([in] double Cd_spin);
+        [id(708)] 
+        HRESULT GetHydroInternalFluidDiameter([out,retval] double* Di);
+        [id(709)] 
+        HRESULT SetHydroInternalFluidDiameter([in] double Di);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(3B3031EB-4104-4290-AA3D-BA0B124715B7),
+      oleautomation,
+      dual
+    ]
+    interface IMaterial : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)] 
+        HRESULT GetMaterialProperties([out] double* Rho, [out] double* E, [out] double* nu, [out] double* G);
+        [id(101)] 
+        HRESULT SetMaterialProperties([in] double Rho, [in] double E, [in] double nu);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(C37FF86E-9004-4F3A-A746-D4BFE9AF32BD),
+      oleautomation,
+      dual
+    ]
+    interface IFmObject : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(100)]
+        HRESULT GetValue([in] BSTR FieldName, [out,retval] BSTR* Value);
+        [id(101)]
+        HRESULT SetValue([in] BSTR FieldName, [in] BSTR Value);
+        [id(800)]
+        HRESULT Delete();
+    }
+
+    [ uuid(1DA849B6-F27C-406F-B119-ECD721C20525),
+      oleautomation,
+      dual
+    ]
+    interface IFriction : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT PrestressForce([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT PrestressForce([in] double val);
+        [propget, id(2)]
+        HRESULT CoulombCoefficient([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT CoulombCoefficient([in] double val);
+        [propget, id(3)]
+        HRESULT StribeckMagnitude([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT StribeckMagnitude([in] double val);
+        [propget, id(4)]
+        HRESULT CriticalStribeckSpeed([out,retval] double* pVal);
+        [propput, id(4)]
+        HRESULT CriticalStribeckSpeed([in] double val);
+        [propget, id(5)]
+        HRESULT Radius([out,retval] double* pVal);
+        [propput, id(5)]
+        HRESULT Radius([in] double val);
+        [propget, id(6)]
+        HRESULT BendingCapacityDistance([out,retval] double* pVal);
+        [propput, id(6)]
+        HRESULT BendingCapacityDistance([in] double val);
+        [propget, id(7)]
+        HRESULT BearingConstant([out,retval] double* pVal);
+        [propput, id(7)]
+        HRESULT BearingConstant([in] double val);
+        [propget, id(8)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(8)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(9)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+    }
+
+    [ uuid(1501EA1C-A232-4296-A8F9-B6A2DFB482B9),
+      oleautomation,
+      dual
+    ]
+    interface IDOF : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT DOFConstraintType([out,retval] DOFConstraintType* pVal);
+        [propput, id(1)]
+        HRESULT DOFConstraintType([in] DOFConstraintType Val);
+        [propget, id(2)]
+        HRESULT InitialVelocity([out,retval] double* pVal);
+        [propget, id(3)]
+        HRESULT AddBC([out,retval] VARIANT_BOOL* pVal);
+        [propput, id(3)]
+        HRESULT AddBC([in] VARIANT_BOOL Val);
+        [propget, id(4)]
+        HRESULT LoadMagnitude([out,retval] VARIANT* pVal);
+        [propget, id(5)]
+        HRESULT PrescribedMotionType([out,retval] DOFPrescribedMotionType* pVal);
+        [propget, id(6)]
+        HRESULT PrescribedMotionMagnitude([out,retval] VARIANT* pVal);
+        [propget, id(7)]
+        HRESULT SDStressfreeLength([out,retval] VARIANT* pVal);
+        [propget, id(8)]
+        HRESULT SDStiffness([out,retval] VARIANT* pVal);
+        [propget, id(9)]
+        HRESULT SDStiffnessScale([out,retval] VARIANT* pVal);
+        [propget, id(10)]
+        HRESULT SDDamper([out,retval] VARIANT* pVal);
+        [propget, id(11)]
+        HRESULT SDDamperScale([out,retval] VARIANT* pVal);
+        [id(100)] 
+        HRESULT SetFree([in,optional] VARIANT LoadMagnitude, [in,optional] VARIANT InitialVelocity);
+        [id(101)] 
+        HRESULT SetFixed();
+        [id(102)] 
+        HRESULT SetPrescribed([in] DOFPrescribedMotionType MotionType,
+            [in,optional] VARIANT MotionMagnitude, [in,optional] VARIANT InitialVelocity);
+        [id(103)] 
+        HRESULT SetSpringDamper([in,optional] VARIANT LoadMagnitude,
+            [in,optional] VARIANT StressfreeLength, [in,optional] VARIANT Stiffness,
+            [in,optional] VARIANT StiffnessScale, [in,optional] VARIANT Damper,
+            [in,optional] VARIANT DamperScale, [in,optional] VARIANT InitialVelocity);
+    }
+
+    [ uuid(9110AD32-79C0-46D9-B0A0-62BE3614C007),
+      oleautomation,
+      dual
+    ]
+    interface IFunction : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT FunctionType([out,retval] FunctionType* pVal);
+        [propget, id(2)]
+        HRESULT Parameters([out,retval] BSTR* pVal);
+        [propput, id(2)]
+        HRESULT Parameters([in] BSTR val);
+        [propget, id(3)]
+        HRESULT ArgumentObject([out,retval] VARIANT* pVal);
+        [propget, id(4)]
+        HRESULT ArgumentDOF([out,retval] FunctionArgSingleDOFType* pVal);
+        [propget, id(5)]
+        HRESULT ArgumentVariable([out,retval] FunctionArgVariableType* pVal);
+        [propget, id(6)]
+        HRESULT Usage([out,retval] FunctionUsageType* pVal);
+        [propget, id(7)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(7)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(8)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(9)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [propget, id(10)]
+        HRESULT ChannelID([out, retval] long* pVal);
+        [id(90)] 
+        HRESULT SetConstant([in] double Value);
+        [id(91)] 
+        HRESULT SetLinear([in] double Slope);
+        [id(100)] 
+        HRESULT SetSin([in] double Period, [in] double MeanValue, [in] double Amplitude, 
+            [in, optional] VARIANT MaxTime);
+        [id(101)] 
+        HRESULT SetCombinedSin([in] double Period1, [in] double Amplitude1, [in] double Period2,
+            [in] double Amplitude2, [in] double MeanValue, [in, optional] VARIANT MaxTime);
+        [id(120)] 
+        HRESULT SetPolyline([in] VARIANT ArrayNx2, [in] FunctionExtrapolationType Extrapolation);
+        [id(121)] 
+        HRESULT SetPolylineFromFile([in] BSTR FileName, [in,optional] VARIANT ChannelName, 
+            [in,optional] VARIANT ScaleFactor, [in,optional] VARIANT ZeroAdjust, [in,optional] VARIANT VerticalShift);
+        [id(130)]
+        HRESULT SetMathExpression([in] BSTR Expression);
+        [id(140)]
+        HRESULT SetExternal();
+        [id(420)] 
+        HRESULT SetJonswap(double Hs, double Tp, [in,optional] VARIANT Gamma, [in,optional] VARIANT N, 
+            [in,optional] VARIANT RndSeed, [in,optional] VARIANT TRangeMin, [in,optional] VARIANT TRangeMax);
+        [id(2000)] 
+        HRESULT SetArgumentSingle([in] FunctionArgSingleDOFType DOF, [in] FunctionArgVariableType Val, 
+            [in] VARIANT ArgObject1, [in, optional] VARIANT ArgNumber);
+        [id(2001)] 
+        HRESULT SetArgumentRelative([in] FunctionArgRelativeDOFType DOF, [in] FunctionArgVariableType Val, 
+            [in] VARIANT ArgObject1, [in] VARIANT ArgObject2, [in, optional] VARIANT ArgNumber);
+        [id(2002)] 
+        HRESULT SetArgumentScalar([in] VARIANT ArgObject1, [in, optional] VARIANT ArgNumber);
+        [id(8000)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(9F1938F6-58C3-47F1-8CB6-4D73280F3643),
+      oleautomation,
+      dual
+    ]
+    interface IGraph : IDispatch
+    {
+        [propget, id(DISPID_VALUE)]
+        HRESULT Item([in] long Index, [out, retval] ICurve** ppObj);
+        [propget, id(1)]
+        HRESULT Description([out, retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Title([out, retval] BSTR* pVal);
+        [propput, id(3)]
+        HRESULT Title([in] BSTR val);
+        [propget, id(4)]
+        HRESULT SubTitle([out, retval] BSTR* pVal);
+        [propput, id(4)]
+        HRESULT SubTitle([in] BSTR val);
+        [propget, id(5)]
+        HRESULT XAxisLabel([out, retval] BSTR* pVal);
+        [propput, id(5)]
+        HRESULT XAxisLabel([in] BSTR val);
+        [propget, id(6)]
+        HRESULT YAxisLabel([out, retval] BSTR* pVal);
+        [propput, id(6)]
+        HRESULT YAxisLabel([in] BSTR val);
+        [propget, id(7)]
+        HRESULT GridType([out, retval] long* pVal);
+        [propput, id(7)]
+        HRESULT GridType([in] long val);
+        [propget, id(8)]
+        HRESULT ShowLegend([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(8)]
+        HRESULT ShowLegend([in] VARIANT_BOOL val);
+        [propget, id(9)]
+        HRESULT AutoScaleFlag([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(9)]
+        HRESULT AutoScaleFlag([in] VARIANT_BOOL val);
+        [propget, id(10)]
+        HRESULT UseTimeRange([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(10)]
+        HRESULT UseTimeRange([in] VARIANT_BOOL val);
+        [propget, id(11)]
+        HRESULT TimeRangeMin([out, retval] double* pVal);
+        [propput, id(11)]
+        HRESULT TimeRangeMin([in] double val);
+        [propget, id(12)]
+        HRESULT TimeRangeMax([out, retval] double* pVal);
+        [propput, id(12)]
+        HRESULT TimeRangeMax([in] double val);
+        [propget, id(13)]
+        HRESULT XAxisScaleMin([out, retval] double* pVal);
+        [propput, id(13)]
+        HRESULT XAxisScaleMin([in] double val);
+        [propget, id(14)]
+        HRESULT XAxisScaleMax([out, retval] double* pVal);
+        [propput, id(14)]
+        HRESULT XAxisScaleMax([in] double val);
+        [propget, id(15)]
+        HRESULT YAxisScaleMin([out, retval] double* pVal);
+        [propput, id(15)]
+        HRESULT YAxisScaleMin([in] double val);
+        [propget, id(16)]
+        HRESULT YAxisScaleMax([out, retval] double* pVal);
+        [propput, id(16)]
+        HRESULT YAxisScaleMax([in] double val);
+        [propget, id(17)]
+        HRESULT IsFunctionPreview([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(18)]
+        HRESULT IsBeamDiagram([out, retval] VARIANT_BOOL* pVal);
+        [id(100)]
+        HRESULT CreateCurve([out, retval] ICurve** ppObj);
+        [id(101)]
+        HRESULT GetItem([in] long Index, [out, retval] ICurve** ppObj);
+        [id(102)]
+        HRESULT GetCount([out, retval] long* pVal);
+        [id(800)]
+        HRESULT Delete();
+    }
+
+    [ uuid(20B8976E-521B-481E-8B8F-2EE88672EB45),
+      oleautomation,
+      dual
+    ]
+    interface ICurve : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out, retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] IGraph** ppObj);
+        [propget, id(4)]
+        HRESULT Mode([out, retval] long* pVal);
+        [propget, id(5)]
+        HRESULT Legend([out, retval] BSTR* pVal);
+        [propput, id(5)]
+        HRESULT Legend([in] BSTR val);
+        [propget, id(6)]
+        HRESULT Color([out, retval] OLE_COLOR* pVal);
+        [propput, id(6)]
+        HRESULT Color([in] OLE_COLOR val);
+        [propget, id(7)]
+        HRESULT TimeRangeMin([out, retval] double* pVal);
+        [propput, id(7)]
+        HRESULT TimeRangeMin([in] double val);
+        [propget, id(8)]
+        HRESULT TimeRangeMax([out, retval] double* pVal);
+        [propput, id(8)]
+        HRESULT TimeRangeMax([in] double val);
+        [propget, id(9)]
+        HRESULT XAxisScale([out, retval] double* pVal);
+        [propput, id(9)]
+        HRESULT XAxisScale([in] double val);
+        [propget, id(10)]
+        HRESULT YAxisScale([out, retval] double* pVal);
+        [propput, id(10)]
+        HRESULT YAxisScale([in] double val);
+        [propget, id(11)]
+        HRESULT XAxisOffset([out, retval] double* pVal);
+        [propput, id(11)]
+        HRESULT XAxisOffset([in] double val);
+        [propget, id(12)]
+        HRESULT YAxisOffset([out, retval] double* pVal);
+        [propput, id(12)]
+        HRESULT YAxisOffset([in] double val);
+        [propget, id(13)]
+        HRESULT XAxisZeroAdjust([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(13)]
+        HRESULT XAxisZeroAdjust([in] VARIANT_BOOL val);
+        [propget, id(14)]
+        HRESULT YAxisZeroAdjust([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(14)]
+        HRESULT YAxisZeroAdjust([in] VARIANT_BOOL val);
+        [propget, id(15)]
+        HRESULT SymbolType([out, retval] long* pVal);
+        [propput, id(15)]
+        HRESULT SymbolType([in] long val);
+        [id(100)]
+        HRESULT SetResult([in] int Axis, [in] BSTR OGType, [in] long BaseID, [in] long UserID,
+            [in] BSTR RefType, [in] BSTR DescPath);
+        [id(101)]
+        HRESULT GetResult([in] int Axis, [in,out] BSTR* OGType, [in,out] long* BaseID, [in,out] long* UserID,
+            [in,out] BSTR* RefType, [in,out] BSTR* DescPath);
+        [id(102)]
+        HRESULT SetResultOper([in] int Axis, [in] BSTR Oper);
+        [id(103)]
+        HRESULT GetResultOper([in] int Axis, [out,retval] BSTR* pVal);
+        [id(200)]
+        HRESULT SetCombinedCurve([in] BSTR Expression, [in] ICurve* A, [in] ICurve* B,
+            [in,optional] VARIANT C, [in,optional] VARIANT D, [in,optional] VARIANT E);
+        [id(800)]
+        HRESULT Delete();
+    }
+
+    [ uuid(CB5A7C92-8B1E-4335-974F-983274C62752),
+      oleautomation,
+      dual
+    ]
+    interface IResultExtractor : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT FileNames([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT FileNames([in] BSTR val);
+        [propget, id(2)]
+        HRESULT ReadTime([out,retval] VARIANT_BOOL* pVal);
+        [propput, id(2)]
+        HRESULT ReadTime([in] VARIANT_BOOL val);
+        [id(100)] 
+        HRESULT Read([in] BSTR ObjectType, [in] BSTR BaseIDs, [in] BSTR Variables, 
+            [in,out] double* StartTime, [in,out] double* EndTime, [out,retval] VARIANT* ArrayNxM);
+        [id(101)] 
+        HRESULT CalcRainflow([in] VARIANT ArrayNx2, [in] double GateValue, 
+            [out,retval] VARIANT* ArrayRx1);
+        [id(102)] 
+        HRESULT OpenSNCurveLib([in] BSTR SNCurveFile, [out,retval] VARIANT_BOOL* pVal);
+        [id(103)] 
+        HRESULT CalcDamage([in] VARIANT ArrayRx1, [in] long SNStd, [in] long SNCurve, 
+            [out,retval] double* pVal);
+        [id(200)] 
+        HRESULT GetSNStdCount([out, retval] long* pVal);
+        [id(201)]
+        HRESULT GetSNStdName([in] long SNStd, [out, retval] BSTR* pVal);
+        [id(202)]
+        HRESULT GetSNCurveCount([in] long SNStd, [out, retval] long* pVal);
+        [id(203)]
+        HRESULT GetSNCurveName([in] long SNStd, [in] long SNCurve, [out, retval] BSTR* pVal);
+        [id(204)]
+        HRESULT ReadCurve([in] BSTR BaseID, [in, out] double* StartTime, 
+            [in, out] double* EndTime, [out, retval] VARIANT* ArrayNx2);
+    }
+
+    [ uuid(6CB47603-8B83-450A-93BF-067991313B1B),
+      oleautomation,
+      dual
+    ]
+    interface ISimulationEvent : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT ID([out,retval] long* pVal);
+        [propput, id(1)]
+        HRESULT ID([in] long val);
+        [propget, id(2)]
+        HRESULT Probability([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT Probability([in] double val);
+        [propget, id(3)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(3)]
+        HRESULT Description([in] BSTR val);
+        [id(100)] 
+        HRESULT GetFRSFileNames([out,retval] BSTR* pVal);
+        [id(101)] 
+        HRESULT Activate([in] VARIANT_BOOL Activate, [in] VARIANT_BOOL Notify);
+        [id(102)] 
+        HRESULT AddPropertyValue([in] IDispatch* ModelObject, [in] BSTR PropertyName, [in] BSTR Value);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(CFA48218-E7F4-4626-AE28-67F34DB102A8),
+      oleautomation,
+      dual
+    ]
+    interface ISimulationEventManager : IDispatch
+    {
+        [propget, id(DISPID_VALUE)]
+        HRESULT Item([in] long Index, [out,retval] ISimulationEvent** ppObj);
+        [propget, id(1)]
+        HRESULT Count([out,retval] long* pnVal);
+        [id(100)] 
+        HRESULT Add([in] long ID, [in,optional] VARIANT Probability, 
+            [in,optional] VARIANT Desc, [out,retval] ISimulationEvent** ppObj);
+        [id(101)] 
+        HRESULT Remove([in] ISimulationEvent* Item);
+        [id(102)] 
+        HRESULT Clear();
+        [id(103)]
+        HRESULT SetActiveEvent([in, optional] VARIANT SimEvent);
+    }
+
+    [ uuid(A89C90FA-3C52-4AB9-99EE-40CE6F031D6F),
+      oleautomation,
+      dual
+    ]
+    interface ISelectionManager : IDispatch
+    {
+        [propget, id(DISPID_VALUE)]
+        HRESULT Item([in] long Index, [out,retval] IDispatch** ppObj);
+        [propput, id(DISPID_VALUE)]
+        HRESULT Item([in] long Index, [in] IDispatch* pObj);
+        [propget, id(1)]
+        HRESULT LastItem([out,retval] IDispatch** ppObj);
+        [propput, id(1)]
+        HRESULT LastItem([in] IDispatch* pObj);
+        [propget, id(2)]
+        HRESULT Count([out, retval] long* pnVal);
+        [id(100)] 
+        HRESULT Add([in] IDispatch* Item);
+        [id(101)] 
+        HRESULT Insert([in] long Index, [in] IDispatch* Item);
+        [id(102)] 
+        HRESULT Remove([in] IDispatch* Item);
+        [id(103)] 
+        HRESULT RemoveAt([in] long Index);
+        [id(104)] 
+        HRESULT Clear();
+        [id(120)]
+        HRESULT FEGetPickedPoint([in, out] double* X, [in, out] double* Y, [in, out] double* Z,
+            [in] VARIANT_BOOL Global, [out, retval] VARIANT_BOOL* pRet);
+        [id(121)]
+        HRESULT FESetPickPointMode([in] VARIANT_BOOL On, [in, optional] VARIANT Desc);
+        [id(122)]
+        HRESULT FEGetPickPointMode([in, out] long* State, [out, retval] VARIANT_BOOL* pRet);
+    }
+
+    [ uuid(D3A3AF02-40AD-434A-BD9E-7CF26CA9BBF6),
+        oleautomation,
+        dual
+    ]
+    interface ISolverManager : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT StartTime([out, retval] double* pVal);
+        [propput, id(1)]
+        HRESULT StartTime([in] double val);
+        [propget, id(2)]
+        HRESULT StopTime([out, retval] double* pVal);
+        [propput, id(2)]
+        HRESULT StopTime([in] double val);
+        [propget, id(3)]
+        HRESULT TimeIncrement([out, retval] double* pVal);
+        [propput, id(3)]
+        HRESULT TimeIncrement([in] double val);
+        [propget, id(4)]
+        HRESULT QuasiStatic([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(4)]
+        HRESULT QuasiStatic([in] VARIANT_BOOL val);
+        [propget, id(5)]
+        HRESULT InitEquil([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(5)]
+        HRESULT InitEquil([in] VARIANT_BOOL val);
+        [id(10)]
+        HRESULT GetFRSFileNames([out, retval] BSTR* pVal);
+        [id(100)]
+        HRESULT SolveDynamics();
+        [id(101)]
+        HRESULT SolveAll();
+        [id(102)]
+        HRESULT SolveEvents();
+        [id(103)]
+        HRESULT EraseSimulationResults();
+        [id(104)]
+        HRESULT EraseEventResults();
+        [id(105)]
+        HRESULT WriteSolverInputFile([in] BSTR FileName, [out, retval] VARIANT_BOOL* pVal);
+    }
+
+    [ uuid(88BCFA29-B7A5-4BFA-AC45-76AFBB546981),
+      oleautomation,
+      dual
+    ]
+    interface ISeaEnvironment : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT WaterDensity([out,retval] double* pVal);
+        [propput, id(1)]
+        HRESULT WaterDensity([in] double val);
+        [propget, id(2)]
+        HRESULT MeanSeaLevel([out,retval] double* pVal);
+        [propput, id(2)]
+        HRESULT MeanSeaLevel([in] double val);
+        [propget, id(3)]
+        HRESULT WaterDepth([out,retval] double* pVal);
+        [propput, id(3)]
+        HRESULT WaterDepth([in] double val);
+        [propget, id(4)]
+        HRESULT MarineGrowthDensity([out,retval] double* pVal);
+        [propput, id(4)]
+        HRESULT MarineGrowthDensity([in] double val);
+        [propget, id(5)]
+        HRESULT MarineGrowthThickness([out,retval] double* pVal);
+        [propput, id(5)]
+        HRESULT MarineGrowthThickness([in] double val);
+        [propget, id(6)]
+        HRESULT MarineGrowthUpperLimit([out,retval] double* pVal);
+        [propput, id(6)]
+        HRESULT MarineGrowthUpperLimit([in] double val);
+        [propget, id(7)]
+        HRESULT MarineGrowthLowerLimit([out,retval] double* pVal);
+        [propput, id(7)]
+        HRESULT MarineGrowthLowerLimit([in] double val);
+        [id(100)] 
+        HRESULT GetGravitation([in,out] double* X, [in,out] double* Y, [in,out] double* Z);
+        [id(101)] 
+        HRESULT SetGravitation([in] double X, [in] double Y, [in] double Z);
+        [id(102)] 
+        HRESULT GetWaveDirection([in,out] double* X, [in,out] double* Y, [in,out] double* Z);
+        [id(103)] 
+        HRESULT SetWaveDirection([in] double X, [in] double Y, [in] double Z);
+        [id(104)] 
+        HRESULT GetWaveFunction([out,retval] IFunction** ppRet);
+        [id(105)] 
+        HRESULT SetWaveFunction([in] IFunction* Function);
+        [id(106)] 
+        HRESULT GetCurrentFunction([out,retval] IFunction** ppRet);
+        [id(107)] 
+        HRESULT SetCurrentFunction([in] IFunction* Function);
+    }
+
+    [ uuid(FF88B28B-42EB-4EA8-BAC5-06AAE548C854),
+      oleautomation,
+      dual
+    ]
+    interface IGenericObject : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out,retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT ObjectType([out,retval] BSTR* pVal);
+        [propput, id(2)]
+        HRESULT ObjectType([in] BSTR val);
+        [propget, id(3)]
+        HRESULT ObjectDefinition([out,retval] BSTR* pVal);
+        [propput, id(3)]
+        HRESULT ObjectDefinition([in] BSTR val);
+        [propget, id(4)]
+        HRESULT BaseID([out,retval] long* pVal);
+        [propget, id(5)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [id(800)] 
+        HRESULT Delete();
+    }
+
+    [ uuid(F0D10805-A27B-4208-ACC2-F9723E62AC5C),
+      oleautomation,
+      dual
+    ]
+    interface IVesselMotion : IDispatch
+    {
+        [propget, id(1)]
+        HRESULT Description([out, retval] BSTR* pVal);
+        [propput, id(1)]
+        HRESULT Description([in] BSTR val);
+        [propget, id(2)]
+        HRESULT BaseID([out, retval] long* pVal);
+        [propget, id(3)]
+        HRESULT Parent([out, retval] ISubAssembly** ppObj);
+        [propget, id(4)]
+        HRESULT RAOFilePath([out, retval] BSTR* pVal);
+        [propput, id(4)]
+        HRESULT RAOFilePath([in] BSTR val);
+        [id(5)]
+        HRESULT GetWaveFunction([out, retval] IFunction** ppRet);
+        [id(6)]
+        HRESULT SetWaveFunction([in] IFunction* Function);
+        [propget, id(7)]
+        HRESULT WaveDir([out, retval] long* pVal);
+        [propput, id(7)]
+        HRESULT WaveDir([in] long val);
+        [id(8)]
+        HRESULT GetMotionScaleFunction([out, retval] IFunction** ppRet);
+        [id(9)]
+        HRESULT SetMotionScaleFunction([in] IFunction* Function);
+        [id(800)]
+        HRESULT Delete();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // CRITICAL: The uuid defined below for the Application coclass
+    // must be identical in value to the one in the CaApplication.cpp file
+    // (the IMPLEMENT_OLECREATE statement there). So remember to update
+    // that file also when setting new GUIDs for a new release.
+    ////////////////////////////////////////////////////////////////////////////
+
+    [ uuid(BEB5424C-69A4-4130-98D4-53D45F15364F) ]
+    coclass Application
+    {
+        [default] interface IApplication;
+    };
+};

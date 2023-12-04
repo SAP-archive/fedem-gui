@@ -1,0 +1,32 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* pointToPointMove_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        3            1",
+/* colors */
+". c #ff0000",
+"# c darkgreen",
+"a c none",
+/* pixels */
+"aaaaaaaa#######a",
+"aaaaaaaa#######a",
+"aaaaaaaa##aaa##a",
+"aaaaaaaa##aaa##a",
+"aaaaaaaa##aaa##a",
+"aaaaaaaa#######a",
+"aaaaaaaa#######a",
+"aaaaaaaaaaaaaaaa",
+"##a##a##aa....aa",
+"##a##a##aaa...aa",
+"aaaaaaaaaa....aa",
+"##aaaa##a...a.aa",
+"##aaaa##a..aaaaa",
+"aaaaaaaaaaaaaaaa",
+"##a##a##aaaaaaaa",
+"##a##a##aaaaaaaa"
+};

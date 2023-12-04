@@ -1,0 +1,40 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* viewFilter_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16       11            1",
+/* colors */
+". c #000000",
+"# c #006600",
+"a c #009900",
+"b c #99ff99",
+"c c #ffff99",
+"d c #ffffcc",
+"e c #66ff66",
+"f c #ff0000",
+"g c #0000ff",
+"h c #00ffff",
+"i c none",
+/* pixels */
+"iiiiiiiiiiiiiiii",
+"iffia#iiiiiiiiii",
+"iffi#aiiiiiiiiii",
+"iiiiiiiiiii.iiii",
+"iggi.....i.h.iii",
+"iggi.ddd..hhh.ii",
+"iiii.dcd.hhhhh.i",
+"iiii.ddd....hhh.",
+"iiii.dc..beb.hh.",
+"iiii.d.ebebeb.h.",
+"iiii.d.bebebe...",
+"iiii.d.ebebeb.ii",
+"iiii.d.bebebe.ii",
+"iiii.dd..ebe.iii",
+"iiii........iiii",
+"iiiiiiiiiiiiiiii"
+};

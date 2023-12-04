@@ -1,0 +1,30 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+static const char* padLock_xpm[] = {
+"16 16 5 1",
+". c none",
+"# c #000000",
+"b c #999900",
+"c c #cccc00",
+"a c #ffffff",
+"................",
+".....######.....",
+"....##aaaa##....",
+"...##a####a##...",
+"...#a#...a#a#...",
+"...#a#....#a#...",
+"...#a#....#a#...",
+"..############..",
+"..#bbbbbbbbbb#..",
+"..#bccccccccb#..",
+"..#bcbbbbbbcb#..",
+"..#bccccccccb#..",
+"..#bcbbbbbbcb#..",
+"..#bbbbbbbbbb#..",
+"..############..",
+"................"};

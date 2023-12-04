@@ -1,0 +1,37 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* deleteStrainCoat_xpm[] = {
+"16 16 12 1",
+"  c None",
+"! c #000000",
+"# c #0000FF",
+"$ c #FFA500",
+"% c #0099FF",
+"& c #FF80FF",
+"' c #FF0000",
+"( c #00FF00",
+") c #FFFF00",
+"* c #00FFFF",
+"+ c #000000",
+", c #FFFF00",
+" !!!!!          ",
+"  !!            ",
+" '''!        '  ",
+" ''''   !! ''   ",
+" !''''! !*''    ",
+"    ''' !''!    ",
+" !!!!''''',%!   ",
+" !'$$&'''*,,#!  ",
+" !',,''''',,,#! ",
+" !',''',,'',,#! ",
+" !'''')((*''#!  ",
+" !'''!!!!*,'!   ",
+" ''''   !*%!'   ",
+" '''    !*!     ",
+"  '     !!   '  ",
+"                "};

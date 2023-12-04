@@ -1,0 +1,32 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* additionalSolverOptions_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 4 1",
+"  c gray0",
+". c #000080",
+"X c #008080",
+"o c none ",
+/* pixels */
+"      oooo      ",
+" XXX oooooo XXX ",
+" XX oooooooo XX ",
+" X oooooooooo X ",
+"  oooooooooooo  ",
+" ooo. o . . ooo ",
+"oooooooooooooooo",
+"oooo. o . . . oo",
+"oooooooooooooooo",
+"oooo. o . .ooooo",
+" oooooooooooooo ",
+"  oo. o . . oo  ",
+" X oooooooooo X ",
+" XX oooooooo XX ",
+" XXX oooooo XXX ",
+"      oooo      "
+};

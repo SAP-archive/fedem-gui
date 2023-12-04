@@ -1,0 +1,35 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* splitBeam_xpm[] = {
+"16 16 10 1",
+" 	c None",
+".	c #1D6900",
+"+	c #000000",
+"@	c #37F400",
+"#	c #2FC600",
+"$	c #BBFFA5",
+"%	c #8AFF68",
+"&	c #33DD00",
+"*	c #228200",
+"=	c #A0A0A0",
+"                ",
+"                ",
+"                ",
+"                ",
+"                ",
+"                ",
+"  .++++  +++++  ",
+" .@.###.. .###+ ",
+".$$%.$$$.  .$$$+",
+"+%@@+&&&.  .&&&+",
+" +@+***+. +***+ ",
+"  +++++  +++++  ",
+"   =         =  ",
+"  ===       === ",
+" =====     =====",
+"                "};

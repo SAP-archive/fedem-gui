@@ -1,0 +1,31 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* solveRosette_xpm[] = {
+"16 16 6 1",
+". c None",
+"a c #000000",
+"# c #663300",
+"d c #cccc00",
+"c c #ffff00",
+"b c #ffff99",
+"................",
+"................",
+".......##.a.....",
+".......##.a##...",
+".......##.###...",
+".aaaaaa#####ba..",
+".accccc####cbba.",
+".a############ba",
+".a############da",
+".addd####dddcda.",
+".aaa#####aadda..",
+"...###.##.ada...",
+"...##..##.aa....",
+".......##.a.....",
+"................",
+"................"};

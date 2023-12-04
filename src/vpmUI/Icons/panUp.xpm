@@ -1,0 +1,33 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* panUp_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1",
+"  c gray0",
+". c #800000",
+"X c none",
+"o c #808080",
+"O c white",
+/* pixels */
+"XXXXXXXXXXXX.XXX",
+"XXXXXXXXXXX...XX",
+"XXXXXXXXXX.....X",
+"Xo X    XXX...XX",
+"X O OO O XX...XX",
+"o OO OO O X...XX",
+" O OO OOoO XXXXX",
+" OO OOOOOOO XXXX",
+"X OO OOOOOOooXXX",
+"XX OOOOOOOOO XXX",
+"XXX OOOOOOOOO XX",
+"X    OOOOOOOOO X",
+" OOOOOOOOOOOOOXX",
+"X   OOOOOOOOOXXX",
+"XXXX      OOXXXX",
+"XXXXXXXXXXXXXXXX"
+};

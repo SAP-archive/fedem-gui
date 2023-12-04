@@ -1,0 +1,29 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* treeObjectsSel_xpm[] = {
+"15 15 5 1",
+" 	c None",
+".	c #2F76CF",
+"+	c #2F77CF",
+"@	c #76BAED",
+"#	c #00C000",
+"    .......    ",
+"    +@@@@@.    ",
+"    +@@@@@.    ",
+"    +@@@@@.    ",
+"  # +++++++    ",
+" ##    +       ",
+"###############",
+"###############",
+" ##    .     . ",
+" .#    .     . ",
+"++++ +++++ ++++",
+".@@+ +@@@+ +@@.",
+".@@. +@@@. +@@.",
+".@@. +@@@. +@@.",
+"++++ +++++ ++++"};

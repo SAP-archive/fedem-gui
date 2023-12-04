@@ -1,0 +1,32 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* manageSolveModes_xpm[] = {
+"16 16 7 1",
+"# c None",
+". c #000000",
+"a c #006666",
+"b c #009999",
+"c c #cccc00",
+"e c #ffff00",
+"d c #ffff99",
+"......####......",
+".aba.######.bab.",
+".ba.####..##.ba.",
+".a.#####.c.##.b.",
+"..######.cd.##..",
+".#.......cdd.##.",
+"##.eeeeeecedd.##",
+"##..ddd...eed..#",
+"##.e...eec...c.#",
+"##.cccccccecc.##",
+".#.......ccc.##.",
+"..######.cc.##..",
+".b.#####.c.##.a.",
+".ab.####..##.ab.",
+".bab.######.aba.",
+"......####......"};

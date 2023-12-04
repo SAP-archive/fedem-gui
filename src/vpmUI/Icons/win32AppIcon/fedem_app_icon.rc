@@ -1,0 +1,78 @@
+// SPDX-FileCopyrightText: 2023 SAP SE
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// This file is part of FEDEM - https://openfedem.org
+////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Application Icons
+//
+
+IDI_ICON1    ICON    DISCARDABLE    "fedem_app_icon_ng.ico"
+128          ICON    DISCARDABLE    "FT_error_err.ico"
+129          ICON    DISCARDABLE    "FT_link_bdf.ico"
+130          ICON    DISCARDABLE    "FT_link_cad.ico"
+131          ICON    DISCARDABLE    "FT_link_flm.ico"
+132          ICON    DISCARDABLE    "FT_link_ftl.ico"
+133          ICON    DISCARDABLE    "FT_link_nas.ico"
+134          ICON    DISCARDABLE    "FT_matrix_fmx.ico"
+135          ICON    DISCARDABLE    "FT_model_fmm.ico"
+136          ICON    DISCARDABLE    "FT_options_fao.ico"
+137          ICON    DISCARDABLE    "FT_options_fco.ico"
+138          ICON    DISCARDABLE    "FT_options_fop.ico"
+139          ICON    DISCARDABLE    "FT_options_fsi.ico"
+140          ICON    DISCARDABLE    "FT_results_frs.ico"
+141          ICON    DISCARDABLE    "FT_results_res.ico"
+142          ICON    DISCARDABLE    "FT_sam_fsm.ico"
+143          ICON    DISCARDABLE    "FT_units_fcd.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version Information
+//
+
+1 VERSIONINFO
+FILEVERSION    8,0,0,0
+PRODUCTVERSION 8,0,0,0
+FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+FILEFLAGS 0x1L
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS 0x4L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName",     "SAP SE"
+            VALUE "FileDescription", "FEDEM"
+            VALUE "FileVersion",     "8.0.0.0"
+            VALUE "InternalName",    "Fedem.exe"
+            VALUE "LegalCopyright",  "Copyright (C) 2023 SAP SE"
+            VALUE "OriginalFilename","Fedem.exe"
+            VALUE "ProductName",     "FEDEM"
+            VALUE "ProductVersion",  "8.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Type Library
+//
+
+#ifdef FT_HAS_COMAPI
+1 TYPELIB "CaMain.tlb"
+#endif

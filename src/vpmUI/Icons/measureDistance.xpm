@@ -1,0 +1,27 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* measureDistance_xpm[] = {
+"16 16 2 1",
+"  c None",
+"x c #000000",	   
+"             xx ",
+"             xx ",
+"            x   ",
+"           x    ",
+"          x     ",
+"      xxx       ",
+"     x   x      ",
+"        x       ",
+"       x        ",
+"       x        ",
+"    x           ",
+"   x   x        ",
+"  x             ",
+"xx              ",
+"xx              ",
+"                "};

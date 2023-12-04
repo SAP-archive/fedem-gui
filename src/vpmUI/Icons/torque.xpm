@@ -1,0 +1,35 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* torque_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        6            1",
+/* colors */
+". c #000000",
+"# c #990000",
+"a c #cc0000",
+"b c #ff00a0",
+"c c #00ff00",
+"d c none",
+/* pixels */
+"ddddbbdddddddddd",
+"ddddbbdddddddddd",
+"ddddbbdddddddddd",
+"ddbbbbbbdddddddd",
+"dddbbbbdddd.....",
+"dddbbbbdddddd.dd",
+"ddddbbddddddd.dd",
+"ddbbbbbbddddd.dd",
+"dddbbbbdddddd.dd",
+"dddbbbbdddddd.dd",
+"ddddbbdddddddddd",
+"ddddbbdddddddddd",
+"ddd.cc.ddddddddd",
+"dd.cccc.dddddddd",
+"ddd.cc.ddddddddd",
+"dddd..dddddddddd"
+};

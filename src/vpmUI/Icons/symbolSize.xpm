@@ -1,0 +1,44 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* symbolSize_xpm[] = {
+"16 16 19 1",
+" 	c None",
+".	c #DFE8F1",
+"+	c #648FBC",
+"@	c #ECF1F7",
+"#	c #618EBB",
+"$	c #4A7DB1",
+"%	c #6A94BF",
+"&	c #779DC4",
+"*	c #799FC5",
+"=	c #232323",
+"-	c #000000",
+";	c #DDDDDD",
+">	c #474747",
+",	c #C3C3C3",
+"'	c #898989",
+")	c #5F8CBA",
+"!	c #696969",
+"~	c #DDE7F0",
+"{	c #A7A7A7",
+"                ",
+"           .+@  ",
+"           #$%  ",
+"          &$$$* ",
+"  =---;         ",
+" >-----         ",
+";-=  >-,  &$$$* ",
+";--'       )$%  ",
+" !----,    ~+@  ",
+"  '----,        ",
+"     =-!        ",
+"{->  {-!        ",
+" ------{        ",
+"  ----{         ",
+"                ",
+"                "};

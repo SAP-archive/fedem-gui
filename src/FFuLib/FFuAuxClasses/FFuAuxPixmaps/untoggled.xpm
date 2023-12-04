@@ -1,0 +1,28 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+static const char* untoggled_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    19    13        2            1",
+/* colors */
+". c #000000",
+"  c None",
+/* pixels */
+".............      ",
+".............      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+"..         ..      ",
+".............      ",
+".............      "
+};

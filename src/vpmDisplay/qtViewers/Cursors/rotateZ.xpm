@@ -1,0 +1,47 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* rotateZ_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"32 32 3 1",
+"X c black",
+". c white",                      
+"  c none",                       
+/* pixels */    
+"         XX                     ",
+"        X.X                     ",
+"       X..X                     ",
+"      X...XXX                   ",
+"     X.......XX                 ",
+"      X...XX...X                ",
+"       X..X XX..X               ",
+" XXX    X.X   X..X              ",
+" X.X     XX    X.X              ",
+"X..X           X..X             ",
+"X.X      .      X.X             ",
+"X.X     X.X     X.X             ",
+"X.X    .....    X.X             ",
+"X.X     X.X     X.X             ",
+"X.X      .      X.X             ",
+"X..X           X..X             ",
+"XX.X           X.X              ",
+" X..X         X..X              ",
+"  X..XX     XX..X               ",
+"   X...XXXXX...X                ",
+"    XX.......XX                 ",
+"      XXXXXXX                   ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                "
+};

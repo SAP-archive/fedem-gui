@@ -1,0 +1,113 @@
+# SPDX-FileCopyrightText: 2023 SAP SE
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# This file is part of FEDEM - https://openfedem.org
+
+# Builds the LIB_ID library
+set ( LIB_ID vpmDisplay )
+
+find_package ( Qt4 REQUIRED )
+include ( ${QT_USE_FILE} )
+
+if ( WIN )
+  set ( SDK_ROOT "C:/Program Files (x86)/Windows Kits/10/Lib" )
+  find_library ( DSO_LIBGL OpenGL32 HINTS ${SDK_ROOT}/${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}/um/x64 )
+  find_library ( DSO_SO_SMALLCHANGES SmallChange1 $ENV{COIN_ROOT}/lib )
+  find_library ( SoQt_library SoQt1 $ENV{COIN_ROOT}/lib )
+  find_library ( Simage_library simage1 $ENV{COIN_ROOT}/lib )
+else ( WIN )
+  find_library ( DSO_LIBGL GL /usr/lib64 )
+  find_library ( DSO_SO_SMALLCHANGES SmallChange )
+  find_library ( SoQt_library SoQt )
+  find_library ( Simage_library simage )
+endif ( WIN )
+
+set ( EXTERNAL_LIBRARIES ${Coin_library} ${SoQt_library} ${DSO_LIBGL} )
+
+if ( WIN )
+  include_directories ( "$ENV{COIN_ROOT}/include" )
+  string ( APPEND CMAKE_CXX_FLAGS " -Dwin32 -DCOIN_DLL -DSOQT_DLL" )
+endif ( WIN )
+
+if ( DSO_SO_SMALLCHANGES )
+  message ( STATUS "Found SmallChange library: ${DSO_SO_SMALLCHANGES}" )
+  list ( INSERT EXTERNAL_LIBRARIES 2 ${DSO_SO_SMALLCHANGES} )
+  string ( APPEND CMAKE_CXX_FLAGS " -DUSE_SMALLCHANGE" )
+  if ( WIN )
+    string ( APPEND CMAKE_CXX_FLAGS " -DSMALLCHANGE_DLL" )
+  endif ( WIN )
+else ( DSO_SO_SMALLCHANGES )
+  message ( STATUS "SmallChange library not available, configuring without it" )
+endif ( DSO_SO_SMALLCHANGES )
+
+if ( Simage_library )
+  message ( STATUS "Found Simage library: ${Simage_library}" )
+  string ( APPEND CMAKE_CXX_FLAGS " -DUSE_SIMAGE" )
+  if ( WIN )
+    string ( APPEND CMAKE_CXX_FLAGS " -DSIMAGE_DLL" )
+  endif ( WIN )
+  list ( APPEND EXTERNAL_LIBRARIES ${Simage_library} )
+else ( Simage_library )
+  message ( STATUS "Simage library not available, configuring without it" )
+endif ( Simage_library )
+
+
+if ( USE_MEMPOOL )
+  string ( APPEND CMAKE_CXX_FLAGS " -DFT_USE_MEMPOOL" )
+endif ( USE_MEMPOOL )
+
+
+## Files with header and source with same name
+set ( COMPONENT_FILE_LIST  FaDOF Fd2dPictureNode Fd2DPoints
+                           FdAnimateModel FdAnimationInfo FdAppearanceKit
+                           FdAxialSprDa FdAxisCross FdBackPointer
+                           FdBase FdBeam FdCamJoint FdCamJointKit FdCtrlDB
+                           FdCtrlElement FdCtrlElemKit FdCtrlGrid FdCtrlGridKit FdCtrlKit
+                           FdCtrlLine FdCtrlLineKit FdCtrlObject FdCtrlSymbolKit
+                           FdCtrlSymDef FdCurveKit FdDB FdDBPointSelectionData
+                           FdEvent FdExportIv FdExtraGraphics
+                           FdFEGroupPart FdFEGroupPartKit FdFEModel FdFEModelKit
+                           FdFEVisControl FdFreeJoint FdHP FdLabelKit
+                           FdLinJoint FdLinJointKit
+                           FdLink FdLoad FdLoadDirEngine FdLoadTransformKit
+                           FdMechanismKit FdMultiplyTransforms FdPart
+                           FdPickedPoints FdPickFilter FdPipeSurface FdPipeSurfaceKit
+                           FdPrismJoint FdPtPMoveAnimator FdRefPlane FdRefPlaneKit
+                           FdRevJoint FdSeaState FdSeaStateKit
+                           FdSelector FdSensor FdSimpleJoint FdSimpleJointKit
+                           FdSprDaPlacer FdSprDaTransformKit FdSticker FdStrainRosette
+                           FdStrainRosetteKit FdSymbolDefs FdSymbolKit
+                           FdTire FdTransformKit FdTriad FdTriadSwKit
+                           FdUserDefinedElement qtViewers/FdQtViewer
+)
+## Pure header files, i.e., header files without a corresponding source file
+set ( HEADER_FILE_LIST FdLogoPicture FdMarkerPicture FdAnimatedBase FdConverter )
+## Pure implementation files, i.e., source files without corresponding header
+set ( SOURCE_FILE_LIST )
+
+
+foreach ( FILE ${COMPONENT_FILE_LIST} )
+  set ( CPP_SOURCE_FILES ${CPP_SOURCE_FILES} ${FILE}.C )
+  set ( HPP_HEADER_FILES ${HPP_HEADER_FILES} ${FILE}.H )
+endforeach ( FILE ${COMPONENT_FILE_LIST} )
+
+foreach ( FILE ${HEADER_FILE_LIST} )
+  set ( HPP_HEADER_FILES ${HPP_HEADER_FILES} ${FILE}.H )
+endforeach ( FILE ${HEADER_FILE_LIST} )
+
+foreach ( FILE ${SOURCE_FILE_LIST} )
+  set ( CPP_SOURCE_FILES ${CPP_SOURCE_FILES} ${FILE}.C )
+endforeach ( FILE ${SOURCE_FILE_LIST} )
+
+
+set ( FT_KERNEL_LIBRARIES vpmDB )
+set ( FT_COMMON_LIBRARIES FFlVisualization FFaAlgebra FFaDefinitions FFaGeometry )
+set ( FT_GUI_LIBRARIES vpmUI vpmApp FFdCadModel )
+set ( FT_LIBRARIES ${FT_GUI_LIBRARIES} ${FT_KERNEL_LIBRARIES} ${FT_COMMON_LIBRARIES} )
+
+set ( DEPENDENCY_LIST ${FT_LIBRARIES} ${EXTERNAL_LIBRARIES} )
+
+message ( STATUS "Building library ${LIB_ID}" )
+add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )
+target_link_libraries ( ${LIB_ID} ${DEPENDENCY_LIST} )

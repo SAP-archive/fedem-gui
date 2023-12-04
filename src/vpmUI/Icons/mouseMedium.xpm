@@ -1,0 +1,31 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* mouseMedium_xpm[] = {
+"26 19 3 1",
+" 	c None",
+".	c black        ",
+"X	c white        ",
+"                          ",
+"                        . ",
+"                      ... ",
+"                     ..   ",
+"                     ..   ",
+"         .....        ..  ",
+"       ..XXX....       .  ",
+"     .. ....XXXX........  ",
+"    .XXXXX..XX...         ",
+"   .XXXXXXX...XXX.        ",
+"  .XXXXXXXX.XXXXX.        ",
+" .XXXXXXXX.XXXXXX.        ",
+" .XXXXXXX.XXXXX..         ",
+" ...XXX..XXXX..           ",
+" .XX...XXXX..             ",
+"  .XXXXXX..               ",
+"   ......                 ",
+"                          ",
+"                          "};

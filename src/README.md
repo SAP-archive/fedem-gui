@@ -1,9 +1,9 @@
 <!---
-  Copyright (C) 2023 SAP SE
-  This file is part of FEDEM - https://openfedem.org
+  SPDX-FileCopyrightText: 2023 SAP SE
 
-  SPDX-License-Identifier: LGPL-3.0-or-later
-  See LICENSES/README.md for more information.
+  SPDX-License-Identifier: Apache-2.0
+
+  This file is part of FEDEM - https://openfedem.org
 --->
 
 # Source code organization

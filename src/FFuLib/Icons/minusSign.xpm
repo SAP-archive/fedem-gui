@@ -1,0 +1,29 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+static const char* minusSign_xpm[] = {
+"16 16 4 1",
+"a c #990000",
+"b c #ff0000",
+"# c #ff3333",
+". c None",
+"................",
+"................",
+"................",
+"................",
+"................",
+"................",
+".##############.",
+".abbbbbbbbbbbb#.",
+".abbbbbbbbbbbb#.",
+".aaaaaaaaaaaaa#.",
+"................",
+"................",
+"................",
+"................",
+"................",
+"................"};

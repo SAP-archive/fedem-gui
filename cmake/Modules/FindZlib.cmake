@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2023 SAP SE
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# This file is part of FEDEM - https://openfedem.org
+
+unset ( ZLIB_INCLUDE CACHE )
+unset ( ZLIB_LIBRARY CACHE )
+
+find_path ( ZLIB_INCLUDE
+            NAMES zlib.h
+            PATHS C:/Zlib/include
+           )
+
+if ( ZLIB_INCLUDE )
+  message ( STATUS "Found Zlib: ${ZLIB_INCLUDE}" )
+  include_directories ( ${ZLIB_INCLUDE} )
+
+  find_library ( ZLIB_LIBRARY
+                 NAMES zlib
+                 PATHS C:/Zlib/lib
+               )
+  find_library ( MINIZIP_LIBRARY
+                 NAMES zip minizip
+                 PATHS C:/Zlib/lib
+               )
+
+endif ( ZLIB_INCLUDE )
+
+if ( ZLIB_LIBRARY AND MINIZIP_LIBRARY )
+  message ( STATUS "Found Zlib: ${ZLIB_LIBRARY} ${MINIZIP_LIBRARY}" )
+  include_directories ( ${ZLIB_INCLUDE} )
+  string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_ZLIB" )
+else ( ZLIB_LIBRARY )
+  message ( WARNING "Did NOT find Zlib, configuring without it." )
+endif ( ZLIB_LIBRARY AND MINIZIP_LIBRARY )

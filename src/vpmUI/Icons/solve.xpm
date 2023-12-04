@@ -1,0 +1,30 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* solve_xpm[] = {
+"16 16 5 1",
+". c none",
+"# c #000000",
+"a c #cccc00",
+"c c #ffff00",
+"b c #ffff99",
+"................",
+"................",
+".........##.....",
+".........#a#....",
+".........#ab#...",
+".#########abb#..",
+".#aaaaaaaaacbb#.",
+".#bbbbbbbbaccbb#",
+".#ccccccccaccaa#",
+".#aaaaaaaaacaa#.",
+".#########aaa#..",
+".........#aa#...",
+".........#a#....",
+".........##.....",
+"................",
+"................"};

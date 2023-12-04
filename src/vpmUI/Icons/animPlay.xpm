@@ -1,0 +1,31 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* animPlay_xpm[] = {
+"20 20 2 1",
+" 	c None",
+".	c #F1F1A0A00000",
+"                    ",
+"                    ",
+"                    ",
+"                    ",
+"     .              ",
+"     ...            ",
+"     .....          ",
+"     .......        ",
+"     .........      ",
+"     ..........     ",
+"     .........      ",
+"     .......        ",
+"     .....          ",
+"     ...            ",
+"     .              ",
+"                    ",
+"                    ",
+"                    ",
+"                    ",
+"                    "};

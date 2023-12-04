@@ -1,0 +1,30 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* vtf_xpm[] = {
+"16 16 4 1",
+"  c gray0",
+". c none",
+"X c yellow",
+"r c red",
+/* pixels */
+"...             ",
+"    rrrrrrrrrrr ",
+" .. .r.r...r... ",
+" .. .r.rr.rr.rr ",
+"    .r.rr.rr..r ",
+"    r.rrr.rr.rr ",
+"  X rrrrrrrrrrr ",
+"  X             ",
+"  XXXXXXXXXXXX  ",
+"  XXXXXXXXXXXX  ",
+"  XXXXXXXXXXXX  ",
+"                ",
+"                ",
+" .. .. .. .. .. ",
+" .. .. .. .. .. ",
+"                "};

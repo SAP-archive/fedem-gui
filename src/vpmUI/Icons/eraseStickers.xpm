@@ -1,0 +1,29 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* eraseStickers_xpm[] = {
+"16 16 4 1",
+" 	c none",
+".	c #000000000000",
+"X	c #FFFF00000000",
+"o	c brown",
+"                ",
+"                ",
+"                ",
+"                ",
+"       ..       ",
+"      .oo.      ",
+"      .oo. XX   ",
+"   XX ....XX    ",
+"    XX. .XX     ",
+"    .XX XX..    ",
+"   .. XXX  ..   ",
+"  ..  XXX   ..  ",
+" ..  XX XX   .. ",
+" ...XX...XX.... ",
+"   XX     XX    ",
+"  XX       XX   "};

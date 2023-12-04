@@ -1,0 +1,31 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* backwardSelect_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1",
+"  c gray0",
+". c #008000",
+"X c none",
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXX XXXXXXX",
+"XXXXXXX  XXXXXXX",
+"XXXXXX . XXXXXXX",
+"XXXXX .. XXXXXXX",
+"XXXX ...   XXXXX",
+"XXX ...... XXXXX",
+"XX ....... XXXXX",
+"XX ....... XXXXX",
+"XXX ...... XXXXX",
+"XXXX ...   XXXXX",
+"XXXXX .. XXXXXXX",
+"XXXXXX . XXXXXXX",
+"XXXXXXX  XXXXXXX",
+"XXXXXXXX XXXXXXX",
+"XXXXXXXXXXXXXXXX"
+};

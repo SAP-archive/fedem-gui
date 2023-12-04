@@ -1,0 +1,30 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+static const char* ExpandDown_xpm[] = {
+"16 16 5 1",
+" 	c None",
+".	c #3E3E3E",
+"+	c #7C7C7C",
+"@	c #292929",
+"#	c #515151",
+"                ",
+"                ",
+"                ",
+"                ",
+"       ...      ",
+"        +       ",
+"        +       ",
+"        +       ",
+"    .@@@@@@@.   ",
+"     @#+++#@    ",
+"      @#+#@     ",
+"       @#@      ",
+"        .       ",
+"                ",
+"                ",
+"                "};

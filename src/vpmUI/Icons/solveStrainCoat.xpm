@@ -1,0 +1,42 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* solveStrainCoat_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16       13            1",
+/* colors */
+". c #000000",
+"# c #000066",
+"a c #000099",
+"b c blue   ",
+"c c orange",
+"d c #0099ff",
+"e c #ffff66",
+"f c #ff0000",
+"g c #00ff00",
+"h c #ffff00",
+"i c #00ffff",
+"j c none",
+"k c yellow",   
+/* pixels */  
+"j.....jjjjjjjjjj",
+"jj..jjjjjjjjjjjj",
+"jjj..jjjjjjjjjjj",
+"jj..jjjj..jjjjjj",
+"j......j.i.jjjjj",
+"jjjjjjjj.ik.jjjj",
+"j........ikd.jjj",
+"j.fcchhggikkb.jj",
+"j.fkkkkkkkkkkb.j",
+"j.fkkkkkkkkkkb.j",
+"j.fcchhggikkb.jj",
+"j........ikd.jjj",
+"jjjjjjjj.id.jjjj",
+"jjjjjjjj.i.jjjjj",
+"jjjjjjjj..jjjjjj",
+"jjjjjjjjjjjjjjjj"
+};

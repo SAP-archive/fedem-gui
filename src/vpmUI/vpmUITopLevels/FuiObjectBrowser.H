@@ -1,0 +1,81 @@
+// SPDX-FileCopyrightText: 2023 SAP SE
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// This file is part of FEDEM - https://openfedem.org
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef FUI_OBJECT_BROWSER_H
+#define FUI_OBJECT_BROWSER_H
+
+#include "FFuLib/FFuBase/FFuTopLevelShell.H"
+#include "FFuLib/FFuBase/FFuUAExistenceHandler.H"
+#include "FFuLib/FFuBase/FFuUADataHandler.H"
+
+class FFuLabel;
+class FFuIOField;
+class FFuPushButton;
+class FFuListView;
+class FFuMemo;
+class FmModelMemberBase;
+
+
+class FuiObjectBrowser : virtual public FFuTopLevelShell,
+			 public FFuUAExistenceHandler,
+			 public FFuUADataHandler
+{
+  Fmd_HEADER_INIT();
+
+public:
+  FuiObjectBrowser();
+  virtual ~FuiObjectBrowser() {}
+
+  static FuiObjectBrowser* create(int xpos = 100, int ypos = 100,
+				  int width = 100, int height = 100,
+				  const char* title= "Fedem Object Browser",
+				  const char* name = "FuiObjectBrowser");
+
+protected:
+  void initWidgets();
+
+  virtual void placeWidgets(int width, int height);
+  virtual void onPoppedUp();
+  virtual void onCopyDataButtonClicked() = 0;
+
+private:
+  void onSearchButtonClicked();
+  void onSearchFieldChanged(char*) { this->onSearchButtonClicked(); }
+  void onHelpButtonClicked();
+  void onSearchViewSelectionChanged();
+
+public:
+  virtual FFuaUIValues* createValuesObject();
+  virtual void setUIValues(const FFuaUIValues* values);
+
+protected:
+  FFuLabel*           headerImage1;
+  FFuLabel*           headerImage2;
+  FFuLabel*           searchLabel;
+  FFuIOField*         searchField;
+  FFuPushButton*      searchButton;
+  FFuListView*        searchView;
+  FFuLabel*           outputLabel;
+  FFuMemo*            outputMemo;
+  FFuPushButton*      closeButton;
+  FFuPushButton*      helpButton;
+  FFuLabel*           sepLabel;
+  FFuPushButton*      copyDataButton;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+class FuaObjectBrowserValues : public FFuaUIValues
+{
+public:
+  FuaObjectBrowserValues() { obj = NULL; }
+  virtual ~FuaObjectBrowserValues() {}
+
+  FmModelMemberBase* obj;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+#endif

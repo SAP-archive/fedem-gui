@@ -1,0 +1,33 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* mouseSmall_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        4            1",
+/* colors */
+". c #000000",
+"# c #ff0000",
+"a c none",
+"b c #ffffff",
+/* pixels */
+"aa##aaaaaaaaaaaa",
+"aa##aaaaaaaaaaaa",
+"######aaaaaaaaaa",
+"######aaaaaaaaaa",
+"aa##aaaaaaaaaaaa",
+"aa##a.......aaaa",
+"aaaaa.bbbb.aaaaa",
+"aaaaa.bbb.aaaaaa",
+"aaaaa.bbbb.aaaaa",
+"aaaaa.b.bbb.aaaa",
+"aaaaa..a.bbb.aaa",
+"aaaaa.aaa.bbb.aa",
+"aaaaaaaaaa.bbb.a",
+"aaaaaaaaaaa.b..a",
+"aaaaaaaaaaaa..aa",
+"aaaaaaaaaaaaaaaa"
+};

@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2023 SAP SE
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# This file is part of FEDEM - https://openfedem.org
+
+Before a new public release, the following needs to be done here.
+
+1. Generate new GUIDs in the CaMain.idl file.
+   Use, e.g., https://www.guidgenerator.com and generate <nuid> new GUIDs
+   with "Uppcase" and "Hyphens" toggled, where <nuid> is the number of lines
+   containing "uuid" in CaMain.idl, i.e., the result of the bash command:
+   $ grep 'uuid(' CaMain.idl | wc -l
+
+2. Paste the Results into a text file uuid.txt
+
+3. Compile replaceuuid.C into replaceuuid.exe (see comments in that file).
+
+4. Run the following DOS commands to replace the GUIDs:
+   $ replaceuuid.exe uuid.txt < CaMain.idl > CaMain.tmp
+   $ rename CaMain.tmp CaMain.idl
+
+5. The last generated GUID (i.e., the one assigned to the coclass Application)
+   must also be edited into the IMPLEMENT_OLECREATE statement
+   in the file CaApplication.cpp in a matching format.
+
+6. git commit and push the changes
+
+7. Replace the value of the <Guid> tag with the first generated GUI
+   in the .csproj files of all Addon source repositories.

@@ -1,0 +1,41 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* IVSnapshot_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16       12            1",
+/* colors */
+". c #000000",
+"# c #c0c0c0",
+"a c #66ff00",
+"b c #99ff00",
+"c c #333333",
+"d c #ffff99",
+"e c #99ffff",
+"f c #ffff66",
+"g c #66ffff",
+"h c #808080",
+"i c #00ffff",
+"j c #ffffff",
+/* pixels */
+"jjjc.........jjj",
+"jjc.dfdfdf.a.jjj",
+"jc.dfdfdf.ab.jjj",
+"c.dfdfdf.aba.jjj",
+"........abab.jjj",
+".gegege...ha.jjj",
+".eg..eg.jj.h...j",
+".g..............",
+".e.jjj......jjj.",
+".g.....hhhh..jj.",
+".e.hh.hji#hh.hh.",
+"...hh.hihhhi.hh.",
+"jj.hh.h#hhhi.hh.",
+"jj.hh..hhii..hh.",
+"jj..............",
+"jjjjjjjh..hjjjjj"
+};

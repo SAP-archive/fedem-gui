@@ -1,0 +1,32 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* look_xpm[] = {
+"29 18 5 1",
+" 	c None",
+".	c black",
+"X	c #C3C3C3C3C3C3",
+"o	c #00006565FDFD",
+"O	c #0A0A0A0A1414",
+"                             ",
+"     ....           ....     ",
+"   ..XXXX..       ..XXXX..   ",
+"  .XXXXXXXX.     .XXXXXXXX.  ",
+"  .XXXXXXXXX.   .XXXXXXXXX.  ",
+" .XXXXXXXXXX.   .XXXXXXXXXX. ",
+" .XXXXXXXXXX.   .XXXXXXXXXX. ",
+" .XXXXXXXXXX.   .XXXXXXXXXX. ",
+" .XXXXXooXXX.   .XXXooXXXXX. ",
+" .XXXXooOoXX.   .XXoOooXXXX. ",
+" .XXXXoOOoXX.   .XXoOOoXXXX. ",
+"  .XXXXooXX.     .XXooXXXX.  ",
+"  .XXXXXXXX.     .XXXXXXXX.  ",
+"  .XXXXXXXX.     .XXXXXXXX.  ",
+"   .XXXXXX.       .XXXXXX.   ",
+"    .XXXX.         .XXXX.    ",
+"     ....           ....     ",
+"                             "};

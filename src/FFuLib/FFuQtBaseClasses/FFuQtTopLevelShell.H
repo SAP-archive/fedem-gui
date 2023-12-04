@@ -1,0 +1,79 @@
+// SPDX-FileCopyrightText: 2023 SAP SE
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// This file is part of FEDEM - https://openfedem.org
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef FUI_QT_TOP_LEVEL_SHELL_H
+#define FUI_QT_TOP_LEVEL_SHELL_H
+
+#include <map>
+#include <QObject>
+
+#include "FFuLib/FFuQtBaseClasses/FFuQtMultUIComponent.H"
+#include "FFuLib/FFuBase/FFuTopLevelShell.H"
+
+class QEvent;
+class QCloseEvent;
+
+
+class FFuQtTopLevelShell : public FFuQtMultUIComponent,
+                           virtual public FFuTopLevelShell
+{
+public:
+  FFuQtTopLevelShell(QWidget* parent,
+		     int xpos = 100, int ypos  = 100,
+		     int width= 100, int height= 100,
+		     const char* title = "FFuQtTopLevelShellUI",
+		     const char* name  = "FFuQtTopLevelShell",
+		     Qt::WindowFlags f = Qt::Widget);
+  virtual ~FFuQtTopLevelShell() {}
+
+  // Qt Implementation of standard window actions :
+
+  virtual void refresh  ();
+  virtual void iconify  ();
+  virtual void deiconify();
+  virtual void setTitle (const char* title);
+  // The popUp method is reimplemented here (from FFuComponentBase)
+  // to make poPup also raise the window to top.
+  // SKE it still doesn't get visible....
+  virtual void popUp    ();
+
+  // This one will show the TLS in "normal" mode.
+  virtual void showTLSNormal();
+
+  // Call this to initialise QtBlocking
+
+  static void initQtBlocking();
+
+private:
+
+  // Reimplementing the Qt event handler on window manager close
+  void closeEvent(QCloseEvent* e);
+
+  // Qt implementation of the low level blocking methods :
+
+  virtual void blockThis(bool everything);
+  virtual void unBlockThis();
+
+  // Methods to assist the Qt implementation of blocking :
+
+  static bool filterEventsDueToBlocking(QObject* receiver, QEvent* e);
+
+  // Class used to keep the event filter for blocking
+  class Blocker : public QObject
+  {
+  protected:
+    virtual bool eventFilter(QObject* receiver, QEvent* e)
+    {
+      return FFuQtTopLevelShell::filterEventsDueToBlocking(receiver,e);
+    }
+  };
+
+  // Variables used by blocking algorithm :
+  static std::map<QWidget*,QWidget*> ourTopLevelsToBlock;
+};
+
+#endif

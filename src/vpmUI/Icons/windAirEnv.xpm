@@ -1,0 +1,30 @@
+/* SPDX-FileCopyrightText: 2023 SAP SE
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * This file is part of FEDEM - https://openfedem.org
+ */
+/* XPM */
+const char* windAirEnv_xpm[] = {
+"16 16 5 1",
+" 	c None",
+".	c #4BB5FF",
+"+	c #ACD4F3",
+"@	c #CCE4F8",
+"#	c #C0C0C0",
+"         ...    ",
+"        .   .   ",
+"      +.+    .  ",
+"     + . +      ",
+"   @+#.   +  .  ",
+"  @ + .     ..  ",
+" @ +   .   .....",
+" @ +   .    ..  ",
+"@   +   .    .  ",
+"@   +    ..     ",
+" @   +     .....",
+" @    ++        ",
+"  @     ++++++  ",
+"   @@           ",
+"     @@@@@@@    ",
+"                "};

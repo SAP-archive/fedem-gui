@@ -1,0 +1,150 @@
+#FEDEM response data
+ AssosiatedModelFileName = NONE;
+ ModelName               = NONE;
+ InformationText         = response data base file;
+ User                    = UNKNOWN;
+ Computer                = UNKNOWN;
+ DateTime                = UNKNOWN;
+ UsedTime                = UNKNOWN;
+ Module                  = fedem_stress;
+ ModuleVersion           = R6.0;
+VARIABLES:
+< 1;"Time step number";NONE;INT;32;NUMBER>
+< 2;"Physical time";TIME;FLOAT;64;SCALAR>
+< 3;"Translational deformation";LENGTH;FLOAT;64;VEC3;(3);(("d_x","d_y","d_z"))>
+< 4;"Angular deformation";ANGLE;FLOAT;64;ROT3;(3);(("theta_x","theta_y","theta_z"))>
+< 5;"Stress";FORCE/AREA;FLOAT;64;TENSOR3;(6);(("sigma_xx","sigma_yy","sigma_zz","sigma_xy","sigma_xz","sigma_yz"))>
+< 6;"Stress";FORCE/AREA;FLOAT;64;TENSOR2;(3);(("sigma_xx","sigma_yy","sigma_xy"))>
+< 7;"Stress";FORCE/AREA;FLOAT;64;TENSOR1;(1);(("sigma_xx"))>
+< 8;"Beam sectional force";FORCE;FLOAT;64;VEC3;(3);(("N","V_y","V_z"))>
+< 9;"Beam sectional moment";FORCE*LENGTH;FLOAT;64;VEC3;(3);(("M_x","M_y","M_z"))>
+<10;"Shell stress resultant force";FORCE/LENGTH;FLOAT;64;TENSOR2;(3);(("n_xx","n_yy","n_xy"))>
+<11;"Shell stress resultant moment";FORCE*LENGTH/LENGTH;FLOAT;64;TENSOR2;(3);(("m_xx","m_yy","m_xy"))>
+<12;"Strain";NONE;FLOAT;64;TENSOR3;(6);(("epsilon_xx","epsilon_yy","epsilon_zz","epsilon_xy","epsilon_xz","epsilon_yz"))>
+<13;"Strain";NONE;FLOAT;64;TENSOR2;(3);(("epsilon_xx","epsilon_yy","epsilon_xy"))>
+<14;"Strain";NONE;FLOAT;64;TENSOR1;(1);(("epsilon_xx"))>
+<15;"Curvature";NONE/LENGTH;FLOAT;64;TENSOR2;(3);(("kappa_xx","kappa_yy","kappa_xy"))>
+<16;"Von Mises stress";FORCE/AREA;FLOAT;64;SCALAR>
+<17;"Max principal stress";FORCE/AREA;FLOAT;64;SCALAR>
+<18;"Min principal stress";FORCE/AREA;FLOAT;64;SCALAR>
+<19;"Max shear stress";FORCE/AREA;FLOAT;64;SCALAR>
+<20;"Max von Mises stress";FORCE/AREA;FLOAT;64;SCALAR>
+<21;"Max stress range";FORCE/AREA;FLOAT;64;SCALAR>
+<22;"Von Mises strain";NONE;FLOAT;64;SCALAR>
+<23;"Max principal strain";NONE;FLOAT;64;SCALAR>
+<24;"Min principal strain";NONE;FLOAT;64;SCALAR>
+<25;"Max shear strain";NONE;FLOAT;64;SCALAR>
+<26;"Max von Mises strain";NONE;FLOAT;64;SCALAR>
+<27;"Max strain range";NONE;FLOAT;64;SCALAR>
+<28;"Mean bi-axiality";NONE;FLOAT;64;SCALAR>
+<29;"Biaxiality standard deviation";NONE;FLOAT;64;SCALAR>
+<30;"Angle spread";ANGLE;FLOAT;64;SCALAR>
+<31;"Most popular angle";ANGLE;FLOAT;64;SCALAR>
+<32;"Damage";NONE;FLOAT;64;SCALAR>
+<33;"Life (repeats)";NONE;FLOAT;64;SCALAR>
+<34;"Life (equnits)";NONE;FLOAT;64;SCALAR>
+
+[1;"Dynamic response";<3><4>]
+
+[2;"QUAD4";
+  [;"Element nodes";
+    [;"Basic";
+      [;1;<10><11>]
+      [;2;<10><11>]
+      [;3;<10><11>]
+      [;4;<10><11>]
+    ]
+    [;"Top";
+      [;1;<6><13><16><17><18><19><22><23><24><25>]
+      [;2;<6><13><16><17><18><19><22><23><24><25>]
+      [;3;<6><13><16><17><18><19><22><23><24><25>]
+      [;4;<6><13><16><17><18><19><22><23><24><25>]
+    ]
+    [;"Bottom";
+      [;1;<6><13><16><17><18><19><22><23><24><25>]
+      [;2;<6><13><16><17><18><19><22><23><24><25>]
+      [;3;<6><13><16><17><18><19><22><23><24><25>]
+      [;4;<6><13><16><17><18><19><22><23><24><25>]
+    ]
+  ]
+]
+
+[3;"Box BEAM2 Results";
+  [;"Element nodes";
+    [;"Basic";
+      [;1;<8><9>]
+      [;2;<8><9>]
+    ]
+  ]
+  [;"Evaluation points";
+    [;"Basic";
+      [;1;]
+      [;2;]
+      [;3;]
+      [;4;]
+      [;5;]
+      [;6;]
+      [;7;]
+      [;8;]
+    ]
+  ]
+]
+
+[4;"I BEAM2 Results";
+  [;"Element nodes";
+    [;"Basic";
+      [;1;<8><9>]
+      [;2;<8><9>]
+    ]
+  ]
+  [;"Evaluation points";
+    [;"Basic";
+      [;1;]
+      [;2;]
+      [;3;]
+      [;4;]
+      [;5;]
+      [;6;]
+      [;7;]
+      [;8;]
+      [;9;]
+      [;10;]
+    ]
+  ]
+]
+
+[5;"HEX8 Results";
+  [;"Element nodes";
+    [;"Basic";
+      [;1;<5><12><16><17><18><19><22><23><24><25>]
+      [;2;<5><12><16><17><18><19><22><23><24><25>]
+      [;3;<5><12><16><17><18><19><22><23><24><25>]
+      [;4;<5><12><16><17><18><19><22><23><24><25>]
+      [;5;<5><12><16><17><18><19><22><23><24><25>]
+      [;6;<5><12><16><17><18><19><22><23><24><25>]
+      [;7;<5><12><16><17><18><19><22><23><24><25>]
+      [;8;<5><12><16><17><18><19><22><23><24><25>]
+    ]
+  ]
+]
+
+[6;"STRCQ4";
+  [;"Element";
+    [;"Basic";<17><19><20><21><23><25><26><27><28><29><30><31><32><33><34>]
+    [;"Top";<17><19><20><21><23><25><26><28><29><30><31><32><33><34>]
+    [;"Bottom";<17><19><20><21><23><25><26><27><28><29><30><31><32><33><34>]
+  ]
+]
+
+DATABLOCKS:
+<1><2>
+{"Part";;;;
+  [;"Nodes";
+    [;*;[1]]
+  ]
+  [;"Elements";
+    [;*;[2][3][4][5][6]]
+  ]
+}
+
+DATA:
