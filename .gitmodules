@@ -1,0 +1,3 @@
+[submodule "fedem-mdb"]
+	path = fedem-mdb
+	url = ../fedem-mdb.git
