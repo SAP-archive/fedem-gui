@@ -25,6 +25,9 @@ See [src/README.md](src/README.md) for details on the source code organization.
 The FEDEM solvers themselves are maintained in a parallel project
 [fedem-solvers](https://github.com/SAP/fedem-solvers).
 
+Refer to our web page [openfedem.org](https://openfedem.org/)
+for overall information on the FEDEM project.
+
 ## Requirements and Setup
 
 The FEDEM GUI project relies on the following third-party modules,
@@ -44,7 +47,7 @@ which are not included in this repository:
   File compression library
 
 You need to build and install these modules separately,
-before building the FEDEM GUI applicationi itself,
+before building the FEDEM GUI application itself,
 see [here](BUILD.md#build-of-external-3rd-party-modules) for details.
 The first four of the packages above are mandatory,
 whereas the latter two are optional.
