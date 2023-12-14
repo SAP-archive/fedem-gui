@@ -4,7 +4,6 @@
 #
 # This file is part of FEDEM - https://openfedem.org
 
-# Builds the LIB_ID library
 set ( LIB_ID vpmUIQtTopLevels )
 
 if ( USE_FORTRAN )
@@ -85,9 +84,7 @@ set ( HEADER_FILES ${HPP_HEADER_FILES} )
 set ( SOURCE_FILES ${CPP_SOURCE_FILES} ${QT_MOC_SOURCE_FILES} )
 
 
-#
 # Dependencies and system libraries
-#
 
 find_package ( Qt4 REQUIRED )
 include ( ${QT_USE_FILE} )
@@ -97,14 +94,31 @@ if ( WIN AND Coin_library )
   include_directories ( "$ENV{COIN_ROOT}/include" )
 endif ( WIN AND Coin_library )
 
-set ( FT_KERNEL_LIBRARIES vpmDB )
-set ( FT_COMMON_LIBRARIES )
-set ( FT_GUI_LIBRARIES vpmUITopLevels vpmUIQtComponents FFuQtComponents FFuQtBaseClasses FFuComponents )
+set ( DEPENDENCY_LIST vpmUITopLevels vpmUIQtComponents FFuQtComponents FFuQtBaseClasses FFuComponents )
 if ( BUILD_FWP )
-  list ( APPEND FT_GUI_LIBRARIES FFuInputTables )
+  list ( APPEND DEPENDENCY_LIST FFuInputTables )
 endif ( BUILD_FWP )
-set ( DEPENDENCY_LIST ${FT_GUI_LIBRARIES} ${FT_KERNEL_LIBRARIES} ${FT_COMMON_LIBRARIES} )
+list ( APPEND DEPENDENCY_LIST vpmDB )
+
+
+# Build the library ${LIB_ID}
 
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${SOURCE_FILES} ${HEADER_FILES} )
 target_link_libraries ( ${LIB_ID} ${DEPENDENCY_LIST} )
+
+
+# Install the dependent shared object libraries
+
+set ( QT_LIBS Qt3Support QtCore QtGui QtNetwork QtOpenGL QtSql QtXml )
+foreach ( LIB ${QT_LIBS} )
+  get_target_property ( LIB_PATH Qt4::${LIB} LOCATION )
+  if ( WIN )
+    string ( REPLACE ".lib" ".dll" DLL_PATH ${LIB_PATH} )
+    if ( FTENV_VERBOSE )
+      message ( STATUS "Installing ${DLL_PATH} to ${CMAKE_INSTALL_PREFIX}" )
+    endif ( FTENV_VERBOSE )
+    install ( FILES ${DLL_PATH} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
+              CONFIGURATIONS Release RelWithDebInfo )
+  endif ( WIN )
+endforeach ( LIB ${QT_LIBS} )

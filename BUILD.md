@@ -404,10 +404,12 @@ Proceed as follows:
       set COIN_ROOT=C:\Coin-4
       set QT_ROOT=C:\Qt-4.8.7
       set PATH=%PATH%;%QT_ROOT%\bin
+      set /p VERSION=<%USERPROFILE%\Fedem-src\fedem-gui\cfg\VERSION
       "%VS2019INSTALLDIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" ^
       -G "Visual Studio 16 2019" ^
       -S %USERPROFILE%\Fedem-src\fedem-gui ^
       -B %USERPROFILE%\Fedem-build\fedemGUI ^
+      -DCMAKE_INSTALL_PREFIX=%USERPROFILE%\Fedem-install\%VERSION% ^
       -DUSE_FORTRAN=ON
       pause
 
@@ -419,10 +421,17 @@ Proceed as follows:
   and remove the option `-DUSE_FORTRAN=ON`.
   It will then configure without Fortran support.
   This implies that the *Previewing of Functions* feature will not be available
-  in yur build of FEDEM GUI. You can also specify any of the options listed
+  in your build of FEDEM GUI. You can also specify any of the options listed
   [here](README.md#activation-of-features-compile-time) in a similar way,
   to tailor your build further.
 
 - Open the generated solution file
   `%USERPROFILE%\Fedem-build\fedemGUI\fedemGUI.sln`
-  in Visual Studio and build the `Fedem` target for `Release` configuration.
+  in Visual Studio and build the `Fedem` target for `Release` configuration
+  to compile all source files.
+
+  Build the `INSTALL` target to install the resulting binaries
+  (`.exe` file and dependent `.dll` files) in the folder
+  `${CMAKE_INSTALL_PREFIX}\bin` where `CMAKE_INSTALL_PREFIX` is specified
+  on the `cmake` command (see above). The binaries will then be installed in
+  a subfolder named after the current version stored in the `cfg\VERSION` file.

@@ -25,10 +25,19 @@ if ( ZLIB_INCLUDE )
                  PATHS C:/Zlib/lib
                )
 
+  if ( ZLIB_LIBRARY AND WIN )
+    get_filename_component ( ZLIB_DIR ${ZLIB_LIBRARY} DIRECTORY )
+    string ( REGEX REPLACE "lib$" "bin" ZLIB_BIN ${ZLIB_DIR} )
+    find_file ( ZLIB_DLL zlib.dll PATHS ${ZLIB_DIR} ${ZLIB_BIN} )
+  endif ( ZLIB_LIBRARY AND WIN )
+
 endif ( ZLIB_INCLUDE )
 
 if ( ZLIB_LIBRARY AND MINIZIP_LIBRARY )
   message ( STATUS "Found Zlib: ${ZLIB_LIBRARY} ${MINIZIP_LIBRARY}" )
+  if ( ZLIB_DLL )
+    message ( STATUS "Found Zlib: ${ZLIB_DLL}" )
+  endif ( ZLIB_DLL )
   include_directories ( ${ZLIB_INCLUDE} )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_ZLIB" )
 else ( ZLIB_LIBRARY )

@@ -132,3 +132,11 @@ list ( APPEND DEPENDENCY_LIST vpmDB FiUserElmPlugin FFaOperation )
 message ( STATUS "Building executable Fedem" )
 add_executable ( Fedem WIN32 vpm_main.C vpm_main_init.C ${COM_FILES} ${APP_ICON} )
 target_link_libraries ( Fedem ${DEPENDENCY_LIST} )
+
+#
+# Install the Fedem binary
+#
+if ( FTENV_VERBOSE )
+  message ( STATUS "Installing Fedem to ${CMAKE_INSTALL_PREFIX}" )
+endif ( FTENV_VERBOSE )
+install ( TARGETS Fedem RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" )

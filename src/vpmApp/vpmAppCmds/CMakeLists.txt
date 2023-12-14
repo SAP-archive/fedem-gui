@@ -102,3 +102,12 @@ endif ( ZLIB_LIBRARY )
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )
 target_link_libraries ( ${LIB_ID} ${DEPENDENCY_LIST} )
+
+
+if ( ZLIB_DLL )
+  if ( FTENV_VERBOSE )
+    message ( STATUS "Installing ${ZLIB_DLL} to ${CMAKE_INSTALL_PREFIX}" )
+  endif ( FTENV_VERBOSE )
+  install ( FILES ${ZLIB_DLL} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
+            CONFIGURATIONS Release RelWithDebInfo )
+endif ( ZLIB_DLL )

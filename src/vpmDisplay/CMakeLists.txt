@@ -4,8 +4,10 @@
 #
 # This file is part of FEDEM - https://openfedem.org
 
-# Builds the LIB_ID library
 set ( LIB_ID vpmDisplay )
+
+
+# Dependencies and system libraries
 
 find_package ( Qt4 REQUIRED )
 include ( ${QT_USE_FILE} )
@@ -13,12 +15,12 @@ include ( ${QT_USE_FILE} )
 if ( WIN )
   set ( SDK_ROOT "C:/Program Files (x86)/Windows Kits/10/Lib" )
   find_library ( DSO_LIBGL OpenGL32 HINTS ${SDK_ROOT}/${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}/um/x64 )
-  find_library ( DSO_SO_SMALLCHANGES SmallChange1 $ENV{COIN_ROOT}/lib )
+  find_library ( SmallChange_library SmallChange1 $ENV{COIN_ROOT}/lib )
   find_library ( SoQt_library SoQt1 $ENV{COIN_ROOT}/lib )
   find_library ( Simage_library simage1 $ENV{COIN_ROOT}/lib )
 else ( WIN )
   find_library ( DSO_LIBGL GL /usr/lib64 )
-  find_library ( DSO_SO_SMALLCHANGES SmallChange )
+  find_library ( SmallChange_library SmallChange )
   find_library ( SoQt_library SoQt )
   find_library ( Simage_library simage )
 endif ( WIN )
@@ -30,16 +32,16 @@ if ( WIN )
   string ( APPEND CMAKE_CXX_FLAGS " -Dwin32 -DCOIN_DLL -DSOQT_DLL" )
 endif ( WIN )
 
-if ( DSO_SO_SMALLCHANGES )
-  message ( STATUS "Found SmallChange library: ${DSO_SO_SMALLCHANGES}" )
-  list ( INSERT EXTERNAL_LIBRARIES 2 ${DSO_SO_SMALLCHANGES} )
+if ( SmallChange_library )
+  message ( STATUS "Found SmallChange library: ${SmallChange_library}" )
+  list ( INSERT EXTERNAL_LIBRARIES 2 ${SmallChange_library} )
   string ( APPEND CMAKE_CXX_FLAGS " -DUSE_SMALLCHANGE" )
   if ( WIN )
     string ( APPEND CMAKE_CXX_FLAGS " -DSMALLCHANGE_DLL" )
   endif ( WIN )
-else ( DSO_SO_SMALLCHANGES )
+else ( SmallChange_library )
   message ( STATUS "SmallChange library not available, configuring without it" )
-endif ( DSO_SO_SMALLCHANGES )
+endif ( SmallChange_library )
 
 if ( Simage_library )
   message ( STATUS "Found Simage library: ${Simage_library}" )
@@ -51,7 +53,6 @@ if ( Simage_library )
 else ( Simage_library )
   message ( STATUS "Simage library not available, configuring without it" )
 endif ( Simage_library )
-
 
 if ( USE_MEMPOOL )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_USE_MEMPOOL" )
@@ -101,13 +102,28 @@ foreach ( FILE ${SOURCE_FILE_LIST} )
 endforeach ( FILE ${SOURCE_FILE_LIST} )
 
 
-set ( FT_KERNEL_LIBRARIES vpmDB )
-set ( FT_COMMON_LIBRARIES FFlVisualization FFaAlgebra FFaDefinitions FFaGeometry )
-set ( FT_GUI_LIBRARIES vpmUI vpmApp FFdCadModel )
-set ( FT_LIBRARIES ${FT_GUI_LIBRARIES} ${FT_KERNEL_LIBRARIES} ${FT_COMMON_LIBRARIES} )
+# Build the library ${LIB_ID}
 
-set ( DEPENDENCY_LIST ${FT_LIBRARIES} ${EXTERNAL_LIBRARIES} )
+set ( DEPENDENCY_LIST vpmUI vpmApp FFdCadModel vpmDB
+                      FFlVisualization FFaAlgebra FFaDefinitions FFaGeometry
+                      ${EXTERNAL_LIBRARIES} )
 
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )
 target_link_libraries ( ${LIB_ID} ${DEPENDENCY_LIST} )
+
+
+# Install the dependent shared object libraries
+
+list ( REMOVE_ITEM EXTERNAL_LIBRARIES ${DSO_LIBGL} )
+foreach ( LIB ${EXTERNAL_LIBRARIES} )
+  string ( REPLACE "/lib/" "/bin/" DLL_PATH ${LIB} )
+  if ( WIN )
+    string ( REPLACE ".lib" ".dll" DLL_PATH ${DLL_PATH} )
+    if ( FTENV_VERBOSE )
+      message ( STATUS "Installing ${DLL_PATH} to ${CMAKE_INSTALL_PREFIX}" )
+    endif ( FTENV_VERBOSE )
+    install ( FILES ${DLL_PATH} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
+              CONFIGURATIONS Release RelWithDebInfo )
+  endif ( WIN )
+endforeach ( LIB ${EXTERNAL_LIBRARIES} )
