@@ -71,17 +71,19 @@ when running cmake, where `=ON` activates a feature which is off by default,
 and `=OFF` deactivates a feature which is on by default.
 Currently, the following options can be specified to toggle features On or Off:
 
+* USE_CHSHAPE - Build with mooring line calculation support
 * USE_COMAPI - Build with the COM API
 * USE_CONTROL - Build with control system support
 * USE_DIGTWIN - Build with some Digitial Twin features
 * USE_FATIGUE - Build with durability calculation support
+* USE_FREQDOMAIN - Build with frequency-domain support
 * USE_MESHING - Build with FE meshing support
 * USE_OILWELL - Build with oil well modeling support
 * USE_RISER - Build with marine structures modeling support
 * USE_SEVENTS - Build with simulation event support
+* USE_SOLVERS - Build with solver support
 * USE_TIREAPI - Build with the Tire model API
 * USE_VTF - Build with VTF export support
-* USE_VTFX - Build with VTFx export support
 * USE_WINDPOW - Build with Wind turbine modeling support
 
 ## Contributing
