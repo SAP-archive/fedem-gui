@@ -51,3 +51,14 @@ endforeach ( FILE ${SOURCE_FILE_LIST} )
 
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )
+
+
+# Install StartGuide files
+
+file ( GLOB HTM_FILES StartGuide/*.htm )
+file ( GLOB IMG_FILES StartGuide/img/*.* )
+if ( FTENV_VERBOSE )
+  message ( STATUS "Installing ${HTM_FILES} to ${CMAKE_INSTALL_PREFIX}" )
+endif ( FTENV_VERBOSE )
+install ( FILES ${HTM_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/Doc" )
+install ( FILES ${IMG_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/Doc/img" )

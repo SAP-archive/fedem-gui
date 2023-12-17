@@ -1,0 +1,19 @@
+{
+  "version": "3",
+  "name": "fedemsolver",
+  "operators": {
+    "fmmfedem": {
+      "type": "python",
+      "image": "fedempy",
+      "library": "driver",
+      "function": "run",
+      "out": [
+        {
+          "name": "frs",
+          "kind": "file",
+          "format": "frs"
+        }
+      ]
+    }
+  }
+}

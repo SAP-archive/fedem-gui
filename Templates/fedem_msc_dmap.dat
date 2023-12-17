@@ -1,0 +1,157 @@
+$ **************************************************
+$ **************************************************
+$
+$ OUTPUT CMS REDUCED MASS (MAA) AND STIFFNESS (KAA)
+$ MATRICES WHICH CAN BE DIRECTLY ACCESSED AFTER CMS.
+$
+$ **************************************************
+$
+$ i04: Updated to MSC.Nastran 2005r1 and 2005r2
+$
+$
+COMPILE PHASE1DR NOLIST NOREF $
+MALTER '$MALTER:STATIC AND DYNAMIC (KAA, MAA' $
+$
+$ STORE REDUCED MATRICES ON OP2 FORMAT WHICH CAN
+$ BE READ BY THE INTERFACE PROGRAM
+$
+OUTPUT2 MAA,,,,//0/71/ $
+OUTPUT2 KAA,,,,//0/72/ $
+$
+$ PRINT REDUCED MATRICES TO .F06 and .OP4 ASCII FILES
+$
+$MATPRN KAA,MAA,,,/ $
+$OUTPUT4 MAA,,,,//0/81//true/ $
+$OUTPUT4 KAA,,,,//0/82//true/ $
+$
+$ **************************************************
+$ **************************************************
+$
+$ CALCULATE AND OUTPUT GRAVITY VECTOR
+$
+$ **************************************************
+$ OUTPUT TRANSFORMATION MATRICES USED TO CALCULATE
+$ GRAVITY VECTORS
+$ GOQ = PHI
+$ GOT = B
+$ GOA = H
+$ **************************************************
+$
+COMPILE SEGOA NOLIST NOREF $
+ALTER 1 $
+TYPE DB,ZUZR05,ZUZR06 $
+ALTER 11 $
+EQUIVX GOT/ZUZR05/ALWAYS $
+EQUIVX GOQ/ZUZR06/ALWAYS $
+$
+$ WRITE B (STATIC MODES) AND PHI (COMPONENT MODES) MATRICES TO OP2 FILES
+$
+OUTPUT2 GOT,,,,//0/74/ $
+OUTPUT2 GOQ,,,,//0/75/ $
+$MATPRN GOQ,GOT,,,/ $
+$
+$ OUTPUT PARTITIONED MASS MATRIX (O-SET + T-SET)
+$ MOO  = Mii
+$ MTT1 = Mee
+$ MOT  = Mie
+$
+COMPILE SEMR2B NOLIST NOREF $
+ALTER 1 $
+TYPE DB,ZUZR02,ZUZR03,ZUZR04 $
+MALTER 'ENDIF $ NOOSET>-1 ' $
+EQUIVX MOO/ZUZR02/ALWAYS $
+EQUIVX MOT/ZUZR03/ALWAYS $
+EQUIVX MTT1/ZUZR04/ALWAYS $
+$MATPRN MTT1,,,,/ $
+$MATPRN MOO,,,,/ $
+$MATPRN MOT,,,,/ $
+
+$
+$ CREATE RIGID-BODY VECTORS (G-SET)
+$
+COMPILE SEMG LIST NOREF $
+ALTER 1 $
+TYPE DB ZUZR01 $
+$MALTER 'kjjz.*stiffness' $
+MALTER 'ENDIF $ NOMGG>=0' $
+VECPLOT ,,BGPDTS,EQEXINS,CSTMS,,,,/RIGID/GRDPNT//4 $
+
+MATGEN ,/CP/4/1/6/0/3/4 $
+$MATPRN CP,,,,/ $
+PARTN RIGID,,CP/,ZUZR01,,/0 $
+$MATPRN ZUZR01,RIGID,,,/ $
+
+COMPILE SEMODES NOLIST NOREF $
+ALTER 1 $
+TYPE DB, ZUZR01,ZUZR02,ZUZR03,ZUZR04,ZUZR05,ZUZR06 $
+MALTER 'DPD      DYNAMICS,GPLS,SILS,USET,,,,,,,,,/' $
+$
+$ RETRIEVE DATABLOCKS FROM DB
+$
+EQUIVX ZUZR02/MOO/ALWAYS $
+EQUIVX ZUZR03/MOT/ALWAYS $
+EQUIVX ZUZR04/MTT1/ALWAYS $
+EQUIVX ZUZR05/GOT/ALWAYS $
+EQUIVX ZUZR06/GOQ/ALWAYS $
+$
+$ PARTITION RIGID BODY VECTORS
+$
+TRNSP ZUZR01/RBODY $
+UPARTN USETD,RBODY/RBODYM,RBODYN,,/'G'/'M'/'N'/1 $
+UPARTN USETD,RBODYN/RBODYF,RBODYS,,/'N'/'F'/'S'/1 $
+UPARTN USETD,RBODYF/RBODYO,RBODYA,,/'F'/'O'/'A'/1 $
+UPARTN USETD,RBODYA/RBODYQ,RBODYT,,/'A'/'Q'/'T'/1 $
+
+$ MATPRN RBODYQ,RBODYT,USETD,,/ $
+
+TRNSP MOT/MOTT $
+MPYAD GOT,MOO,MOTT/MI/1/1/1 $
+
+TRNSP MTT1/MTT1T $
+MPYAD GOT,MOT,MTT1/ME/1/1/1 $
+
+MPYAD MI,RBODYO,/GI/0/1 $
+MPYAD ME,RBODYT,GI/GS/0/1 $
+$ MATPRN GS,,,,/ $
+
+MPYAD GOQ,MOO,/MIQ1/1/1 $
+MPYAD MIQ1,RBODYO,/GIQ1/0/1 $
+
+MPYAD GOQ,MOT,/MIQ2/1/1 $
+MPYAD MIQ2,RBODYT,/GIQ2/0/1 $
+
+ADD5 GIQ1,GIQ2,,,/GQ/1./1. $
+
+UMERGE USETD,GS,GQ/GXYZ/'A'/'T'/'Q' $
+
+$ **************************************************
+$ **************************************************
+$
+$ OUTPUT GRAVITY VECTOR (gxyz) AS ONE MATRIX (3,ndof2+ngen)
+$ TO OP2 AND ASCII FORMAT
+$
+$OUTPUT2 GXYZ,,,,//0/73/ $
+OUTPUT2 GXYZ,,,,//0/73///'MATRIX' $
+
+MATPRN GXYZ,GS,GQ,,/ $
+
+$
+$ OUTPUT MODEL INFO
+$
+
+PARAML MOO//'TRAILER'/1/S,N,ndof1/ $
+PARAML MTT1//'TRAILER'/1/S,N,ndof2/ $
+PARAML GOQ//'TRAILER'/1/S,N,ngen/ $
+MESSAGE //' ' $
+MESSAGE //'==========================================================' $
+MESSAGE //' ' $
+MESSAGE //' ' $
+MESSAGE //'         Number of internal dofs    : '/ndof1 $
+MESSAGE //'         Number of external dofs    : '/ndof2 $
+MESSAGE //'         Number of generalized dofs : '/ngen $
+MESSAGE //' ' $
+MESSAGE //' ' $
+MESSAGE //'==========================================================' $
+MESSAGE //' ' $
+$MATPRN MOO,ZUZR02,,,/ $
+ENDALTER $

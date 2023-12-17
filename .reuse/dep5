@@ -24,7 +24,7 @@ Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  you any rights to use or access any SAP External Product, or provide any third
  parties the right to use of access any SAP External Product, through API Calls.
 
-Files: cfg/* resources/* src/*.* src/comApi/* src/vpm*/* src/comApi/* src/FF*/*
+Files: cfg/* resources/* src/*.* src/comApi/* src/vpm*/* src/comApi/* src/FF*/* Properties/* Templates/*
 Copyright: 2023 SAP SE or an SAP affiliate company and fedem-gui contributors
 License: Apache-2.0
 

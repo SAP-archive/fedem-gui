@@ -1,0 +1,270 @@
+FEDEMMODELFILE {R5.1 ASCII}
+!Template model file with default values when modeling in SI units.
+
+GLOBAL_VIEW_SETTINGS
+{
+ID = 1;
+SYMBOL_SCALE = 0.1;
+SYMBOL_LINE_WIDTH = 1;
+BACKGROUND_COLOR = 0.098039 0.305882 0.458823;
+CAMERA_FOCAL_DIST = 0.707107;
+CAMERA_HEIGHT = 1.41421;
+CAMERA_ORIENTATION =
+1.00000000 0.00000000 0.00000000 0.00000000
+0.00000000 1.00000000 0.00000000 0.00000000
+0.00000000 0.00000000 1.00000000 0.70710678;
+}
+
+MECHANISM
+{
+ID = 1;
+BASE_ID = 1;
+DESCR = "<default_m.fmm>";
+GRAVITY = 0 0 -9.81;
+POSITION_TOLERANCE = 0.0001;
+}
+
+ANALYSIS
+{
+ID = 1;
+BASE_ID = 2;
+START_TIME = 0;
+END_TIME = 1;
+TIME_INCR = 0.01;
+MAXIMUM_NUM_IT = 50;
+MINIMUM_NUM_IT = 1;
+MIN_MATRIX_UPDATES = 5;
+MIN_TIME_INCREMENT = 1e-006;
+MAX_SEQUENTIAL_NO_MATRIX_UPDATES = 5;
+NUM_EIGENMODES = 10;
+STATIC_EQL_TOLERANCE = 1e-006;
+STEP_REDUCTION_FACTOR = 1;
+TOL_DISPLACEMENT_NORM = 1e-006 ALL_OF;
+TOL_DISPLACEMENT_ROT = 3e-004 IGNORE;
+TOL_DISPLACEMENT_TRA = 1e-004 IGNORE;
+TOL_ENERGY_MAX = 0.0001 IGNORE;
+TOL_ENERGY_SUM = 1e-006 ALL_OF;
+TOL_RESIDUAL_NORM = 1 IGNORE;
+TOL_RESIDUAL_ROT = 1 IGNORE;
+TOL_RESIDUAL_TRA = 1 IGNORE;
+TOL_VELOCITY_NORM = 1e-006 ALL_OF;
+TOL_MATRIX_UPDATE_FACTOR = 100;
+USE_FIXED_MATRIX_UPDATES = false;
+USE_DYN_STRESS_STIFFENING = true;
+USE_EIG_STRESS_STIFFENING = true;
+USE_EQU_STRESS_STIFFENING = false;
+USE_MASS_CORRECTION = true;
+AUTO_RBM_ANIMATION = true;
+}
+
+REF_PLANE
+{
+ID = 1;
+BASE_ID = 3;
+HEIGHT = 1;
+WIDTH = 1;
+COLOR = 1 1 1;
+TRANSPARENCY = 0.65;
+}
+
+ANIMATION
+{
+ID = 1;
+DESCR = "dynamics (rigid body motion)";
+LOAD_DEFORMATION_DATA = false;
+LOAD_FRINGE_DATA = false;
+}
+
+ANIMATION
+{
+ID = 2;
+DESCR = "von Mises stress and deformation";
+LOAD_DEFORMATION_DATA = true;
+LOAD_FRINGE_DATA = true;
+FRINGE_RESULT_CLASS = "Element node";
+FRINGE_VARIABLE_NAME = "Von Mises stress";
+SHOW_DEFORMATION = true;
+SHOW_FRINGES = true;
+}
+
+GRAPH
+{
+ID = 1;
+DESCR = "Algorithm parameters";
+TITLE = "Algorithm parameters";
+SHOW_LEGEND = true;
+X_AXIS_LABEL = "Time [s]";
+Y_AXIS_LABEL = "Number";
+}
+
+GRAPH
+{
+ID = 2;
+DESCR = "System energy";
+TITLE = "System energy";
+SHOW_LEGEND = true;
+X_AXIS_LABEL = "Time [s]";
+Y_AXIS_LABEL = "Energy [Nm]";
+}
+
+CURVE_SET
+{
+ID = 1;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Number of system matrix updates";
+LEGEND = "Number of system matrix updates";
+AUTOLEGEND = false;
+CURVE_COLOR = 0 0 1;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 2;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 1;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"NUMBER","Algorithm parameters","Number of system matrix updates">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 2;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Number of iterations";
+LEGEND = "Number of iterations";
+AUTOLEGEND = false;
+CURVE_COLOR = 1 0 1;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 3;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 1;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"NUMBER","Algorithm parameters","Number of iterations">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 3;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Energy check-sum";
+LEGEND = "Energy check-sum";
+AUTOLEGEND = false;
+CURVE_COLOR = 1 0 0;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 3;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 2;
+OWNER_GRAPH = 2;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"SCALAR","System energy","Energy check-sum">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 4;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Energy input";
+LEGEND = "Energy input";
+AUTOLEGEND = false;
+CURVE_COLOR = 1 0 1;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 1;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 2;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"SCALAR","System energy","Energy input">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 5;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Energy loss";
+LEGEND = "Energy loss";
+AUTOLEGEND = false;
+CURVE_COLOR = 0 1 0;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 2;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 2;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"SCALAR","System energy","Energy loss">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 6;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Strain energy";
+LEGEND = "Strain energy";
+AUTOLEGEND = false;
+CURVE_COLOR = 0 0 1;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 4;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 2;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"SCALAR","System energy","Strain energy">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 7;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Kinetic energy";
+LEGEND = "Kinetic energy";
+AUTOLEGEND = false;
+CURVE_COLOR = 1 0.5 0;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 5;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 2;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"SCALAR","System energy","Kinetic energy">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+CURVE_SET
+{
+ID = 8;
+INPUT_MODE = TEMPORAL_RESULT;
+DESCR = "Potential energy";
+LEGEND = "Potential energy";
+AUTOLEGEND = false;
+CURVE_COLOR = 0 1 1;
+CURVE_NUMBER_SYMBOLS = 10;
+CURVE_STYLE = 0;
+CURVE_SYMBOL = 6;
+CURVE_SYMBOL_SIZE = 5;
+CURVE_WIDTH = 0;
+OWNER_GRAPH = 2;
+X_AXIS_RESULT = <0,"",0,0,0,0,"SCALAR","Physical time">;
+X_AXIS_RESULT_OPER = "None";
+Y_AXIS_RESULT = <0,"Mechanism",1,1,1,1,"SCALAR","System energy","Potential energy">;
+Y_AXIS_RESULT_OPER = "None";
+}
+
+END {FEDEMMODELFILE}

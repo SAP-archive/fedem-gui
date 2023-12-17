@@ -54,3 +54,33 @@ unset ( _MODULES CACHE )
 include ( FedemConfig )
 
 add_subdirectory ( src )
+
+# Install some resource files
+
+file ( GLOB RESOURCES resources/*.* )
+if ( FTENV_VERBOSE )
+  message ( STATUS "Installing ${RESOURCES} to ${CMAKE_INSTALL_PREFIX}" )
+endif ( FTENV_VERBOSE )
+set ( BINARY_DIR "${CMAKE_INSTALL_PREFIX}/bin" )
+set ( PROPERTY_DIR "${BINARY_DIR}/Properties" )
+install ( FILES ${RESOURCES} DESTINATION "${BINARY_DIR}/resources" )
+install ( DIRECTORY Addons DESTINATION "${BINARY_DIR}" )
+install ( DIRECTORY Plugin DESTINATION "${BINARY_DIR}" )
+install ( DIRECTORY Templates DESTINATION "${BINARY_DIR}" )
+install ( DIRECTORY Properties/CrossSections DESTINATION "${PROPERTY_DIR}" )
+install ( FILES Properties/README.md DESTINATION "${PROPERTY_DIR}" )
+
+if ( USE_WINDPOW )
+  # Install the Fedem Windpower property files
+  if ( FTENV_VERBOSE )
+    message ( STATUS "Installing Windpower properties to ${PROPERTY_DIR}" )
+  endif ( FTENV_VERBOSE )
+  file ( GLOB SAMPLES Properties/*.fmm )
+  file ( GLOB AERODAT Properties/AeroData/*.* )
+  install ( FILES ${SAMPLES} DESTINATION "${PROPERTY_DIR}" )
+  install ( FILES ${AERODAT} DESTINATION "${PROPERTY_DIR}/AeroData" )
+  foreach ( FILE ${SAMPLES} )
+    get_filename_component ( MODEL ${FILE} NAME_WLE )
+    install ( FILES ${AERODAT} DESTINATION "${PROPERTY_DIR}/${MODEL}_airfoils" )
+  endforeach ( FILE ${SAMPLES} )
+endif ( USE_WINDPOW )
