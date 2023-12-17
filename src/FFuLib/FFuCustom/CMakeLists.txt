@@ -6,9 +6,9 @@
 
 set ( SUBFOLDER_LIST components )
 
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   list ( APPEND SUBFOLDER_LIST inputTables mvcModels )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 
 foreach ( FOLDER ${SUBFOLDER_LIST} )
   add_subdirectory ( ${FOLDER} )

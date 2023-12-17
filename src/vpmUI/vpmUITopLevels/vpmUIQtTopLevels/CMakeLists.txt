@@ -28,11 +28,10 @@ set ( COMPONENT_FILE_LIST  FuiQtAdvAnalysisOptions FuiQtAnimationControl FuiQtAn
                            FuiQtSeaEnvironment FuiQtEventDefinition
                            FuiQtSplitBeam FuiQtCreateBeamstringPair FuiQtObjectBrowser
                            FuiQtMooringLine FuiQtModelExport )
-
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   list ( APPEND COMPONENT_FILE_LIST FuiQtAirEnvironment FuiQtAirfoilDefinition FuiQtBladeDefinition
                                     FuiQtCreateTurbineAssembly FuiQtCreateTurbineTower FuiQtTurbWind )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 
 if ( Qwt_LIBRARY )
   list ( APPEND COMPONENT_FILE_LIST FuiQtGraphView FuiQtRDBMEFatigue )
@@ -67,9 +66,9 @@ endforeach ( FILE ${SOURCE_FILE_LIST} )
 
 ## Header files to be moc'ed
 set ( QT_MOC_HEADER_FILE_LIST FuiQtEventDefinition FuiQtModelExport )
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   list ( APPEND QT_MOC_HEADER_FILE_LIST FuiQtAirfoilDefinition FuiQtBladeDefinition FuiQtTurbWind )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 
 foreach ( FILE ${QT_MOC_HEADER_FILE_LIST} )
   set ( QT_MOC_HEADER_FILES ${QT_MOC_HEADER_FILES} ${FILE}.H )
@@ -95,9 +94,9 @@ if ( WIN AND Coin_library )
 endif ( WIN AND Coin_library )
 
 set ( DEPENDENCY_LIST vpmUITopLevels vpmUIQtComponents FFuQtComponents FFuQtBaseClasses FFuComponents )
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   list ( APPEND DEPENDENCY_LIST FFuInputTables )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 list ( APPEND DEPENDENCY_LIST vpmDB )
 
 

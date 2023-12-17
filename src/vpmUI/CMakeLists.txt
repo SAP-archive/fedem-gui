@@ -4,24 +4,23 @@
 #
 # This file is part of FEDEM - https://openfedem.org
 
-# Builds the LIB_ID library
 set ( LIB_ID vpmUI )
+set ( LIB_ID_LIST vpmUIComponents vpmUITopLevels )
+
 
 option ( USE_FREQDOMAIN "Build Fedem GUI with frequency-domain settings" true )
 
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_WND" )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 if ( USE_NCODE_INTERFACE )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_NCODE" )
 endif ( USE_NCODE_INTERFACE )
 
 
-set ( SUBFOLDER_LIST vpmUIComponents vpmUITopLevels )
-
-foreach ( FOLDER ${SUBFOLDER_LIST} )
+foreach ( FOLDER ${LIB_ID_LIST} )
   add_subdirectory ( ${FOLDER} )
-endforeach ( FOLDER ${SUBFOLDER_LIST} )
+endforeach ( FOLDER ${LIB_ID_LIST} )
 
 
 ## Files with header and source with same name
@@ -48,6 +47,7 @@ foreach ( FILE ${SOURCE_FILE_LIST} )
 endforeach ( FILE ${SOURCE_FILE_LIST} )
 
 
+# Build the ${LIB_ID} library
+
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )
-target_link_libraries ( ${LIB_ID} ${FT_GUI_LIBRARIES} )

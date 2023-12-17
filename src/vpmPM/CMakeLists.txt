@@ -7,9 +7,9 @@
 # Builds the LIB_ID library
 set ( LIB_ID vpmPM )
 
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_WND" )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 if ( USE_EXT_CTRLSYS )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_EXTCTRL" )
 endif ( USE_EXT_CTRLSYS )

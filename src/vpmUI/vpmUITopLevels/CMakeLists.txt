@@ -31,10 +31,10 @@ set ( COMPONENT_FILE_LIST  FuiAdvAnalysisOptions FuiAnimationControl FuiAnimExpo
                            FuiSplitBeam FuiCreateBeamstringPair FuiObjectBrowser
                            FuiTopLevelDialog FuiMooringLine FuiModelExport )
 
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   list ( APPEND COMPONENT_FILE_LIST FuiAirEnvironment FuiAirfoilDefinition FuiBladeDefinition
                                     FuiCreateTurbineAssembly FuiCreateTurbineTower FuiTurbWind )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 
 if ( Qwt_LIBRARY )
   list ( APPEND COMPONENT_FILE_LIST FuiGraphView FuiRDBMEFatigue )

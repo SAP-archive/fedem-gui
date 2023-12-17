@@ -7,12 +7,11 @@
 # Library setup
 
 set ( LIB_ID vpmApp )
+set ( LIB_ID_LIST vpmAppCmds vpmAppDisplay vpmAppProcess vpmAppUAMap )
 
-set ( SUBFOLDER_LIST vpmAppCmds vpmAppDisplay vpmAppProcess vpmAppUAMap )
-
-foreach ( FOLDER ${SUBFOLDER_LIST} )
+foreach ( FOLDER ${LIB_ID_LIST} )
   add_subdirectory ( ${FOLDER} )
-endforeach ( FOLDER ${SUBFOLDER_LIST} )
+endforeach ( FOLDER ${LIB_ID_LIST} )
 
 
 # Options for inclusion of various features at compile time
@@ -22,7 +21,6 @@ option ( USE_FATIGUE "Build with Fatigue/life calculation" OFF )
 option ( USE_MESHING "Build with FE meshing support" OFF )
 option ( USE_OILWELL "Build with Oil well modeling" OFF )
 option ( USE_RISER   "Build with Offshore modeling" OFF )
-option ( USE_WINDPOW "Build with Windpower support" OFF )
 option ( USE_SEVENTS "Build with Simulation Event support" OFF )
 option ( USE_DIGTWIN "Build with Digital Twin features" OFF )
 option ( USE_VTF     "Use the VTF API (Ceetron)" OFF )

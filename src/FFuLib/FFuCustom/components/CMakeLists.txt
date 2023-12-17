@@ -6,7 +6,7 @@
 
 set ( LIB_ID FFuComponents )
 
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   file ( GLOB_RECURSE CPP_SOURCE_FILES *.C )
   file ( GLOB_RECURSE HPP_HEADER_FILES *.H )
 
@@ -17,13 +17,13 @@ if ( BUILD_FWP )
 	renderers/AirfoilView.H
 	renderers/BladeView.H
       ) ## H files to be moc'ed
-else ( BUILD_FWP )
+else ( USE_WINDPOW )
   set ( CPP_SOURCE_FILES Event.C EventObject.C EventParameter.C MultiEventModel.C
                          ../inputTables/delegates/HeaderDelegate.C )
   set ( HPP_HEADER_FILES Event.H EventObject.H EventParameter.H MultiEventModel.H
                          ../inputTables/delegates/HeaderDelegate.H )
   set ( QT_MOC_HEADER_FILES ../inputTables/delegates/HeaderDelegate.H )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 
 find_package ( Qt4 REQUIRED )
 include ( ${QT_USE_FILE} )

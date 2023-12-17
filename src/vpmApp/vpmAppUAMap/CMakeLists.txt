@@ -48,11 +48,11 @@ if ( Qwt_LIBRARY )
                                     FapUARDBMEFatigue )
 endif ( Qwt_LIBRARY )
 
-if ( BUILD_FWP )
+if ( USE_WINDPOW )
   list ( APPEND COMPONENT_FILE_LIST FapUAAirEnvironment
                                     FapUACreateTurbineAssembly
                                     FapUACreateTurbineTower )
-endif ( BUILD_FWP )
+endif ( USE_WINDPOW )
 
 if ( USE_EXT_CTRLSYS )
   string ( APPEND CMAKE_CXX_FLAGS " -DFT_HAS_EXTCTRL" )
@@ -86,14 +86,9 @@ foreach ( FILE ${SOURCE_FILE_LIST} )
 endforeach ( FILE ${SOURCE_FILE_LIST} )
 
 
-#
-# Set library dependencies
-#
-set ( FT_COMMON_LIBRARIES FFrLib FFlLib )
-set ( FT_KERNEL_LIBRARIES vpmDB )
-set ( FT_GUI_LIBRARIES vpmPM vpmUI vpmUITopLevels vpmUIComponents
-                       vpmApp vpmAppCmds vpmAppProcess vpmAppDisplay )
-set ( DEPENDENCY_LIST ${FT_GUI_LIBRARIES} ${FT_KERNEL_LIBRARIES} ${FT_COMMON_LIBRARIES} )
+set ( DEPENDENCY_LIST vpmPM vpmUI vpmUITopLevels vpmUIComponents
+                      vpmApp vpmAppCmds vpmAppProcess vpmAppDisplay
+                      vpmDB FFrLib FFlLib )
 
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HPP_HEADER_FILES} )
