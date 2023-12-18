@@ -498,7 +498,7 @@ bool FuiQtProperties::initStartGuide(FedemEdition edition)
 
   QString strData;
   if (!fileOk)
-    strData = "Welcome to <i>FEDEM 7.6</i>";
+    strData = "Welcome to <i>FEDEM 8.0</i>";
   else while (!file.atEnd())
     strData.append(file.readLine().data());
   file.close();
@@ -507,15 +507,15 @@ bool FuiQtProperties::initStartGuide(FedemEdition edition)
   // Set fields
   if (edition == Windpower) {
     mySGLogoImage->setPixMap(startGuideLogoWP_xpm);
-    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Windpower 7.6</b></i></font>");
+    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Windpower 8.0</b></i></font>");
   }
   else if (edition == Offshore) {
     mySGLogoImage->setPixMap(startGuideLogo_xpm);
-    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Offshore 7.6</b></i></font>");
+    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Offshore 8.0</b></i></font>");
   }
   else {
     mySGLogoImage->setPixMap(startGuideLogo_xpm);
-    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM 7.6</b></i></font>");
+    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM 8.0</b></i></font>");
   }
   mySGContentLabel->setLabel(strData);
   mySGContentLabel->setLinkActivatedCB(FFaDynCB1S(onURLActivated,const std::string&));
