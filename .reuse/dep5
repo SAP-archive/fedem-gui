@@ -24,7 +24,7 @@ Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  you any rights to use or access any SAP External Product, or provide any third
  parties the right to use of access any SAP External Product, through API Calls.
 
-Files: cfg/* resources/* src/*.* src/comApi/* src/vpm*/* src/comApi/* src/FF*/* Properties/* Templates/*
+Files: cfg/* resources/* src/comApi/* src/vpm*/* src/FF*/* Properties/* Templates/*
 Copyright: 2023 SAP SE or an SAP affiliate company and fedem-gui contributors
 License: Apache-2.0
 
@@ -35,3 +35,7 @@ License: LGPL-2.1-or-later
 Files: cmake/Modules/FindQt4.cmake
 Copyright: 2000-2020 Kitware, Inc. and Contributors
 License: BSD-3-Clause
+
+Files: Install/SFTA.exe
+Copyright: 2021 Danysys
+License: MIT
