@@ -20,10 +20,10 @@ public:
 
   // Methods to set what to show :
 
-  virtual void setPixMap(const char** pixmap, int width = 0, int height = 0) = 0;
+  virtual void setPixMap(const char** pixmap, bool stretch = false) = 0;
   virtual void setLabel(const char* label) = 0;
-  virtual void setLabel(const std::string& label) = 0;
-  virtual void setLabelAlignment(int align) = 0;
+
+  void setLabel(const std::string& label) { this->setLabel(label.c_str()); }
 
   // Get the text of the label :
 

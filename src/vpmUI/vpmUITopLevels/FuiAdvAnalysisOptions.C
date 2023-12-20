@@ -406,8 +406,6 @@ void FuiAdvAnalysisOptions::initWidgets()
   this->autoCurveExportField->setFileOpenedCB(FFaDynCB2M(FuiAdvAnalysisOptions,this,
                                                          onAutoCurveExportFileChanged,const std::string&,int));
 
-  this->labels[OUTPUTOPTIONS][AUTO_CURVE_EXPORT]->setLabelAlignment(FFuaTextAlignment::AlignRight);
-
   this->toggleButtons[OUTPUTOPTIONS][AUTO_VTF_EXPORT]->setLabel("Automatic export to GLview VTF file");
   this->toggleButtons[OUTPUTOPTIONS][AUTO_VTF_EXPORT]->setToggleCB(FFaDynCB1M(FFuComponentBase,autoVTFField,
                                                                               setSensitivity,bool));

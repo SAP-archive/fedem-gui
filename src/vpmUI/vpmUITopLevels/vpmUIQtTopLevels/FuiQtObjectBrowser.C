@@ -45,7 +45,6 @@ FuiQtObjectBrowser::FuiQtObjectBrowser(int xpos, int ypos,
   this->helpButton      = new FFuQtPushButton(this);
   this->sepLabel        = new FFuQtLabel(this);
   this->copyDataButton  = new FFuQtPushButton(this);
-  ((FFuQtLabel*)headerImage2)->setScaledContents(true); // stretch the picture
 
   this->initWidgets();
 }

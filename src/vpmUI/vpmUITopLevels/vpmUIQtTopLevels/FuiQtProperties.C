@@ -377,15 +377,14 @@ FuiQtProperties::FuiQtProperties(QWidget* parent,
   mySGLogoBorderTop = new FFuQtLabel(this);
   mySGLogoBorderRight = new FFuQtLabel(this);
   mySGFillWhite = new FFuQtLabel(this);
-  mySGContentLabel = new FFuQtLabel(this);
   mySGHeading = new FFuQtLabel(this);
   mySGBorderRight = new FFuQtLabel(this);
   mySGBorderBottom = new FFuQtLabel(this);
   mySGBorderTop = new FFuQtLabel(this);
-  ((FFuQtLabel*)mySGLogoImage)->setScaledContents(true); // stretch the picture
-  ((FFuQtLabel*)mySGLogoBorderRight)->setScaledContents(true); // stretch the picture
-  ((FFuQtLabel*)mySGBorderTop)->setScaledContents(true); // stretch the picture
-  ((FFuQtLabel*)mySGContentLabel)->setAlignment(Qt::AlignTop|Qt::AlignLeft); // set alignment
+
+  FFuQtLabel* qlab;
+  mySGContentLabel = qlab = new FFuQtLabel(this);
+  qlab->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
   // Parent class component initiation
 
@@ -454,7 +453,7 @@ static void onURLActivated(const std::string& url)
     FFaMsg::dialog("Invalid URL:\n" + url, FFaMsg::WARNING);
   else if (strUrl.left(7) == "file://")
     showPDFfile(strUrl);
-  else if (strUrl.left(7) == "http://")
+  else if (strUrl.left(8) == "https://" || strUrl.left(7) == "http://")
     if (!QDesktopServices::openUrl(objUrl))
       FFaMsg::dialog("Unable to open URL:\n" + url, FFaMsg::WARNING);
 }
@@ -506,25 +505,25 @@ bool FuiQtProperties::initStartGuide(FedemEdition edition)
   strData.replace(" src='", " src='" + appPath);
   // Set fields
   if (edition == Windpower) {
-    mySGLogoImage->setPixMap(startGuideLogoWP_xpm);
+    mySGLogoImage->setPixMap(startGuideLogoWP_xpm,true);
     mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Windpower 8.0</b></i></font>");
   }
   else if (edition == Offshore) {
-    mySGLogoImage->setPixMap(startGuideLogo_xpm);
+    mySGLogoImage->setPixMap(startGuideLogo_xpm,true);
     mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Offshore 8.0</b></i></font>");
   }
   else {
-    mySGLogoImage->setPixMap(startGuideLogo_xpm);
+    mySGLogoImage->setPixMap(startGuideLogo_xpm,true);
     mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM 8.0</b></i></font>");
   }
   mySGContentLabel->setLabel(strData);
   mySGContentLabel->setLinkActivatedCB(FFaDynCB1S(onURLActivated,const std::string&));
-  mySGLogoBorderRight->setPixMap(startGuideBorderRight_xpm);
+  mySGLogoBorderRight->setPixMap(startGuideBorderRight_xpm,true);
   FFuaPalette pal;
   pal.setStdBackground(255,255,255);
   mySGFillWhite->setColors(pal);
   mySGContentLabel->setColors(pal);
-  mySGBorderTop->setPixMap(startGuideBorderTop_xpm);
+  mySGBorderTop->setPixMap(startGuideBorderTop_xpm,true);
   pal.setStdBackground(130,135,144);
   mySGBorderRight->setColors(pal);
   mySGBorderBottom->setColors(pal);

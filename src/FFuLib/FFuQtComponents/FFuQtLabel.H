@@ -23,10 +23,9 @@ public:
   FFuQtLabel(QWidget* parent = NULL);
   virtual ~FFuQtLabel() {}
 
-  virtual void setPixMap(const char** pixmap, int width = 0, int height = 0);
+  virtual void setPixMap(const char** pixmap, bool stretch);
   virtual void setLabel(const char* label);
-  virtual void setLabel(const std::string& label);
-  virtual void setLabelAlignment(int align);
+
   virtual std::string getLabel() const;
 
 public slots:

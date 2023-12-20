@@ -37,8 +37,8 @@ FuiObjectBrowser::FuiObjectBrowser()
 
 void FuiObjectBrowser::initWidgets()
 {
-  this->headerImage1->setPixMap(objectBrowser1_xpm);
-  this->headerImage2->setPixMap(objectBrowser2_xpm);
+  this->headerImage1->setPixMap(objectBrowser1_xpm, false);
+  this->headerImage2->setPixMap(objectBrowser2_xpm, true);
 
   this->searchLabel->setLabel("Search and browse objects:");
 

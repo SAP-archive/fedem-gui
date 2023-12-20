@@ -215,7 +215,9 @@ FuiQtAdvAnalysisOptions::FuiQtAdvAnalysisOptions(QWidget* parent,
 
   // Output options
 #ifdef FT_HAS_SOLVERS
-  this->labels[OUTPUTOPTIONS][AUTO_CURVE_EXPORT]        = new FFuQtLabel(myOptions[OUTPUTOPTIONS]);
+  FFuQtLabel* qlab;
+  this->labels[OUTPUTOPTIONS][AUTO_CURVE_EXPORT] = qlab = new FFuQtLabel(myOptions[OUTPUTOPTIONS]);
+  qlab->setAlignment(Qt::AlignRight);
   this->toggleButtons[OUTPUTOPTIONS][AUTO_CURVE_EXPORT] = new FFuQtToggleButton(myOptions[OUTPUTOPTIONS]);
   this->toggleButtons[OUTPUTOPTIONS][AUTO_VTF_EXPORT]   = new FFuQtToggleButton(myOptions[OUTPUTOPTIONS]);
   this->toggleButtons[OUTPUTOPTIONS][AUTO_ANIM]         = new FFuQtToggleButton(myOptions[OUTPUTOPTIONS]);
