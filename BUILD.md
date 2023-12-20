@@ -431,7 +431,32 @@ Proceed as follows:
   to compile all source files.
 
   Build the `INSTALL` target to install the resulting binaries
-  (`.exe` file and dependent `.dll` files) in the folder
+  (`.exe` file and dependent `.dll` files) and some other files in the folder
   `${CMAKE_INSTALL_PREFIX}\bin` where `CMAKE_INSTALL_PREFIX` is specified
-  on the `cmake` command (see above). The binaries will then be installed in
-  a subfolder named after the current version stored in the `cfg\VERSION` file.
+  on the `cmake` command (see above). The binaries will then be installed
+  in a subfolder named after the current version stored in the
+  [cfg\VERSION](cfg/VERSION) file.
+
+## Build new FEDEM installation
+
+  To build a complete installer for FEDEM with the GUI and solver modules,
+  you first need to build the `INSTALL` target of this project
+  as described [above](#build-the-fedem-gui-application), as well as for
+  the parallel projects [fedem-solvers](https://github.com/SAP/fedem-solvers)
+  and [fedem-mdb](https://github.com/SAP/fedem-mdb). Finally, you need to build
+  the end-user documentation in [fedem-docs](https://github.com/SAP/fedem-docs).
+
+  Make sure that all four projects use the same installation destination,
+  by setting the `CMAKE_INSTALL_PREFIX` variable to the same value for all
+  when running the `cmake` configuration steps.
+
+  When you have completed these tasks, you can build a zip-file installer
+  for distribution of the FEDEM package by executing the script
+  [Install\createInstaller.bat](Install/createInstaller.bat).
+  You may need to edit this script first to specify the version tag and
+  location of the compiled binaries (i.e., line 11 and 13):
+
+      10 REM Edit the following line according to the version to create installer for:
+      11 SET VERSION=8.0.0
+      12 REM All binaries are assumed to have been built and placed in folder %INST_DIR%.
+      13 SET INST_DIR=%USERPROFILE%\Fedem-install\3.0.1\bin

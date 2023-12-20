@@ -86,6 +86,15 @@ Currently, the following options can be specified to toggle features On or Off:
 * USE_VTF - Build with VTF export support
 * USE_WINDPOW - Build with Wind turbine modeling support
 
+## Installation
+
+You can install a pre-compiled release of FEDEM for the Windows platform
+(64-bit only) by downloading any of the zip-files `FedemInstaller-*.zip`
+from the [Releases](https://github.com/SAP/fedem-gui/releases) page.
+Unzip this file in an arbitrary location, and execute the file `INSTALL.bat`
+as administrator to install the software on your PC.
+See also [Install/README.txt](Install/README.txt).
+
 ## Contributing
 
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/SAP/fedem-gui/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
