@@ -62,9 +62,10 @@ bool FapLicenseManager::checkWindpowerLicense(bool checkOut)
   return FapLicenseManager::checkLicense("FA-WND",checkOut);
 }
 
+
 bool FapLicenseManager::checkOffshoreLicense(bool checkOut)
 {
-  return FapLicenseManager::checkLicense("FA-RIS", checkOut);
+  return FapLicenseManager::checkLicense("FA-RIS",checkOut);
 }
 
 
@@ -151,18 +152,21 @@ bool FapLicenseManager::hasUserGuide()
   else if (FapLicenseManager::checkOffshoreLicense(false))
     return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUsersGuide-WindPower.pdf"));
   else
-    return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUserGuide.pdf"));
+    return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUsersGuide.pdf"));
 }
+
 
 bool FapLicenseManager::hasTheoryGuide()
 {
   return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemTheoryGuide.pdf"));
 }
 
+
 bool FapLicenseManager::hasReferenceGuide()
 {
   return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/Fedem.chm"));
 }
+
 
 bool FapLicenseManager::hasComAPIGuide()
 {
