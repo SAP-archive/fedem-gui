@@ -95,6 +95,13 @@ Unzip this file in an arbitrary location, and execute the file `INSTALL.bat`
 as administrator to install the software on your PC.
 See also [Install/README.txt](Install/README.txt).
 
+Unless you already have Microsoft Visual Studio installed (2015 or later),
+you also need to download and install some C++ runtime libraries from
+[Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
+before you can run the installed FEDEM GUI or solvers on Windows.
+Simply download the file [vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe)
+and execute it as administrator.
+
 ## Contributing
 
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/SAP/fedem-gui/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
