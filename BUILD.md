@@ -61,7 +61,8 @@ proceed as follows:
   Windows app to configure Qt:
 
       cd %USERPROFILE%\Fedem-src\qt-everywhere-opensource-src-4.8.7
-      configure -opensource -fast -release -platform win32-msvc2015 -no-gif -no-libjpeg -no-libmng -no-libpng -no-libtiff -no-webkit
+      configure -opensource -fast -release -platform win32-msvc2015 ^
+      -no-declarative -no-gif -no-multimedia -no-libjpeg -no-libmng -no-libtiff -no-openssl -no-phonon -no-script -no-scripttools -no-webkit -no-xmlpatterns
 
   You need to press `y` to accept the Open Source licensing terms.
   Then to build the Qt modules, execute:
