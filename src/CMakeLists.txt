@@ -44,6 +44,7 @@ if ( "${USE_QWTLIB}" STREQUAL "External" )
   endif ( Qwt_FOUND )
 elseif ( "${USE_QWTLIB}" STREQUAL "Internal" )
   set ( Qwt_LIBRARY TRUE )
+  string ( APPEND CXX_FLAGS " -DFT_HAS_GRAPHVIEW" )
   include_directories ( "${CMAKE_CURRENT_SOURCE_DIR}/Qwt/src" )
 endif ( "${USE_QWTLIB}" STREQUAL "External" )
 
