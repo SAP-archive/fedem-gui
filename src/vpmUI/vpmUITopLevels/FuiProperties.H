@@ -80,8 +80,7 @@ protected:
 
   static void showPDF(const char* url);
 
-  enum FedemEdition { Mechanical, Windpower, Offshore };
-  virtual bool initStartGuide(FedemEdition edition) = 0;
+  virtual bool initStartGuide() = 0;
 
   virtual void placeWidgets(int width, int height);
 

@@ -459,14 +459,10 @@ static void onURLActivated(const std::string& url)
 }
 
 
-bool FuiQtProperties::initStartGuide(FedemEdition edition)
+bool FuiQtProperties::initStartGuide()
 {
   // Load HTML file
   QString htmFile = "StartGuide.htm";
-  if (edition == Windpower)
-    htmFile = "StartGuide-WindPower.htm";
-  else if (edition == Offshore)
-    htmFile = "StartGuide-Offshore.htm";
   QString appPath = QApplication::applicationDirPath() + "/Doc/";
   QFile file(appPath + htmFile);
   bool fileOk = file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -504,18 +500,8 @@ bool FuiQtProperties::initStartGuide(FedemEdition edition)
   // Change all relative local paths
   strData.replace(" src='", " src='" + appPath);
   // Set fields
-  if (edition == Windpower) {
-    mySGLogoImage->setPixMap(startGuideLogoWP_xpm,true);
-    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Windpower 8.0</b></i></font>");
-  }
-  else if (edition == Offshore) {
-    mySGLogoImage->setPixMap(startGuideLogo_xpm,true);
-    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM Offshore 8.0</b></i></font>");
-  }
-  else {
-    mySGLogoImage->setPixMap(startGuideLogo_xpm,true);
-    mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM 8.0</b></i></font>");
-  }
+  mySGLogoImage->setPixMap(startGuideLogo_xpm,true);
+  mySGHeading->setLabel("<font color='#008cff' size='5'><i><b>Welcome to FEDEM 8.0</b></i></font>");
   mySGContentLabel->setLabel(strData);
   mySGContentLabel->setLinkActivatedCB(FFaDynCB1S(onURLActivated,const std::string&));
   mySGLogoBorderRight->setPixMap(startGuideBorderRight_xpm,true);

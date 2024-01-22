@@ -27,7 +27,7 @@ public:
     this->FuiProperties::setSensitivity(isSensitive);
   }
 
-  virtual bool initStartGuide(FedemEdition edition);
+  virtual bool initStartGuide();
 };
 
 #endif
