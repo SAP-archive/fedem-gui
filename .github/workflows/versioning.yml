@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2023 SAP SE
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# This file is part of FEDEM - https://openfedem.org
+
+name: Bump build number
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-build-no:
+    if: github.event.commits[0].author.name != 'github-actions'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source code repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ACCESS_PAT }}
+
+      - name: Bump build number
+        run: |
+          echo "VERSION=$(awk -F. '{$NF++;print}' OFS=. < cfg/VERSION)" >> $GITHUB_ENV
+          echo "BUILDNO=$(awk -F. '{print $NF+1}' < cfg/VERSION)" >> $GITHUB_ENV
+
+      - name: Update VERSION file
+        run: |
+          echo $VERSION > cfg/VERSION
+          sed -i "/VERSION /s/,[0-9]*$/,$BUILDNO/;/Version\",/s/\.[0-9]\"$/.$BUILDNO/" src/vpmUI/Icons/win32AppIcon/fedem_app_icon.rc
+
+      - name: Push updated VERSION file
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -m"chore(version): build number $VERSION" cfg/VERSION src/vpmUI/Icons/win32AppIcon/fedem_app_icon.rc
+          git push origin HEAD

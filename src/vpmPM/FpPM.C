@@ -483,19 +483,7 @@ void FpPM::CopyrightNotice()
 
 const char* FpPM::getVpmVersion()
 {
-  static std::string version;
-  if (FapLicenseManager::checkWindpowerLicense())
-    version = "Windpower ";
-  else if (FapLicenseManager::checkOffshoreLicense())
-    version = "Offshore ";
-  else
-    version = "";
-
-  version += FedemAdmin::getVersion();
-  if (FapLicenseManager::isFreeEdition() || FapLicenseManager::isDemoEdition())
-    version += " (Free Edition)";
-  else if (FapLicenseManager::isLimEdition())
-    version += " (Limited Edition)";
+  static std::string version(FedemAdmin::getVersion());
 
   return version.c_str();
 }

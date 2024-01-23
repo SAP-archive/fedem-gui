@@ -917,15 +917,10 @@ void FuiProperties::initWidgets()
 
   // Start guide
 
-  if (FapLicenseManager::checkWindpowerLicense(false))
-    IAmShowingStartGuide = this->initStartGuide(Windpower);
-  else if (FapLicenseManager::checkOffshoreLicense(false))
-    IAmShowingStartGuide = this->initStartGuide(Offshore);
-  else
-    IAmShowingStartGuide = this->initStartGuide(Mechanical);
-
-  if (IAmShowingStartGuide)
+  if ((IAmShowingStartGuide = this->initStartGuide()))
   {
+    myTypeField->popDown();
+    myIdField->popDown();
     mySGLogoImage->popUp();
     mySGLogoBorderTop->popUp();
     mySGLogoBorderRight->popUp();
@@ -947,6 +942,8 @@ void FuiProperties::initWidgets()
     mySGBorderRight->popDown();
     mySGBorderBottom->popDown();
     mySGContentLabel->popDown();
+    myTypeField->popUp();
+    myIdField->popUp();
     IAmShowingStartGuide = -1; // Start guide not available
   }
 
@@ -2954,6 +2951,8 @@ void FuiProperties::buildDynamicWidgets(const FFuaUIValues* values)
 
   if (IAmShowingStartGuide > 0)
   {
+    myTypeField->popDown();
+    myIdField->popDown();
     mySGLogoImage->popUp();
     mySGLogoBorderTop->popUp();
     mySGLogoBorderRight->popUp();
@@ -2975,6 +2974,8 @@ void FuiProperties::buildDynamicWidgets(const FFuaUIValues* values)
     mySGBorderRight->popDown();
     mySGBorderBottom->popDown();
     mySGContentLabel->popDown();
+    myTypeField->popUp();
+    myIdField->popUp();
   }
 }
 
