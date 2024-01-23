@@ -31,7 +31,7 @@ jobs:
       - name: Update VERSION file
         run: |
           echo $VERSION > cfg/VERSION
-          sed -i "/VERSION /s/,[0-9]*$/,$BUILDNO/;/Version\",/s/\.[0-9]\"$/.$BUILDNO/" src/vpmUI/Icons/win32AppIcon/fedem_app_icon.rc
+          sed -i "/VERSION /s/,[0-9]*$/,$BUILDNO/;/Version\",/s/\.[0-9]\"$/.$BUILDNO\"/" src/vpmUI/Icons/win32AppIcon/fedem_app_icon.rc
 
       - name: Push updated VERSION file
         run: |
