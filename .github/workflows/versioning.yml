@@ -28,14 +28,15 @@ jobs:
           echo "VERSION=$(awk -F. '{$NF++;print}' OFS=. < cfg/VERSION)" >> $GITHUB_ENV
           echo "BUILDNO=$(awk -F. '{print $NF+1}' < cfg/VERSION)" >> $GITHUB_ENV
 
-      - name: Update VERSION file
+      - name: Update VERSION files
         run: |
           echo $VERSION > cfg/VERSION
           sed -i "/VERSION /s/,[0-9]*$/,$BUILDNO/;/Version\",/s/\.[0-9]\"$/.$BUILDNO\"/" src/vpmUI/Icons/win32AppIcon/fedem_app_icon.rc
+          sed -i "/SET INST_DIR/s/[1-9][0-9]*\.[0-9]*\.[0-9]*/$VERSION/" Install/createInstaller.bat
 
-      - name: Push updated VERSION file
+      - name: Push updated VERSION files
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -m"chore(version): build number $VERSION" cfg/VERSION src/vpmUI/Icons/win32AppIcon/fedem_app_icon.rc
+          git commit -m"chore(version): build number $VERSION" cfg src Install
           git push origin HEAD
