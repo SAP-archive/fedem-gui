@@ -19,11 +19,6 @@
 #include "vpmDB/FmPart.H"
 #include "vpmDB/FmElementGroupProxy.H"
 
-#include "FFlLib/FFlLinkHandler.H"
-#include "FFlLib/FFlIOAdaptors/FFlFedemWriter.H"
-#include "FFlLib/FFlAttributeBase.H"
-#include "FFlLib/FFlPartBase.H"
-
 #include "FFaLib/FFaCmdLineArg/FFaOptionFileCreator.H"
 #include "FFaLib/FFaOS/FFaFilePath.H"
 #include "FFaLib/FFaString/FFaStringExt.H"
@@ -91,7 +86,7 @@
 
 
 FapDamageRecovery::FapDamageRecovery(FmPart* aPart, FmSimulationEvent* event,
-				     bool preBatch)
+                                     bool preBatch)
   : FapRecoveryBase(aPart,event)
 {
   mySolverName = "fedem_fpp";
@@ -124,37 +119,14 @@ int FapDamageRecovery::createInput(std::string& rdbPath)
     return depVal;
 
   // If the FE data is loaded, create a strain coat on the current selection
-  FFlLinkHandler* FEdata = myWorkPart->getLinkHandler();
-  if (FEdata && myWorkPart->ramUsageLevel.getValue() == FmPart::FULL_FE)
-  {
-    int numStrCoat = FEdata->getElementCount(FFlLinkHandler::FFL_STRC);
-    if (autoCreateStrainCoat)
-    {
-      if (mySelectedGroups.empty())
-	FapStrainCoatCmds::makeStrainCoat(myWorkPart);
-      else
-	FapStrainCoatCmds::makeStrainCoat(mySelectedGroups);
-      int newStrCoat = FEdata->getElementCount(FFlLinkHandler::FFL_STRC);
-      if (newStrCoat > numStrCoat)
-	ListUI <<" ==> Created "<< newStrCoat-numStrCoat
-	       <<" Strain Coat elements on "<< myWorkPart->getIdString() <<" "
-	       << myWorkPart->baseFTLFile.getValue() <<"\n";
-       numStrCoat = newStrCoat;
-    }
-    else if (numStrCoat > 0)
-    {
-      std::vector<FmElementGroupProxy*> groups;
-      myWorkPart->getElementGroups(groups);
-      FapStrainCoatCmds::addFatigueProps(groups);
-    }
-
-    if (numStrCoat <= 0)
+  if (myWorkPart->isFELoaded(true))
+    if (FapStrainCoatCmds::makeStrainCoat(autoCreateStrainCoat,myWorkPart,mySelectedGroups) < 1)
     {
       ListUI <<"===> "<< myWorkPart->getIdString() <<" "
-	     << myWorkPart->baseFTLFile.getValue() <<" does not have a Strain Coat.\n";
+             << myWorkPart->baseFTLFile.getValue()
+             <<" does not have a Strain Coat.\n";
       return FAP_RESULTS_OK;
     }
-  }
 
   // Get paths to all directories accessed by this process
   std::string mechRDBPath, partPath;
@@ -168,14 +140,15 @@ int FapDamageRecovery::createInput(std::string& rdbPath)
   // Calculation options
   FFaOptionFileCreator fcoArgs(rdbPath + mySolverName + ".fco");
   fcoArgs.add("-linkId", myWorkPart->getBaseID());
-  if (FEdata && myWorkPart->ramUsageLevel.getValue() == FmPart::FULL_FE)
+  if (myWorkPart->isFELoaded(true))
   {
     // Write a local copy of the FE part data currently in core to file
-    FFlFedemWriter writer(FEdata);
-    writer.write(rdbPath + myWorkPart->baseFTLFile.getValue());
+    myWorkPart->exportPart(rdbPath + myWorkPart->baseFTLFile.getValue(),
+                           true, false, true);
     fcoArgs.add("-linkfile", myWorkPart->baseFTLFile.getValue());
   }
-  else // use FE data file from the part repository (hoping it also contains strain coat elements)
+  else // use FE data file from the part repository
+    // (relying on that it also contains strain coat elements)
     fcoArgs.add("-linkfile", FFaFilePath::getRelativeFilename(rdbPath, myWorkPart->getBaseFTLFile()));
 
   fcoArgs.add("-Bmatfile", FFaFilePath::getRelativeFilename(rdbPath, partPath + myWorkPart->BMatFile.getValue()));
@@ -189,18 +162,13 @@ int FapDamageRecovery::createInput(std::string& rdbPath)
 
   if (!mySelectedGroups.empty())
   {
-    // build group listing:
-    std::string groupDef = "<";
+    std::string groupDef;
     for (FmElementGroupProxy* group : mySelectedGroups)
-    {
-      if (groupDef.length() > 1) groupDef += ",";
-      FFlPartBase* g = group->getRealObject();
-      // if groups are attributes, add typename to the option string
-      FFlAttributeBase* agr = dynamic_cast<FFlAttributeBase*>(g);
-      if (agr) groupDef += agr->getTypeName() + " ";
-      groupDef += FFaNumStr(g->getID());
-    }
-    groupDef += ">";
+      if (groupDef.empty())
+        groupDef = group->getGroupId();
+      else
+        groupDef += "," + group->getGroupId();
+    groupDef = "<" + groupDef + ">";
     fcoArgs.add("-group", groupDef, false);
   }
 

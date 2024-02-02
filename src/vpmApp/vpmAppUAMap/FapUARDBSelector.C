@@ -21,9 +21,6 @@
 #include "vpmDB/FmTriad.H"
 #include "vpmDB/FmBeam.H"
 
-#include "FFlLib/FFlPartBase.H"
-#include "FFlLib/FFlElementBase.H"
-#include "FFlLib/FFlFEParts/FFlNode.H"
 #include "FFrLib/FFrExtractor.H"
 #include "FFrLib/FFrEntryBase.H"
 #include "FFrLib/FFrVariableReference.H"
@@ -103,22 +100,19 @@ void FapUARDBSelector::selectResult(const FFaResultDescription& result)
   // no result
   if (result.empty()) {
     FapEventManager::permTotalSelect(NULL);
-    posUA->permTotSelectUIItems(std::vector<FFaViewItem*>());
+    posUA->permTotSelectUIItems({});
   }
 
+  FmModelMemberBase* mmb;
   FFrEntryBase* ffrresult;
   FFrEntryBase* ffrpos;
 
-  //fill up frozen topLevelItem lv's with fmm or ffl as toplevel
-  if (resUA->getFreezeTopLevelItem() || posUA->getFreezeTopLevelItem()) {
-    if (result.baseId > 0) { // TODOffl || ffl
-      FmModelMemberBase* mmb = FmDB::findObject(result.baseId);//TODOffl how to find FFlPartBase elem or node  (search in link)
-      if (mmb) {                                               // FFlPartBase maa arve FFaListViewItem
-	if (resUA->getFreezeTopLevelItem()) resUA->setTopLevelItem(mmb,true);
-	if (posUA->getFreezeTopLevelItem()) posUA->setTopLevelItem(mmb,true);
-      }
+  // Fill up frozen top-level item listviews with model member
+  if (resUA->getFreezeTopLevelItem() || posUA->getFreezeTopLevelItem())
+    if (result.baseId > 0 && (mmb = FmDB::findObject(result.baseId))) {
+      if (resUA->getFreezeTopLevelItem()) resUA->setTopLevelItem(mmb,true);
+      if (posUA->getFreezeTopLevelItem()) posUA->setTopLevelItem(mmb,true);
     }
-  }
 
   //result only
   if ((ffrresult = resUA->findItem(result))) {
@@ -126,30 +120,24 @@ void FapUARDBSelector::selectResult(const FFaResultDescription& result)
     resUA->ensureItemVisible(ffrresult);
   }
   //result + possibility
-  else if (result.baseId > 0) {
-    FmModelMemberBase* mmb = FmDB::findObject(result.baseId);
-    if (mmb) {
-      //res
-      FapEventManager::permTotalSelect(mmb);
-      resUA->ensureItemVisible(mmb);
-      //pos
-      FFaResultDescription pos = result;
-      pos.baseId = 0;
-      FFrEntryBase* ffrpos = posUA->findItem(pos);
-      if (ffrpos) {
-	posUA->permTotSelectUIItems(std::vector<FFaViewItem*>(1,ffrpos));
-	posUA->ensureItemVisible(ffrpos);
-      }
+  else if (result.baseId > 0 && (mmb = FmDB::findObject(result.baseId))) {
+    //res
+    FapEventManager::permTotalSelect(mmb);
+    resUA->ensureItemVisible(mmb);
+    //pos
+    FFaResultDescription pos = result;
+    pos.baseId = 0;
+    if ((ffrpos = posUA->findItem(pos))) {
+      posUA->permTotSelectUIItems({ffrpos});
+      posUA->ensureItemVisible(ffrpos);
     }
   }
   //possibility only -> ie top level var
   else if ((ffrpos = posUA->findItem(result))) {
     FapEventManager::permTotalSelect(NULL);
-    posUA->permTotSelectUIItems(std::vector<FFaViewItem*>(1,ffrpos));
+    posUA->permTotSelectUIItems({ffrpos});
     posUA->ensureItemVisible(ffrpos);
   }
-
-  //TODOffl set 3d in selection mode (all, element, node ..)
 
   this->updateApplyable();
 }
@@ -177,13 +165,6 @@ void FapUARDBSelector::onRDBItemSelected(FapUAItemsViewHandler* lv)
     FFaViewItem* item = totalSelection.front();
     if (dynamic_cast<FmSimulationModelBase*>(item))
       toplevelpos.OGType = item->getItemName();
-    else if (dynamic_cast<FFlPartBase*>(item)) {
-      //    descr.OGType = link->getItemName();//FFlPartBase->link? TODOffl
-      if (dynamic_cast<FFlNode*>(item))
-	toplevelpos.varDescrPath.push_back("Noderesults");
-      else if (dynamic_cast<FFlElementBase*>(item))
-	toplevelpos.varDescrPath.push_back("Elementresults");
-    }
     posUA->setTopLevelItemDescr(toplevelpos,false);
   }
   else if (totalSelection.empty())

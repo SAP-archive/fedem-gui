@@ -154,7 +154,7 @@ void FapStrainCoatCmds::makeStrainCoat(const std::vector<FmPart*>& parts)
     FFaMsg::setSubTask(part->baseFTLFile.getValue());
     FFaMsg::setSubStep(++ipart);
 
-    if (FapStrainCoatCmds::makeStrainCoat(part,NULL))
+    if (FapStrainCoatCmds::makeStrainCoat(part))
       touchedParts.insert(part);
   }
 
@@ -199,13 +199,6 @@ void FapStrainCoatCmds::makeStrainCoat(const std::vector<FmElementGroupProxy*>& 
 }
 
 
-void FapStrainCoatCmds::makeStrainCoat(FmPart* fmPart)
-{
-  if (FapStrainCoatCmds::makeStrainCoat(fmPart,0))
-    fmPart->getLinkHandler()->updateGroupVisibilityStatus();
-}
-
-
 bool FapStrainCoatCmds::makeStrainCoat(FmPart* fmPart,
 				       FmElementGroupProxy* group)
 {
@@ -228,11 +221,7 @@ bool FapStrainCoatCmds::makeStrainCoat(FmPart* fmPart,
 #endif
 
   if (!group)
-  {
-    std::vector<FmElementGroupProxy*> groups;
-    fmPart->getElementGroups(groups);
-    FapStrainCoatCmds::addFatigueProps(groups);
-  }
+    FapStrainCoatCmds::addFatigueProps(fmPart);
   else if (group->doFatigue())
     FapStrainCoatCmds::addFatigueProps(fmPart,group);
 
@@ -240,8 +229,36 @@ bool FapStrainCoatCmds::makeStrainCoat(FmPart* fmPart,
 }
 
 
-void FapStrainCoatCmds::addFatigueProps(const std::vector<FmElementGroupProxy*>& groups)
+int FapStrainCoatCmds::makeStrainCoat(bool autoCreate, FmPart* fmPart,
+                                      const std::vector<FmElementGroupProxy*>& groups)
 {
+  FFlLinkHandler* fePart = fmPart->getLinkHandler();
+  int noStrCoat = fePart->getElementCount(FFlLinkHandler::FFL_STRC);
+  if (autoCreate)
+  {
+    if (!groups.empty())
+      FapStrainCoatCmds::makeStrainCoat(groups);
+    else if (FapStrainCoatCmds::makeStrainCoat(fmPart))
+      fePart->updateGroupVisibilityStatus();
+
+    int newStrCoat = fePart->getElementCount(FFlLinkHandler::FFL_STRC);
+    if (newStrCoat > noStrCoat)
+      ListUI <<" ==> Created "<< newStrCoat-noStrCoat
+             <<" Strain Coat elements on "<< fmPart->getIdString() <<" "
+             << fmPart->baseFTLFile.getValue() <<"\n";
+    return newStrCoat;
+  }
+  else if (noStrCoat > 0)
+    FapStrainCoatCmds::addFatigueProps(fmPart);
+
+  return noStrCoat;
+}
+
+
+void FapStrainCoatCmds::addFatigueProps(FmPart* part)
+{
+  std::vector<FmElementGroupProxy*> groups;
+  part->getElementGroups(groups);
   for (FmElementGroupProxy* group : groups)
     if (group->doFatigue())
       FapStrainCoatCmds::addFatigueProps(group->getOwner(),group);

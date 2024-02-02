@@ -491,9 +491,10 @@ void FapUAFunctionProperties::setDBValues(FFuaUIValues* values)
 
     if (f->isOfType(FmfDeviceFunction::getClassTypeID())) {
       FmfDeviceFunction* df = static_cast<FmfDeviceFunction*>(f);
-      if (df->setDevice(pv->fileName,pv->myChannelName) |
-          df->setFileReference(static_cast<FmFileReference*>(pv->selectedFileRef)))
-        if (df->isWaveFunction()) df->initGetValue(); // Recalculate Hs and Tz
+      bool newFile = df->setDevice(pv->fileName,pv->myChannelName);
+      bool newFref = df->setFileReference(static_cast<FmFileReference*>(pv->selectedFileRef));
+      if ((newFile || newFref) && df->isUsedAs(FmMathFuncBase::WAVE_FUNCTION))
+        df->initGetValue(); // Recalculate Hs and Tz
       df->scaleFactor.setValue(pv->myScaleFactor);
       df->verticalShift.setValue(pv->myVerticalShift);
       df->zeroAdjust.setValue(pv->myZeroAdjust);
