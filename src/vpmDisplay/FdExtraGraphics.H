@@ -8,6 +8,7 @@
 #ifndef FD_EXTRA_GRAPHICS_H
 #define FD_EXTRA_GRAPHICS_H
 
+#include <cstddef> // To ensure NULL is defined
 #include <vector>
 #include <array>
 
