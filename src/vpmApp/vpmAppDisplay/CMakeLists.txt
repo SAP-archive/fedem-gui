@@ -58,4 +58,4 @@ endif ( WIN AND Coin_library )
 
 message ( STATUS "Building library ${LIB_ID}" )
 add_library ( ${LIB_ID} ${CPP_SOURCE_FILES} ${HEADER_FILES} )
-target_link_libraries ( ${LIB_ID} FFlrLib ${VTF_LIBRARY} )
+target_link_libraries ( ${LIB_ID} FFlrLib FFaOperation ${VTF_LIBRARY} )
