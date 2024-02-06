@@ -488,8 +488,8 @@ bool FuiQtProperties::initStartGuide()
         fileOk = file.open(QIODevice::ReadOnly | QIODevice::Text);
       }
     }
-#endif
   }
+#endif
 
   QString strData;
   if (!fileOk)
