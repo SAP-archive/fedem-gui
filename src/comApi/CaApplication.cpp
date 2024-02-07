@@ -74,6 +74,7 @@
 #endif
 
 #include "vpmUI/Fui.H"
+#include "vpmUI/vpmUITopLevels/FuiMainWindow.H"
 #include "vpmApp/FapLicenseManager.H"
 #include "FFaLib/FFaDefinitions/FFaMsg.H"
 #include "FFaLib/FFaOS/FFaFilePath.H"
@@ -296,7 +297,12 @@ void CaApplication::Show(BOOL bShowWindow)
 {
   CA_CHECK_LICENSE(false);
 
-  Fui::mainWindowUI(bShowWindow,true);
+  if (Fui::hasGUI()) {
+    if (bShowWindow)
+      Fui::getMainWindow()->popUp();
+    else
+      Fui::getMainWindow()->popDown();
+  }
 }
 
 ITriad* CaApplication::CreateTriad(double x, double y, double z,
