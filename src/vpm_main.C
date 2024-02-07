@@ -25,6 +25,7 @@
 #include <fstream> // For std::cout redirection
 #endif
 
+#include <cstring>
 #if defined(win32) || defined(win64)
 #define strcasecmp _stricmp
 #define NOGDI

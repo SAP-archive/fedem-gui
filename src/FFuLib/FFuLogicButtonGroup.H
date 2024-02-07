@@ -9,6 +9,8 @@
 #define FFU_LOGIC_BUTTON_GROUP_H
 
 #include "FFaLib/FFaDynCalls/FFaDynCB.H"
+
+#include <cstddef> // To ensure NULL is defined
 #include <map>
 
 class FFuButton;

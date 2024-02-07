@@ -8,6 +8,7 @@
 #ifndef FAP_UA_EXISTENCE_HANDLER_H
 #define FAP_UA_EXISTENCE_HANDLER_H
 
+#include <cstddef> // To ensure NULL is defined
 #include <set>
 #include <map>
 #include <vector>

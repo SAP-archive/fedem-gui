@@ -76,42 +76,44 @@
 UIgeo Fui::screen;
 int   Fui::borderWidth = 0;
 int   Fui::titleBarHeight = 0;
-bool  Fui::iHaveGUI = false;
 
 FuiMainWindow* Fui::mainWindow = NULL;
 
 
 void Fui::init(int argc, char** argv)
 {
-  iHaveGUI = !FFaAppInfo::isConsole();
+  bool consoleOnly = FFaAppInfo::isConsole();
 
   // Init the UAExistenceHandler
   FapUAExistenceHandler::init();
 
   // GUI lib initialisation
-  FFuaApplication::init(argc,argv,iHaveGUI);
+  FFuaApplication::init(argc,argv,!consoleOnly);
 
   // Init user feedback method
   FFaMsg::setMessager(new FuiMsg);
-  if (!iHaveGUI) return;
+  if (consoleOnly) return;
 
   // Getting screen geometry
   Fui::screen.width  = FFuaApplication::getScreenWidth();
   Fui::screen.height = FFuaApplication::getScreenHeight();
+
+  // Create the main window
+  UIgeo geo = Fui::getUIgeo(FUI_MAINWINDOW_GEO);
+  Fui::mainWindow = FuiMainWindow::create(geo.xPos, geo.yPos, geo.width, geo.height);
 }
 
 
 void Fui::start()
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   // Get decoration properties from project UI
   // FIXME - find these values somehow.
   Fui::borderWidth = 8;
   Fui::titleBarHeight = 23;
 
-  // Create the different UIs
-  Fui::mainWindowUI(false,true);
+  // Create the other UIs
   Fui::outputListUI(false,true);
   Fui::modellerUI(false,true);
 }
@@ -119,15 +121,15 @@ void Fui::start()
 
 void Fui::mainUI()
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   // Set basic mode
   FuiModes::setMode(FuiModes::EXAM_MODE);
 
   // Pop up the different ui's
 
-  Fui::mainWindowUI();
-  ((FapUAMainWindow*)Fui::mainWindow->getUA())->updateUICommands();// TMP (FapUAMainWindow::initWidgets)
+  Fui::mainWindow->popUp();
+  ((FapUAMainWindow*)Fui::mainWindow->getUA())->updateUICommands();
 
   Fui::modellerUI();
 
@@ -173,7 +175,7 @@ void Fui::setTitle(const char* title)
 
 bool Fui::okCancelDialog(const char* msg, int type)
 {
-  if (!iHaveGUI) return true;
+  if (!Fui::mainWindow) return true;
 
   const char* texts[2] = {"OK","Cancel"};
   FFuUserDialog* dialog = FFuUserDialog::create(msg,type,texts,2);
@@ -186,7 +188,7 @@ bool Fui::okCancelDialog(const char* msg, int type)
 
 bool Fui::yesNoDialog(const char* msg, int type)
 {
-  if (!iHaveGUI) return true;
+  if (!Fui::mainWindow) return true;
 
   const char* texts[2] = {"Yes","No"};
   FFuUserDialog* dialog = FFuUserDialog::create(msg,type,texts,2);
@@ -199,7 +201,7 @@ bool Fui::yesNoDialog(const char* msg, int type)
 
 void Fui::okDialog(const char* msg, int type)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   const char* texts[1] = {"OK"};
   FFuUserDialog* dialog = FFuUserDialog::create(msg,type,texts,1);
@@ -210,7 +212,7 @@ void Fui::okDialog(const char* msg, int type)
 
 void Fui::dismissDialog(const char* msg, int type)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   const char* texts[1] = {"Dismiss"};
   FFuUserDialog::create(msg,type,texts,1,false);
@@ -219,7 +221,7 @@ void Fui::dismissDialog(const char* msg, int type)
 
 int Fui::genericDialog(const char* msg, const char** texts, int nButtons, int type)
 {
-  if (!iHaveGUI) return -1;
+  if (!Fui::mainWindow) return -1;
 
   FFuUserDialog* dialog = FFuUserDialog::create(msg,type,texts,nButtons);
   int answer = dialog->execute();
@@ -231,7 +233,7 @@ int Fui::genericDialog(const char* msg, const char** texts, int nButtons, int ty
 
 void Fui::noUserInputPlease()
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuaApplication::blockUserEvents(true);
 }
@@ -239,7 +241,7 @@ void Fui::noUserInputPlease()
 
 void Fui::okToGetUserInput()
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuaApplication::blockUserEvents(false);
 }
@@ -322,12 +324,6 @@ FFuComponentBase* Fui::getCtrlViewer()
     return dynamic_cast<FuiCtrlModeller*>(uic)->activeViewer();
   else
     return NULL;
-}
-
-
-FuiMainWindow* Fui::getMainWindow()
-{
-  return Fui::mainWindow;
 }
 
 
@@ -591,7 +587,7 @@ UIgeo Fui::getUIgeo(int fuiType)
 
 void Fui::animationUI(bool onScreen, bool)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiModeller::getClassTypeID());
 
@@ -601,7 +597,7 @@ void Fui::animationUI(bool onScreen, bool)
 
 void Fui::appearanceUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   inMem = true; // Always keep FuiAppearance in memory,
   // because the Done button has not finished when this function is called.
@@ -621,7 +617,7 @@ void Fui::appearanceUI(bool onScreen, bool inMem)
 
 void Fui::viewSettingsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiViewSettings::getClassTypeID());
 
@@ -637,7 +633,7 @@ void Fui::viewSettingsUI(bool onScreen, bool inMem)
 
 void Fui::analysisOptionsUI(bool onScreen, bool inMem, bool basicMode)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiAdvAnalysisOptions::getClassTypeID());
 
@@ -655,7 +651,7 @@ void Fui::analysisOptionsUI(bool onScreen, bool inMem, bool basicMode)
 
 void Fui::stressOptionsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiStressOptions::getClassTypeID());
 
@@ -671,7 +667,7 @@ void Fui::stressOptionsUI(bool onScreen, bool inMem)
 
 void Fui::eigenmodeOptionsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiEigenOptions::getClassTypeID());
 
@@ -687,7 +683,7 @@ void Fui::eigenmodeOptionsUI(bool onScreen, bool inMem)
 
 void Fui::gageOptionsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiGageOptions::getClassTypeID());
 
@@ -703,7 +699,7 @@ void Fui::gageOptionsUI(bool onScreen, bool inMem)
 
 void Fui::fppOptionsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiFppOptions::getClassTypeID());
 
@@ -720,7 +716,7 @@ void Fui::fppOptionsUI(bool onScreen, bool inMem)
 #ifdef FT_HAS_NCODE
 void Fui::dutyCycleOptionsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiDutyCycleOptions::getClassTypeID());
 
@@ -737,7 +733,7 @@ void Fui::dutyCycleOptionsUI(bool onScreen, bool inMem)
 
 void Fui::preferencesUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiPreferences::getClassTypeID());
 
@@ -753,7 +749,7 @@ void Fui::preferencesUI(bool onScreen, bool inMem)
 
 void Fui::modelPreferencesUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiModelPreferences::getClassTypeID());
 
@@ -769,7 +765,7 @@ void Fui::modelPreferencesUI(bool onScreen, bool inMem)
 
 void Fui::linkRamSettingsUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiLinkRamSettings::getClassTypeID());
 
@@ -785,7 +781,7 @@ void Fui::linkRamSettingsUI(bool onScreen, bool inMem)
 
 void Fui::animationControlUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiAnimationControl::getClassTypeID());
 
@@ -801,7 +797,7 @@ void Fui::animationControlUI(bool onScreen, bool inMem)
 
 void Fui::rdbSelectorUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiRDBSelector::getClassTypeID());
 
@@ -817,7 +813,7 @@ void Fui::rdbSelectorUI(bool onScreen, bool inMem)
 
 void Fui::rdbMEFatigueUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
 #ifdef FT_HAS_GRAPHVIEW
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiRDBMEFatigue::getClassTypeID());
@@ -835,32 +831,9 @@ void Fui::rdbMEFatigueUI(bool onScreen, bool inMem)
 }
 
 
-void Fui::mainWindowUI(bool onScreen, bool inMem)
-{
-  if (!iHaveGUI) return;
-
-  if ((onScreen || inMem) && !Fui::mainWindow) {
-    UIgeo geo = Fui::getUIgeo(FUI_MAINWINDOW_GEO);
-    Fui::mainWindow = FuiMainWindow::create(geo.xPos, geo.yPos, geo.width, geo.height);
-  }
-
-  if (!Fui::mainWindow)
-    return;
-
-  else if (onScreen) // Requested on screen (and exists)
-    Fui::mainWindow->popUp();
-
-  else if (inMem) // Requested off screen but in mem
-    Fui::mainWindow->popDown();
-
-  else // Requested off screen and removed from mem
-    delete Fui::mainWindow;
-}
-
-
 void Fui::modellerUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI || !Fui::mainWindow) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiModeller::getClassTypeID());
 
@@ -880,7 +853,7 @@ void Fui::modellerUI(bool onScreen, bool inMem)
 
 void Fui::ctrlModellerUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI || !Fui::mainWindow) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiCtrlModeller::getClassTypeID());
 
@@ -903,7 +876,7 @@ void Fui::ctrlModellerUI(bool onScreen, bool inMem)
 
 void Fui::ctrlGridSnapUI(bool onScreen)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiCtrlModeller::getClassTypeID());
 
@@ -913,7 +886,7 @@ void Fui::ctrlGridSnapUI(bool onScreen)
 
 void Fui::outputListUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiOutputList::getClassTypeID());
 
@@ -929,7 +902,7 @@ void Fui::outputListUI(bool onScreen, bool inMem)
 
 void Fui::resultFileBrowserUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiMiniFileBrowser::getClassTypeID());
 
@@ -944,7 +917,7 @@ void Fui::resultFileBrowserUI(bool onScreen, bool inMem)
 
 void Fui::seaEnvironmentUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiSeaEnvironment::getClassTypeID());
   if ((onScreen || inMem) && uic == NULL) {
@@ -958,7 +931,7 @@ void Fui::seaEnvironmentUI(bool onScreen, bool inMem)
 
 void Fui::airEnvironmentUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
 #ifdef FT_HAS_WND
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiAirEnvironment::getClassTypeID());
@@ -976,7 +949,7 @@ void Fui::airEnvironmentUI(bool onScreen, bool inMem)
 
 FuiTurbWind* Fui::turbWindUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return NULL;
+  if (!Fui::mainWindow) return NULL;
 
 #ifdef FT_HAS_WND
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiTurbWind::getClassTypeID());
@@ -993,7 +966,7 @@ FuiTurbWind* Fui::turbWindUI(bool onScreen, bool inMem)
 
 void Fui::bladeDefinitionUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
 #ifdef FT_HAS_WND
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiBladeDefinition::getClassTypeID());
@@ -1011,7 +984,7 @@ void Fui::bladeDefinitionUI(bool onScreen, bool inMem)
 
 void Fui::airfoilDefinitionUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
 #ifdef FT_HAS_WND
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiAirfoilDefinition::getClassTypeID());
@@ -1029,7 +1002,7 @@ void Fui::airfoilDefinitionUI(bool onScreen, bool inMem)
 
 void Fui::turbineAssemblyUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
 #ifdef FT_HAS_WND
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiCreateTurbineAssembly::getClassTypeID());
@@ -1047,7 +1020,7 @@ void Fui::turbineAssemblyUI(bool onScreen, bool inMem)
 
 void Fui::turbineTowerUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
 #ifdef FT_HAS_WND
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiCreateTurbineTower::getClassTypeID());
@@ -1065,7 +1038,7 @@ void Fui::turbineTowerUI(bool onScreen, bool inMem)
 
 void Fui::beamstringPairUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiCreateBeamstringPair::getClassTypeID());
   if ((onScreen || inMem) && uic == NULL) {
@@ -1079,7 +1052,7 @@ void Fui::beamstringPairUI(bool onScreen, bool inMem)
 
 void Fui::objectBrowserUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiObjectBrowser::getClassTypeID());
   if ((onScreen || inMem) && uic == NULL) {
@@ -1093,7 +1066,7 @@ void Fui::objectBrowserUI(bool onScreen, bool inMem)
 
 void Fui::eventDefinitionUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiEventDefinition::getClassTypeID());
   if ((onScreen || inMem) && uic == NULL) {
@@ -1106,7 +1079,7 @@ void Fui::eventDefinitionUI(bool onScreen, bool inMem)
 
 void Fui::modelExportUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiModelExport::getClassTypeID());
 
@@ -1121,7 +1094,7 @@ void Fui::modelExportUI(bool onScreen, bool inMem)
 
 void Fui::beamCSSelectorUI(bool onScreen, bool inMem)
 {
-  if (!iHaveGUI) return;
+  if (!Fui::mainWindow) return;
 
   FFuTopLevelShell* uic = FFuTopLevelShell::getInstanceByType(FuiCSSelector::getClassTypeID());
   if ((onScreen || inMem) && uic == NULL) {
@@ -1141,7 +1114,7 @@ void Fui::pluginsUI()
 
 FuiGraphView* Fui::newGraphViewUI(const char* title)
 {
-  if (!iHaveGUI || !Fui::mainWindow) return NULL;
+  if (!Fui::mainWindow) return NULL;
 
 #ifdef FT_HAS_GRAPHVIEW
   UIgeo geo = Fui::getUIgeo(FUI_GRAPHVIEW_GEO);

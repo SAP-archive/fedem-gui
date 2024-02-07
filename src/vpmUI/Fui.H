@@ -65,7 +65,7 @@ public:
   // Global UI parameters interface
   /////////////////////////////////
 
-  static FuiMainWindow*    getMainWindow(); // Get the main window
+  static FuiMainWindow*    getMainWindow() { return mainWindow; }
   static FFuComponentBase* getViewer();     // Get the 3D viewer
   static FFuComponentBase* getCtrlViewer(); // Get the control viewer
 
@@ -102,9 +102,7 @@ public:
 
   static void start();
   static void mainUI();
-  static bool hasGUI() { return iHaveGUI; }
-
-  static void mainWindowUI       (bool onScreen = true, bool inMem = false);
+  static bool hasGUI() { return mainWindow != NULL; }
 
   // regular toplevels
   static void animationUI        (bool onScreen = true, bool inMem = false);
@@ -156,7 +154,6 @@ private:
   static UIgeo screen;         // Screen geometry
   static int   borderWidth;    // Width of border surrounding top level UIs
   static int   titleBarHeight; // Height of title bar in top level UIs
-  static bool  iHaveGUI;
 
   static FuiMainWindow* mainWindow;
 
