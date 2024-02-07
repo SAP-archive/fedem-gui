@@ -30,6 +30,8 @@
 #include "FFaLib/FFaOperation/FFaOpUtils.H"
 #include "FFuLib/FFuAuxClasses/FFuaIdentifiers.H"
 
+#include <algorithm>
+
 
 Fmd_SOURCE_INIT(FcFAPUARDBSELECTOR, FapUARDBSelector, FapUAExistenceHandler)
 
