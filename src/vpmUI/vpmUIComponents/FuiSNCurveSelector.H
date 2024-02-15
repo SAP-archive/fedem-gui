@@ -5,8 +5,8 @@
 // This file is part of FEDEM - https://openfedem.org
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef FUISNCURVESELECTOR_H
-#define FUISNCURVESELECTOR_H
+#ifndef FUI_SN_CURVE_SELECTOR_H
+#define FUI_SN_CURVE_SELECTOR_H
 
 #include "FFuLib/FFuBase/FFuMultUIComponent.H"
 #include "FFaLib/FFaDynCalls/FFaDynCB.H"
@@ -19,7 +19,11 @@ class FFuOptionMenu;
 class FuiSNCurveSelector : virtual public FFuMultUIComponent
 {
 public:
-  FuiSNCurveSelector() {}
+  FuiSNCurveSelector()
+  {
+    stdLabel = curveLabel = NULL;
+    stdTypeMenu = curveTypeMenu = NULL;
+  }
   virtual ~FuiSNCurveSelector() {}
 
   virtual void setSensitivity(bool isSensitive);
@@ -32,11 +36,11 @@ public:
   void getValues(int& stdIdx, int& curveIdx);
   void setValues(int stdIdx, int curveIdx);
 
-  void populateStdMenu();
-
 protected:
   void initWidgets();
+
   virtual void placeWidgets(int width, int height);
+  virtual void onPoppedUpFromMem();
 
 private:
   void onStdValueChanged(int value);
