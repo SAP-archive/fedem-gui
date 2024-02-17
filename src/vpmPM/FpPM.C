@@ -1185,12 +1185,18 @@ bool FpPM::openTemplateFile(const std::string& modelPath)
   bool writeLogFile = false;
   FFaCmdLineArg::instance()->getValue("logFile",writeLogFile);
   int existingFile = Fedem::loadTemplate(fileName,defaultFile,writeLogFile);
-  if (existingFile < 0) // invalid file path
-    return false;
-  else if (existingFile == 0) // non-existing template file
-    FmDB::newMechanism();
+  if (existingFile < 0) return false; // invalid file path
 
-  FmMechanism* mech = FmDB::getMechanismObject();
+  FmMechanism* mech = NULL;
+  if (existingFile > 0)
+    mech = FmDB::getMechanismObject();
+  else
+  {
+    // Non-existing template file, create an empty mechanism
+    mech = FmDB::newMechanism();
+    mech->syncPath(fileName,true);
+  }
+
   FpPM::saveActivePlugins(mech);
   FpPM::loadPropertyLibraries();
 
