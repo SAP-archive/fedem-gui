@@ -129,8 +129,7 @@ void Fui::mainUI()
   // Pop up the different ui's
 
   Fui::mainWindow->popUp();
-  ((FapUAMainWindow*)Fui::mainWindow->getUA())->updateUICommands();
-
+  Fui::updateUICommands();
   Fui::modellerUI();
 
   // Make all the ui's actually redraw themselves (handle redraw event etc..)
@@ -138,6 +137,12 @@ void Fui::mainUI()
   FFuaApplication::handlePendingEvents();
 
   FFaMsg::setStatus("Ready");
+}
+
+
+void Fui::updateUICommands()
+{
+  ((FapUAMainWindow*)Fui::mainWindow->getUA())->updateUICommands();
 }
 
 

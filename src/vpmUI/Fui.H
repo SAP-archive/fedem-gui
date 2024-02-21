@@ -103,6 +103,7 @@ public:
   static void start();
   static void mainUI();
   static bool hasGUI() { return mainWindow != NULL; }
+  static void updateUICommands();
 
   // regular toplevels
   static void animationUI        (bool onScreen = true, bool inMem = false);
