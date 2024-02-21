@@ -90,6 +90,8 @@ enum TouchMode { READ_ONLY = -2, DONT_TOUCH = -1, UNTOUCHED = 0,
 		 TOUCHED_RESULTS = 1, TOUCHED_MODEL = 2 };
 int FpPM::touchedFlag = DONT_TOUCH;
 
+std::vector<std::string> FpPM::recentFiles;
+
 
 /////////////////////////////////////////////
 // Initiate the PM system and support classes
@@ -993,7 +995,20 @@ bool FpPM::vpmModelOpen(const std::string& givenName, bool doLoadParts,
 
   Fui::okToGetUserInput(); // This block is started in FpPM::closeModel
 
+  // Move the file name to the top of the recent file list
+  std::vector<std::string>::iterator it = std::find(recentFiles.begin(),recentFiles.end(),name);
+  if (it != recentFiles.end()) recentFiles.erase(it);
+  recentFiles.insert(recentFiles.begin(),name);
+  Fui::updateUICommands();
+
   return true;
+}
+
+
+void FpPM::removeRecent(size_t idx)
+{
+  if (idx < recentFiles.size())
+    recentFiles.erase(recentFiles.begin()+idx);
 }
 
 

@@ -14,6 +14,7 @@
 #include "vpmUI/vpmUITopLevels/FuiMainWindow.H"
 #include "vpmUI/Icons/FuiIconPixmaps.H"
 #include "vpmUI/Fui.H"
+#include "vpmPM/FpPM.H"
 #include "FiUserElmPlugin/FiUserElmPlugin.H"
 #include "FFuLib/FFuAuxClasses/FFuaCmdItem.H"
 #include "FFaLib/FFaCmdLineArg/FFaCmdLineArg.H"
@@ -32,6 +33,7 @@ FapUAMainWindow::FapUAMainWindow(FuiMainWindow* uic)
 
   this->fileHeader.setText("File");
   this->fileExportHeader.setText("Export");
+  this->fileRecentHeader.setText("Recent models");
   this->editHeader.setText("Edit");
   this->viewHeader.setText("View");
   this->viewZoomHeader.setText("Zoom");
@@ -98,9 +100,11 @@ void FapUAMainWindow::getCommands(FFuaUICommands* commands)
   //file
   this->fileHeader.clear();
   this->fileExportHeader.clear();
+  this->fileRecentHeader.clear();
 
   this->fileHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_file_nu"));
   this->fileHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_file_open"));
+  this->fileHeader.push_back(&this->fileRecentHeader);
 
   this->fileHeader.push_back(&this->separator);
   this->fileHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_file_save"));
@@ -125,6 +129,16 @@ void FapUAMainWindow::getCommands(FFuaUICommands* commands)
     this->fileExportHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_export_exportCGeo"));
     this->fileExportHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_export_dtsDigitalTwin"));
   }
+
+  //recent files
+  FFuaCmdItem* pCmdItem; int i = 0;
+  for (const std::string& model : FpPM::recentModels())
+    if ((pCmdItem = FFuaCmdItem::getCmdItem("cmdId_file_recent" + std::to_string(i++))))
+    {
+      pCmdItem->setToolTip("Open the model " + model);
+      pCmdItem->setText(std::to_string(i) + " " + model);
+      this->fileRecentHeader.push_back(pCmdItem);
+    }
 
   this->fileHeader.push_back(&this->separator);
   this->fileHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_file_exit"));
@@ -244,8 +258,7 @@ void FapUAMainWindow::getCommands(FFuaUICommands* commands)
   this->addonsHeader.clear();
   if (haveAddOns) {
     char szName[512];
-    FFuaCmdItem* pCmdItem = NULL;
-    for (int i = 0; FapToolsCmds::getAddonExe(i,NULL,szName); i++)
+    for (i = 0; FapToolsCmds::getAddonExe(i,NULL,szName); i++)
       if ((pCmdItem = FFuaCmdItem::getCmdItem("cmdId_tools_addon" + std::to_string(i))))
       {
         pCmdItem->setToolTip(szName);
@@ -427,15 +440,14 @@ void FapUAMainWindow::getCommands(FFuaUICommands* commands)
   if (nTypes > 0) {
     this->mechHeader.push_back(&this->separator);
     this->mechHeader.push_back(&this->createUDEHeader);
-    FFuaCmdItem* cmdItem = NULL;
     char typeName[64];
-    for (int i = 0; i < nTypes; i++)
-      if ((cmdItem = FFuaCmdItem::getCmdItem("cmdId_dBCreate_UE" + std::to_string(i))))
+    for (i = 0; i < nTypes; i++)
+      if ((pCmdItem = FFuaCmdItem::getCmdItem("cmdId_dBCreate_UE" + std::to_string(i))))
         if (FiUserElmPlugin::instance()->getTypeName(eTypes[i],64,typeName) > 0)
         {
-          cmdItem->setText(typeName);
-          cmdItem->setToolTip(typeName);
-          this->createUDEHeader.push_back(cmdItem);
+          pCmdItem->setText(typeName);
+          pCmdItem->setToolTip(typeName);
+          this->createUDEHeader.push_back(pCmdItem);
         }
   }
 

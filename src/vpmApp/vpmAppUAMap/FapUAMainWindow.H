@@ -35,6 +35,7 @@ private:
 
   FFuaCmdHeaderItem fileHeader;
   FFuaCmdHeaderItem fileExportHeader;
+  FFuaCmdHeaderItem fileRecentHeader;
   FFuaCmdHeaderItem editHeader;
   FFuaCmdHeaderItem viewHeader;
   FFuaCmdHeaderItem viewZoomHeader;

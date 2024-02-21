@@ -176,6 +176,25 @@ void FapFileCmds::init()
   cmdItem->setToolTip("Import generic beam cross sections from database");
   cmdItem->setActivatedCB(FFaDynCB0S([](){ Fui::beamCSSelectorUI(true); }));
   cmdItem->setGetSensitivityCB(FFaDynCB1S(FapCmdsBase::isModelTouchable,bool&));
+
+  for (int i = 0; i < 10; i++)
+  {
+    cmdItem = new FFuaCmdItem("cmdId_file_recent" + std::to_string(i));
+    cmdItem->setSmallIcon(open_xpm);
+    cmdItem->setGetSensitivityCB(FFaDynCB1S(FapFileCmds::getChangeModelSensitivity,bool&));
+    switch (i) {
+    case 0: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(0); })); break;
+    case 1: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(1); })); break;
+    case 2: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(2); })); break;
+    case 3: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(3); })); break;
+    case 4: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(4); })); break;
+    case 5: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(5); })); break;
+    case 6: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(6); })); break;
+    case 7: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(7); })); break;
+    case 8: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(8); })); break;
+    case 9: cmdItem->setActivatedCB(FFaDynCB0S([](){ FapFileCmds::open(9); })); break;
+    }
+  }
 }
 //----------------------------------------------------------------------------
 
@@ -203,21 +222,25 @@ void FapFileCmds::open()
   std::vector<std::string> retFiles = aDialog->execute();
   bool skipParts = aDialog->getUserToggleSet("LoadParts");
   delete aDialog;
-  if (retFiles.empty()) return;
 
-  // Check the selected file. If the file does not exist or cannot be opened,
+  if (!retFiles.empty())
+    FapFileCmds::open(retFiles.front(),!skipParts);
+}
+//----------------------------------------------------------------------------
+
+bool FapFileCmds::open(const std::string& fileName, bool loadParts)
+{
+  // Check the specified file. If the file does not exist or cannot be opened,
   // cancel the open command without closing the current model.
-  const std::string& fileName = retFiles.front();
-
   if (!FpFileSys::isFile(fileName)) {
     FFaMsg::dialog("The file: \"" + fileName + "\" does not exist.");
-    return;
+    return false;
   }
 
   if (!FpFileSys::isReadable(fileName)) {
     FFaMsg::dialog("The file: \"" + fileName + "\" can not be opened.\n"
                    "Check that you have proper read permissions to the file.");
-    return;
+    return false;
   }
 
 #ifdef FT_USE_PROFILER
@@ -226,14 +249,25 @@ void FapFileCmds::open()
 #endif
 
   // If the model opening fails, create an empty new model instead
+  bool success = true;
   if (FpPM::closeModel())
-    if (!FpPM::vpmModelOpen(fileName,!skipParts))
+    if (!(success = FpPM::vpmModelOpen(fileName,loadParts)))
       FpPM::vpmModelNew();
 
 #ifdef FT_USE_PROFILER
   FFaMemoryProfiler::reportMemoryUsage("ModelOpen");
   FFaMemoryProfiler::nullifyMemoryUsage("ModelOpen");
 #endif
+  return success;
+}
+//----------------------------------------------------------------------------
+
+void FapFileCmds::open(size_t recentFileIdx)
+{
+  const std::vector<std::string>& recentFiles = FpPM::recentModels();
+  if (recentFileIdx < recentFiles.size())
+    if (!FapFileCmds::open(recentFiles[recentFileIdx],true))
+      FpPM::removeRecent(recentFileIdx);
 }
 //----------------------------------------------------------------------------
 
