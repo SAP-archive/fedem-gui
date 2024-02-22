@@ -23,30 +23,22 @@ FapUAOutputList::FapUAOutputList(FuiOutputList* uic)
 }
 //----------------------------------------------------------------------------
 
-FapUAOutputList::~FapUAOutputList()
-{
-}
-//----------------------------------------------------------------------------
-
 void FapUAOutputList::finishUI()
 {
   Fui::outputListUI(false,true);
 }
 //----------------------------------------------------------------------------
 
-FFuaUICommands* FapUAOutputList::createCommandsObject()
+FFuaUICommands* FapUAOutputList::getCommands()
 {
-  return new FuaOutputListCommands();
-}
-//----------------------------------------------------------------------------
+  FuaOutputListCommands* cmds = new FuaOutputListCommands();
 
-void FapUAOutputList::getCommands(FFuaUICommands* commands)
-{
-  FuaOutputListCommands* cmds = (FuaOutputListCommands*) commands;
-  cmds->popUpMenu.clear();
+  cmds->popUpMenu = {
+    FFuaCmdItem::getCmdItem("cmdId_outputList_copy"),
+    FFuaCmdItem::getCmdItem("cmdId_outputList_selectAll"),
+    &this->separator,
+    FFuaCmdItem::getCmdItem("cmdId_outputList_clear")
+  };
 
-  cmds->popUpMenu.push_back(FFuaCmdItem::getCmdItem("cmdId_outputList_copy"));
-  cmds->popUpMenu.push_back(FFuaCmdItem::getCmdItem("cmdId_outputList_selectAll"));
-  cmds->popUpMenu.push_back(&this->separator);
-  cmds->popUpMenu.push_back(FFuaCmdItem::getCmdItem("cmdId_outputList_clear"));
+  return cmds;
 }

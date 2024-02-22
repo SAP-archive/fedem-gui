@@ -62,15 +62,9 @@ FapUAMainWindow::FapUAMainWindow(FuiMainWindow* uic)
 }
 //----------------------------------------------------------------------------
 
-FFuaUICommands* FapUAMainWindow::createCommandsObject()
+FFuaUICommands* FapUAMainWindow::getCommands()
 {
-  return new FuaMainWindowCommands();
-}
-//----------------------------------------------------------------------------
-
-void FapUAMainWindow::getCommands(FFuaUICommands* commands)
-{
-  FuaMainWindowCommands* cmds = (FuaMainWindowCommands*) commands;
+  FuaMainWindowCommands* cmds = new FuaMainWindowCommands();
 
   //menubar
   cmds->menuBar.clear();
@@ -949,6 +943,8 @@ void FapUAMainWindow::getCommands(FFuaUICommands* commands)
   }
   else
     Fui::getMainWindow()->removeToolBar(FuiMainWindow::CTRLMODELLINGTOOLS);
+
+  return cmds;
 }
 //----------------------------------------------------------------------------
 

@@ -987,8 +987,7 @@ bool FpPM::vpmModelOpen(const std::string& givenName, bool doLoadParts,
   FapUAExistenceHandler::doUpdateSession();
 
   // Update all command sensitivities + toggle on model open
-  FapUACommandHandler::updateAllUICommandsSensitivity();
-  FapUACommandHandler::updateAllUICommandsToggle();
+  FapUACommandHandler::updateAllUICommands(true,true);
 
   // Reset all file dialog memorizers to the new model file location
   FFuFileDialogMemoryMap::instance()->resetDir(path);
@@ -1247,8 +1246,7 @@ bool FpPM::openTemplateFile(const std::string& modelPath)
   FapUAExistenceHandler::doUpdateSession();
 
   // Update all command sensitivities + toggle on model open
-  FapUACommandHandler::updateAllUICommandsSensitivity();
-  FapUACommandHandler::updateAllUICommandsToggle();
+  FapUACommandHandler::updateAllUICommands(true,true);
 
   Fui::okToGetUserInput(); // This block is started in FpPM::closeModel
 

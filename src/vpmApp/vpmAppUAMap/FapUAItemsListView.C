@@ -182,7 +182,7 @@ void FapUAItemsListView::expandItem(int item, bool open)
 void FapUAItemsListView::tmpSelectionChangedEvent()
 {
   if (this->shouldIUpdateOnChanges())
-    this->updateUICommandsSensitivity();
+    this->updateUICommands(true,false);
 }
 //----------------------------------------------------------------------------
 
@@ -194,19 +194,13 @@ bool FapUAItemsListView::getItemExpanded(FFaListViewItem* item)
 
 std::vector<std::string> FapUAItemsListView::getItemText(FFaListViewItem* item)
 {
-  return std::vector<std::string>(1,item->getItemName()+FFaNumStr(" %d",item->getItemID()));
+  return { item->getItemName()+FFaNumStr(" %d",item->getItemID()) };
 }
 //----------------------------------------------------------------------------
 
 const char** FapUAItemsListView::getItemPixmap(FFaListViewItem* item)
 {
   return item->getListViewPixmap();
-}
-//----------------------------------------------------------------------------
-
-FFuaUICommands* FapUAItemsListView::createCommandsObject()
-{
-  return new FuaItemsLVCommands;
 }
 //----------------------------------------------------------------------------
 

@@ -26,75 +26,28 @@ FapUACommandHandler::FapUACommandHandler(FFuUACommandHandler* uic) :
 }
 //----------------------------------------------------------------------------
 
-void FapUACommandHandler::updateUICommands()
+void FapUACommandHandler::updateUICommands(bool setNew, bool sens, bool toggle)
 { 
-  FFuaUICommands* commands = this->createCommandsObject();
-  if (commands) {
-    this->getCommands(commands);
-    this->ui->setUICommands(commands);
-    delete commands;
-  }
+  FFuaUICommands* commands = this->getCommands();
+  if (!commands) return;
+
+  if (setNew) this->ui->setUICommands(commands);
+  if (sens)   this->ui->updateUICommandsSensitivity(commands);
+  if (toggle) this->ui->updateUICommandsToggle(commands);
+  delete commands;
 }
+
 //----------------------------------------------------------------------------
 
-void FapUACommandHandler::updateUICommandsSensitivity()
-{ 
-  FFuaUICommands* commands = this->createCommandsObject();
-  if (commands) {
-    this->getCommands(commands);
-    this->ui->updateUICommandsSensitivity(commands);
-    delete commands;
-  }
-}
-//----------------------------------------------------------------------------
-
-void FapUACommandHandler::updateUICommandsToggle()
-{ 
-  FFuaUICommands* commands = this->createCommandsObject();
-  if (commands) {
-    this->getCommands(commands);
-    this->ui->updateUICommandsToggle(commands);
-    delete commands;
-  }
-}
-//----------------------------------------------------------------------------
-
-void FapUACommandHandler::updateAllUICommands()
-{
-  std::vector<FapUAExistenceHandler*> all;
-  FapUACommandHandler* tmp;
-  
-  FapUAExistenceHandler::getAllOfType(FapUAExistenceHandler::getClassTypeID(),all);
-  
-  for (unsigned int i = 0; i < all.size(); i++) 
-    if ((tmp = dynamic_cast<FapUACommandHandler*>(all[i])))
-      tmp->updateUICommands();
-}
-//----------------------------------------------------------------------------
-
-void FapUACommandHandler::updateAllUICommandsSensitivity()
+void FapUACommandHandler::updateAllUICommands(bool sens, bool toggle)
 { 
   std::vector<FapUAExistenceHandler*> all;
-  FapUACommandHandler* tmp;
-  
   FapUAExistenceHandler::getAllOfType(FapUAExistenceHandler::getClassTypeID(),all);
-  
-  for (unsigned int i = 0; i < all.size(); i++) 
-    if ((tmp = dynamic_cast<FapUACommandHandler*>(all[i])))
-      tmp->updateUICommandsSensitivity();
-}
-//----------------------------------------------------------------------------
 
-void FapUACommandHandler::updateAllUICommandsToggle()
-{
-  std::vector<FapUAExistenceHandler*> all;
   FapUACommandHandler* tmp;
-  
-  FapUAExistenceHandler::getAllOfType(FapUAExistenceHandler::getClassTypeID(),all);
-  
-  for (unsigned int i = 0; i < all.size(); i++) 
-    if ((tmp = dynamic_cast<FapUACommandHandler*>(all[i])))
-      tmp->updateUICommandsToggle();  
+  for (FapUAExistenceHandler* ua : all)
+    if ((tmp = dynamic_cast<FapUACommandHandler*>(ua)))
+      tmp->updateUICommands(false,sens,toggle);
 }
 //----------------------------------------------------------------------------
 
@@ -102,31 +55,29 @@ void FapUACommandHandler::onPermSelectionChanged(const std::vector<FFaViewItem*>
 						 const std::vector<FFaViewItem*>&,
 						 const std::vector<FFaViewItem*>&)
 {
-  //  cout<<"\\\\\\\\\\\\\\\\FapUACommandHandler::onSelectionChanged"<<endl;
-  //this->updateUICommandsSensitivity();
+  //this->updateUICommands(false,true);
 }
 //----------------------------------------------------------------------------
 
 void FapUACommandHandler::onActiveWindowChanged(FFuMDIWindow*, FFuMDIWindow*)
 {
-  //  cout<<"\\\\\\\\\\\\\\\\FapUACommandHandler::onActiveWindowChanged"<<endl;
-  this->updateUICommandsSensitivity();
+  this->updateUICommands(false,true);
 }
 //----------------------------------------------------------------------------
 void FapUACommandHandler::onActiveAnimationChanged(FmAnimation*, FmAnimation*)
 {
-  this->updateUICommandsSensitivity();
+  this->updateUICommands(false,true);
 }
 //----------------------------------------------------------------------------
 
 void FapUACommandHandler::onRDBHeaderChanged(FFrExtractor*)
 {
-  this->updateUICommandsSensitivity();
+  this->updateUICommands(false,true);
 }
 //----------------------------------------------------------------------------
 
 void FapUACommandHandler::onProcessGroupChanged(int)
 {
-  this->updateUICommandsSensitivity();
+  this->updateUICommands(false,true);
 }
 //----------------------------------------------------------------------------

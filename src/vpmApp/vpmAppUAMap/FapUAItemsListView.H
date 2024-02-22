@@ -80,9 +80,6 @@ private:
   void tmpSelectItem(int item);
   void expandItem(int item, bool open);
 
-  // from FapUACommandHandler
-  virtual FFuaUICommands* createCommandsObject();
-
   // from FapUAItemsViewHandler
   // You should always start your view session by updateUIValues
   // since it initialises the session

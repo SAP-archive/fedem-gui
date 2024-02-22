@@ -28,7 +28,7 @@ private:
   virtual const char** getItemPixmap(FFaListViewItem* item);
 
   // Reimplementations from FapUACommandHandler
-  virtual void getCommands(FFuaUICommands* commands);
+  virtual FFuaUICommands* getCommands();
 
   // Reimplementations from FapUAItemsViewHandler
   virtual void permTotSelectItems(std::vector<int>& totalSelection);
