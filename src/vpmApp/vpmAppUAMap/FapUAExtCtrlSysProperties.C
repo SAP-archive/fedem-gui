@@ -106,7 +106,7 @@ void FapUAExtCtrlSysProperties::setDBValues(FFuaUIValues* values)
     this->updateUI();
     this->ui->setSensitivity(FpPM::isModelEditable() &&
 			     FapLicenseManager::hasExtCtrlLicense(0));
-    this->updateProperties();
+    FapUAExistenceHandler::doUpdateUI(FapUAProperties::getClassTypeID());
   }
 
   this->dbexternal->onChanged();
@@ -153,14 +153,6 @@ void FapUAExtCtrlSysProperties::getDBValues(FFuaUIValues* values)
   for (size_t i = 0; i < externalValues->fromWorkspace.size(); i++)
     externalValues->mySelectedQueries.push_back(this->dbexternal->getEngine(i));
 
-  this->updateProperties();
-}
-//----------------------------------------------------------------------------
-
-void FapUAExtCtrlSysProperties::updateProperties()
-{
-  std::set<int> uiTypesToUpdate;
-  uiTypesToUpdate.insert(FapUAProperties::getClassTypeID());
-  FapUAExistenceHandler::doUpdateUI(uiTypesToUpdate);
+  FapUAExistenceHandler::doUpdateUI(FapUAProperties::getClassTypeID());
 }
 //----------------------------------------------------------------------------

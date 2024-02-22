@@ -115,10 +115,7 @@ void FuiPlugins::onDialogButtonClicked(int button)
 
   if (changed) {
     FmFuncAdmin::clearInfoTable();
-    std::vector<FapUAExistenceHandler*> uas;
-    FapUAExistenceHandler::getAllOfType(FapUAFunctionProperties::getClassTypeID(),uas);
-    if (!uas.empty())
-      ((FapUAFunctionProperties*)uas.front())->updateUI();
+    FapUAExistenceHandler::doUpdateUI(FapUAFunctionProperties::getClassTypeID());
     Fui::updateUICommands();
   }
 }

@@ -168,10 +168,10 @@ void FapUAExistenceHandler::doUpdateState(int oldState, int newState, int mode)
 }
 //----------------------------------------------------------------------------
 
-void FapUAExistenceHandler::doUpdateUI(const std::set<int>& uiTypesToUpdate)
+void FapUAExistenceHandler::doUpdateUI(int typeToUpdate)
 {
   for (FapUAExistenceHandler* self : ourSelfSet)
-    if (uiTypesToUpdate.find(self->getTypeID()) != uiTypesToUpdate.end())
+    if (typeToUpdate < 0 || self->getTypeID() == typeToUpdate)
     {
       FapUADataHandler* dataHandler = dynamic_cast<FapUADataHandler*>(self);
       if (dataHandler) dataHandler->updateUI();
@@ -185,16 +185,6 @@ void FapUAExistenceHandler::doUpdateSession()
   {
     FapUAItemsViewHandler* ivHandler = dynamic_cast<FapUAItemsViewHandler*>(self);
     if (ivHandler) ivHandler->updateSession();
-  }
-}
-//----------------------------------------------------------------------------
-
-void FapUAExistenceHandler::doUpdateUI()
-{
-  for (FapUAExistenceHandler* self : ourSelfSet)
-  {
-    FapUADataHandler* dataHandler = dynamic_cast<FapUADataHandler*>(self);
-    if (dataHandler) dataHandler->updateUI();
   }
 }
 //----------------------------------------------------------------------------

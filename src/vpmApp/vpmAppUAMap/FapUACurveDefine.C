@@ -531,9 +531,7 @@ void FapUACurveDefine::onAxisCompleted()
 
   this->dbcurve->onDataChanged();
 
-  std::set<int> uiTypesToUpdate;
-  uiTypesToUpdate.insert(FapUAProperties::getClassTypeID());
-  FapUAExistenceHandler::doUpdateUI(uiTypesToUpdate);
+  FapUAExistenceHandler::doUpdateUI(FapUAProperties::getClassTypeID());
 }
 
 //----------------------------------------------------------------------------
@@ -574,10 +572,7 @@ void FapUACurveDefine::onModelMemberChanged(FmModelMemberBase* item)
   this->updateUIValues();
   this->wait = false;
 
-  // Update properties
-  std::set<int> uiTypesToUpdate;
-  uiTypesToUpdate.insert(FapUAProperties::getClassTypeID());
-  FapUAExistenceHandler::doUpdateUI(uiTypesToUpdate);
+  FapUAExistenceHandler::doUpdateUI(FapUAProperties::getClassTypeID());
 }
 
 //----------------------------------------------------------------------------

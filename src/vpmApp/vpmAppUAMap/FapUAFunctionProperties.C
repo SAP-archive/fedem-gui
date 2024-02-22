@@ -589,13 +589,8 @@ void FapUAFunctionProperties::setDBValues(FFuaUIValues* values)
   }
 #endif
 
-  // To get the topology view to handle argument change :
-
-  if (e) {
-    std::set<int> types;
-    types.insert(FapUAProperties::getClassTypeID());
-    FapUAExistenceHandler::doUpdateUI(types);
-  }
+  if (e) // To get the topology view to handle argument change
+    FapUAExistenceHandler::doUpdateUI(FapUAProperties::getClassTypeID());
 }
 
 
