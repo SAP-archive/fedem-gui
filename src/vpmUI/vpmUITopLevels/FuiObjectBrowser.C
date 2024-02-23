@@ -64,6 +64,7 @@ void FuiObjectBrowser::initWidgets()
   this->outputLabel->setLabel("Object details:");
 
   this->outputMemo->clearText();
+  this->outputMemo->setEditable(false);
 
   this->closeButton->setLabel("Close");
   this->closeButton->setActivateCB(FFaDynCB0M(FFuComponentBase,this,popDown));
