@@ -587,7 +587,12 @@ void FuiProperties::initWidgets()
   myGenDBObjDefLabel->setLabel("Definition");
 
   myGenDBObjTypeField->setAcceptedCB(FFaDynCB1M(FuiProperties,this,onStringChanged,const std::string&));
+  myGenDBObjTypeField->setToolTip("Enter the keyword identifying the object type for the dynamics solver here");
+
   myGenDBObjDefField->setTextChangedCB(FFaDynCB0M(FuiProperties,this,onValuesChanged));
+  myGenDBObjDefField->setToolTip("Enter the solver input file data defining the object here.\n"
+                                 "Remember to press the Enter key at the end, "
+                                 "also when editing existing data.");
 
   myGenDBObjTypeLabel->popDown();
   myGenDBObjTypeField->popDown();

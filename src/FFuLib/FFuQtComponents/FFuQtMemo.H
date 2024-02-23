@@ -64,7 +64,6 @@ public:
   virtual void setTextFont(const FFuaFont& aFont);
 
 private slots:
-  void fwdTextChanged()      { myTextChangedCB.invoke(); }
   void fwdSelectionChanged() { mySelectionChangedCB.invoke(); }
 
 protected:
@@ -75,6 +74,7 @@ protected:
   virtual void setColors(FFuaPalette aPalette);
   virtual void setFonts (FFuaFontSet aFontSet);
 
+  virtual void keyPressEvent(QKeyEvent* event);
   virtual Q3PopupMenu* createPopupMenu(const QPoint& pos);
 };
 
