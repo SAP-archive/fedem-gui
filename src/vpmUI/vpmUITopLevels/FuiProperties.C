@@ -4565,12 +4565,7 @@ void FuiProperties::updateSubassCoG()
 
 void FuiProperties::showUsersGuide()
 {
-  if (FapLicenseManager::checkWindpowerLicense(false))
-    showPDF("file://Doc/FedemUsersGuide-WindPower.pdf?page=1");
-  else if (FapLicenseManager::checkOffshoreLicense(false))
-    showPDF("file://Doc/FedemUsersGuide-WindPower.pdf?page=1");
-  else
-    showPDF("file://Doc/FedemUsersGuide.pdf?page=1");
+  showPDF("file://Doc/FedemUsersGuide.pdf?page=1");
 }
 
 void FuiProperties::showTheoryGuide()
