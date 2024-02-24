@@ -14,7 +14,6 @@
 #include "FFuLib/FFuQtBaseClasses/FFuQtMultUIComponent.H"
 #include "FFuLib/FFuBase/FFuTopLevelShell.H"
 
-class QEvent;
 class QCloseEvent;
 
 
@@ -44,36 +43,9 @@ public:
   // This one will show the TLS in "normal" mode.
   virtual void showTLSNormal();
 
-  // Call this to initialise QtBlocking
-
-  static void initQtBlocking();
-
 private:
-
   // Reimplementing the Qt event handler on window manager close
-  void closeEvent(QCloseEvent* e);
-
-  // Qt implementation of the low level blocking methods :
-
-  virtual void blockThis(bool everything);
-  virtual void unBlockThis();
-
-  // Methods to assist the Qt implementation of blocking :
-
-  static bool filterEventsDueToBlocking(QObject* receiver, QEvent* e);
-
-  // Class used to keep the event filter for blocking
-  class Blocker : public QObject
-  {
-  protected:
-    virtual bool eventFilter(QObject* receiver, QEvent* e)
-    {
-      return FFuQtTopLevelShell::filterEventsDueToBlocking(receiver,e);
-    }
-  };
-
-  // Variables used by blocking algorithm :
-  static std::map<QWidget*,QWidget*> ourTopLevelsToBlock;
+  virtual void closeEvent(QCloseEvent* e);
 };
 
 #endif
