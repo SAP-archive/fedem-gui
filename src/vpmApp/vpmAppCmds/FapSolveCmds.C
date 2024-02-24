@@ -64,7 +64,9 @@
 #include <unistd.h>
 #endif
 
+#if FT_HAS_SAP > 1
 #include <chrono>
+#endif
 
 std::string FapSolveCmds::ourCloudJobId;
 std::string FapSolveCmds::ourCloudAppId;
@@ -1014,6 +1016,7 @@ void FapSolveCmds::degradeSoil(double degradeTime)
 }
 
 //----------------------------------------------------------------------------
+#if FT_HAS_SAP > 1
 
 /*!
   \brief Static helper executing a DTS command.
@@ -1231,17 +1234,19 @@ static bool downloadCloud(const char* appname, const std::string& jobId)
   // Remove the download folder (which now should be empty)
   return FpFileSys::removeDir(FFaFilePath::getPath(path,false), false);
 }
-
+#endif
 //------------------------------------------------------------------------------
 
 bool FapSolveCmds::haveCloud()
 {
+#if FT_HAS_SAP > 1
   if (!haveCloudAccess)
   {
     std::string msg = runDtsCommand("apps","");
     haveCloudAccess = msg.find("OK") < msg.size() ? 'y' : 'n';
     if (haveCloudAccess == 'n') std::cout << msg << std::endl;
   }
+#endif
 
   return haveCloudAccess == 'y';
 }
@@ -1250,6 +1255,7 @@ bool FapSolveCmds::haveCloud()
 
 void FapSolveCmds::solveInCloud()
 {
+#if FT_HAS_SAP > 1
   FuiModes::cancel();
 
   // Check that all FE parts have been reduced
@@ -1333,12 +1339,14 @@ void FapSolveCmds::solveInCloud()
   int deltaT = 1000; // Check status every second by default
   FFaCmdLineArg::instance()->getValue("checkCloudInterval",deltaT);
   ourCloudJobTimer->start(deltaT);
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 void FapSolveCmds::checkRunningCloudJob()
 {
+#if FT_HAS_SAP > 1
   const char* appName = ourCloudAppId.c_str();
 
   // Check job status in the cloud
@@ -1370,4 +1378,5 @@ void FapSolveCmds::checkRunningCloudJob()
   FpFileSys::removeDir(FFaFilePath::appendToPath(path,appName));
   ourCloudAppId.clear();
   ourCloudJobId.clear();
+#endif
 }
