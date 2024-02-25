@@ -7,24 +7,23 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QSplashScreen>
 #include <QStyleFactory>
+#include <QSplashScreen>
 #include <QScreen>
 #include <QTimer>
 #ifdef FFU_DEBUG
 #include <iostream>
 #endif
 
-#include "FFuLib/FFuBase/FFuComponentBase.H"
 #include "FFuLib/FFuAuxClasses/FFuQtAuxClasses/FFuaQtEventBlocker.H"
 #include "FFuLib/FFuAuxClasses/FFuaApplication.H"
 #include "FFuLib/Icons/splashBase.xpm"
 #include "FFuLib/Icons/splashWind.xpm"
 #include "FFuLib/Icons/splashOffshore.xpm"
 
-QSplashScreen* FFuaApplication::splashScreen = NULL;
-QTimer* FFuaApplication::splashTimer = NULL;
-bool FFuaApplication::isBlocked = false;
+static QSplashScreen* splashScreen = NULL;
+static QTimer* splashTimer = NULL;
+static bool isBlocked = false;
 
 static FFuaQtEventBlocker applicationblocker;
 
@@ -33,9 +32,9 @@ static FFuaQtEventBlocker applicationblocker;
 //  Initialisation routine.
 //
 
-void FFuaApplication::init(int argc, char** argv, bool useGUI)
+void FFuaApplication::init(int& argc, char** argv, bool useGUI)
 {
-  new QApplication(argc,argv,useGUI);
+  new QApplication(argc,argv);
 
   if (useGUI)
   {

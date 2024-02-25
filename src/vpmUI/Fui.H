@@ -34,7 +34,9 @@ public:
   // Must be run before further use of this class
   ///////////////////////////////////////////////
 
-  static void init(int argc, char** argv);
+  // Note: argc must be passed as reference
+  // to avoid crash in Qt6 for Release build on Linux
+  static void init(int& argc, char** argv);
 
 
   ///////////////////////////////////////////////
