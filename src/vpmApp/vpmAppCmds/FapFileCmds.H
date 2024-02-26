@@ -30,6 +30,9 @@ private:
   static void importAssembly();
   static void importEvents();
 
+  static bool open(const std::string& fileName, bool loadParts);
+  static void open(size_t recentFileIdx);
+
 public:
   static void open();
   static void save() { FapFileCmds::save(true); }

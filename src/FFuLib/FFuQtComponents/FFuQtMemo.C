@@ -21,6 +21,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QFont>
+#include <QKeyEvent>
 
 #include "FFuLib/FFuQtComponents/FFuQtPopUpMenu.H"
 #include "FFuLib/FFuQtComponents/FFuQtMemo.H"
@@ -31,7 +32,6 @@ FFuQtMemo::FFuQtMemo(QWidget* parent) : Q3TextEdit(parent,"FFuQtMemo")
 {
   this->setWidget(this);
 
-  QObject::connect(this,SIGNAL(textChanged()),this,SLOT(fwdTextChanged()));
   QObject::connect(this,SIGNAL(selectionChanged()),this,SLOT(fwdSelectionChanged()));
 }
 
@@ -358,6 +358,20 @@ bool FFuQtMemo::undoRedoEnabled() const
 bool FFuQtMemo::readOnly() const
 {
   return this->isReadOnly();
+}
+
+
+//! Invokes the text-changed call-back when the Return key is pressed.
+void FFuQtMemo::keyPressEvent(QKeyEvent* event)
+{
+  this->Q3TextEdit::keyPressEvent(event);
+  if (!myTextChangedCB.empty() && event->key() == Qt::Key_Return)
+  {
+    int para, index;
+    this->getCursorPosition(&para,&index);
+    myTextChangedCB.invoke();
+    this->setCursorPosition(para,index);
+  }
 }
 
 

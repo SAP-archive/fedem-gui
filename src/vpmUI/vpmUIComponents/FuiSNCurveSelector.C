@@ -22,8 +22,6 @@ void FuiSNCurveSelector::initWidgets()
 						    onStdValueChanged,int));
   this->curveTypeMenu->setOptionSelectedCB(FFaDynCB1M(FuiSNCurveSelector,this,
 						      onCurveValueChanged,int));
-
-  this->populateStdMenu();
 }
 
 
@@ -94,7 +92,10 @@ void FuiSNCurveSelector::getValues(int& stdIdx, int& curveIdx)
 
 void FuiSNCurveSelector::setValues(int stdIdx, int curveIdx)
 {
-  if (stdIdx < 0 || stdIdx >= this->stdTypeMenu->getOptionCount())
+  int numStd = this->stdTypeMenu->getOptionCount();
+  if (numStd < 1) return; // The S-N standard menu has not been populated yet
+
+  if (stdIdx < 0 || stdIdx >= numStd)
   {
     if (FFpSNCurveLib::allocated())
       std::cout <<"Warning: SN-curve library has changed since you last saved your model"
@@ -118,7 +119,7 @@ void FuiSNCurveSelector::setValues(int stdIdx, int curveIdx)
 }
 
 
-void FuiSNCurveSelector::populateStdMenu()
+void FuiSNCurveSelector::onPoppedUpFromMem()
 {
   if (!FFpSNCurveLib::allocated()) return;
 

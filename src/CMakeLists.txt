@@ -49,10 +49,10 @@ elseif ( "${USE_QWTLIB}" STREQUAL "Internal" )
 endif ( "${USE_QWTLIB}" STREQUAL "External" )
 
 #
-# List all subfolders from the fedem foundation repository in this project
+# List all subfolders from the fedem-foundation repository in this project
 #
 
-set ( USE_QT TRUE )
+set ( USE_QT Qt4 )
 set ( USE_VISUALS TRUE )
 set ( USE_VERTEXOBJ TRUE )
 set ( SUBFOLDER_LIST Admin FFaLib FFlLib FFrLib
@@ -75,8 +75,8 @@ if ( WIN )
 
 # Check if the COM-API should be included
 # or if the program should be run with console window
-  option ( USE_COMAPI "Build Fedem with the COM-API" true )
-  option ( NO_CONSOLE_WINDOW "Build fedem without console window" true )
+  option ( USE_COMAPI "Build Fedem with the COM-API" ON )
+  option ( NO_CONSOLE_WINDOW "Build fedem without console window" ON )
   mark_as_advanced ( USE_COMAPI NO_CONSOLE_WINDOW )
 
   if ( USE_COMAPI )

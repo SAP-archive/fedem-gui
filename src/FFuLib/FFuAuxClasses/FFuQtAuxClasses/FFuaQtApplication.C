@@ -16,7 +16,6 @@
 #endif
 
 #include "FFuLib/FFuBase/FFuComponentBase.H"
-#include "FFuLib/FFuQtBaseClasses/FFuQtTopLevelShell.H"
 #include "FFuLib/FFuAuxClasses/FFuQtAuxClasses/FFuaQtEventBlocker.H"
 #include "FFuLib/FFuAuxClasses/FFuaApplication.H"
 #include "FFuLib/Icons/splashBase.xpm"
@@ -28,8 +27,6 @@ QTimer* FFuaApplication::splashTimer = NULL;
 bool FFuaApplication::isBlocked = false;
 
 static FFuaQtEventBlocker applicationblocker;
-// Workaround Qt bug (see TT#2679)
-// Qt4 extern Q_EXPORT int qt_ntfs_permission_lookup;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -38,10 +35,7 @@ static FFuaQtEventBlocker applicationblocker;
 
 void FFuaApplication::init(int argc, char** argv, bool useGUI)
 {
-  // Workaround Qt bug (see TT#2679)
-  // Qt4 qt_ntfs_permission_lookup = 0;
   new QApplication(argc,argv,useGUI);
-  FFuQtTopLevelShell::initQtBlocking();
 
   if (useGUI)
   {

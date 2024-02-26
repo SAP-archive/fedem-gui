@@ -5,8 +5,8 @@
 // This file is part of FEDEM - https://openfedem.org
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef FAP_UA_EXT_ELEM_PROPERTIES_H
-#define FAP_UA_EXT_ELEM_PROPERTIES_H
+#ifndef FAP_UA_EXT_CTRL_SYS_PROPERTIES_H
+#define FAP_UA_EXT_CTRL_SYS_PROPERTIES_H
 
 #include "vpmApp/vpmAppUAMap/vpmAppUAMapHandlers/FapUAExistenceHandler.H"
 #include "vpmApp/vpmAppUAMap/vpmAppUAMapHandlers/FapUADataHandler.H"
@@ -45,8 +45,6 @@ private:
 private:
   FuiExtCtrlSysProperties* ui;
   FmExternalCtrlSys* dbexternal;
-
-  void updateProperties();
 
   // Private receivers
   FapPermSelChangedReceiver<FapUAExtCtrlSysProperties> selSignalConnector;

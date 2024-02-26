@@ -29,7 +29,7 @@ protected:
 
 private:
   // Reimplementations from FapUACommandHandler
-  virtual void getCommands(FFuaUICommands* commands);
+  virtual FFuaUICommands* getCommands();
 
   FFuaCmdHeaderItem createHeader;
   FFuaCmdHeaderItem createSpringFunctionHeader;

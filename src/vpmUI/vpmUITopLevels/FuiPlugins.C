@@ -6,14 +6,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "vpmUI/vpmUITopLevels/FuiPlugins.H"
-#include "vpmUI/vpmUITopLevels/FuiMainWindow.H"
 #include "vpmUI/Fui.H"
 #include "FFuLib/FFuLabel.H"
 #include "FFuLib/FFuToggleButton.H"
 #include "FFuLib/FFuDialogButtons.H"
 #include "vpmPM/FpPM.H"
 #include "vpmDB/FmFuncAdmin.H"
-#include "vpmApp/vpmAppUAMap/FapUAMainWindow.H"
 #include "vpmApp/vpmAppUAMap/FapUAFunctionProperties.H"
 
 
@@ -117,11 +115,8 @@ void FuiPlugins::onDialogButtonClicked(int button)
 
   if (changed) {
     FmFuncAdmin::clearInfoTable();
-    std::vector<FapUAExistenceHandler*> uas;
-    FapUAExistenceHandler::getAllOfType(FapUAFunctionProperties::getClassTypeID(),uas);
-    if (!uas.empty())
-      ((FapUAFunctionProperties*)uas.front())->updateUI();
-    ((FapUAMainWindow*)Fui::getMainWindow()->getUA())->updateUICommands();
+    FapUAExistenceHandler::doUpdateUI(FapUAFunctionProperties::getClassTypeID());
+    Fui::updateUICommands();
   }
 }
 

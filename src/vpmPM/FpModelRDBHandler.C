@@ -202,11 +202,11 @@ void FpModelRDBHandler::RDBOpen(FmResultStatusData* rsd,
 
   FFaMsg::setSubTask("Initializing");
 
-  std::string rdbPath, mainRDBPath = rsd->getPath();
+  const std::string& mainRDBPath = rsd->getPath();
   ListUI <<"===> Scanning "<< mainRDBPath <<" for results.\n";
 
   bool noResults = true;
-  std::string listWarning, dialogWarning;
+  std::string rdbPath, listWarning, dialogWarning;
 
   // In batch mode, always ignore found files not present in the RSD
   if (!Fui::hasGUI()) askForMissingInRSD = false;
@@ -484,9 +484,11 @@ void FpModelRDBHandler::RDBClose(FmResultStatusData* currentRSD,
   // Clear the result extractors
   if (clearExtrator) RDBRelease(true);
 
-  // Check if the RDB directory actually exists - nothing to do here if not
-  std::string mainRDBPath = currentRSD->getPath();
-  if (!FpFileSys::verifyDirectory(mainRDBPath,false))
+  // Check if the RDB directory actually exists - nothing to do here if not.
+  // Also return if mainRDBPath is empty, otherwise we will try to clean up
+  // the current working directory.
+  const std::string& mainRDBPath = currentRSD->getPath();
+  if (mainRDBPath.empty() || !FpFileSys::verifyDirectory(mainRDBPath,false))
     return;
 
   if (deleteFilesNotInRSD)
@@ -668,7 +670,7 @@ void FpModelRDBHandler::RDBSave(FmResultStatusData* currentRSD,
 	    <<"\n\ttaskdir\t= "<< currentRSD->getCurrentTaskDirName(true) << std::endl;
 #endif
 
-  std::string mainRDBPath = currentRSD->getPath();
+  const std::string& mainRDBPath = currentRSD->getPath();
   std::string rdbPath = currentRSD->getCurrentTaskDirName(true);
 
   Strings obsoleteFiles;
@@ -1075,7 +1077,6 @@ void FpModelRDBHandler::removeResults(const std::string& rdbResultGroup,
   }
 
   // Get file names for this sub-task
-  std::string filePath = currentRSD->getPath();
   Strings resultFiles, allFiles;
   currentRSD->getAllFileNames(resultFiles,"frs");
   currentRSD->getAllFileNames(allFiles);
@@ -1088,7 +1089,7 @@ void FpModelRDBHandler::removeResults(const std::string& rdbResultGroup,
   remove_result_files(allFiles);
 
   // Delete the directory of the old sub-task, which now should be empty
-  FpFileSys::removeDir(filePath,false);
+  FpFileSys::removeDir(currentRSD->getPath(),false);
 }
 
 

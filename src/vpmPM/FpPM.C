@@ -90,6 +90,8 @@ enum TouchMode { READ_ONLY = -2, DONT_TOUCH = -1, UNTOUCHED = 0,
 		 TOUCHED_RESULTS = 1, TOUCHED_MODEL = 2 };
 int FpPM::touchedFlag = DONT_TOUCH;
 
+std::vector<std::string> FpPM::recentFiles;
+
 
 /////////////////////////////////////////////
 // Initiate the PM system and support classes
@@ -985,15 +987,27 @@ bool FpPM::vpmModelOpen(const std::string& givenName, bool doLoadParts,
   FapUAExistenceHandler::doUpdateSession();
 
   // Update all command sensitivities + toggle on model open
-  FapUACommandHandler::updateAllUICommandsSensitivity();
-  FapUACommandHandler::updateAllUICommandsToggle();
+  FapUACommandHandler::updateAllUICommands(true,true);
 
   // Reset all file dialog memorizers to the new model file location
   FFuFileDialogMemoryMap::instance()->resetDir(path);
 
   Fui::okToGetUserInput(); // This block is started in FpPM::closeModel
 
+  // Move the file name to the top of the recent file list
+  std::vector<std::string>::iterator it = std::find(recentFiles.begin(),recentFiles.end(),name);
+  if (it != recentFiles.end()) recentFiles.erase(it);
+  recentFiles.insert(recentFiles.begin(),name);
+  Fui::updateUICommands();
+
   return true;
+}
+
+
+void FpPM::removeRecent(size_t idx)
+{
+  if (idx < recentFiles.size())
+    recentFiles.erase(recentFiles.begin()+idx);
 }
 
 
@@ -1185,12 +1199,18 @@ bool FpPM::openTemplateFile(const std::string& modelPath)
   bool writeLogFile = false;
   FFaCmdLineArg::instance()->getValue("logFile",writeLogFile);
   int existingFile = Fedem::loadTemplate(fileName,defaultFile,writeLogFile);
-  if (existingFile < 0) // invalid file path
-    return false;
-  else if (existingFile == 0) // non-existing template file
-    FmDB::newMechanism();
+  if (existingFile < 0) return false; // invalid file path
 
-  FmMechanism* mech = FmDB::getMechanismObject();
+  FmMechanism* mech = NULL;
+  if (existingFile > 0)
+    mech = FmDB::getMechanismObject();
+  else
+  {
+    // Non-existing template file, create an empty mechanism
+    mech = FmDB::newMechanism();
+    mech->syncPath(fileName,true);
+  }
+
   FpPM::saveActivePlugins(mech);
   FpPM::loadPropertyLibraries();
 
@@ -1226,8 +1246,7 @@ bool FpPM::openTemplateFile(const std::string& modelPath)
   FapUAExistenceHandler::doUpdateSession();
 
   // Update all command sensitivities + toggle on model open
-  FapUACommandHandler::updateAllUICommandsSensitivity();
-  FapUACommandHandler::updateAllUICommandsToggle();
+  FapUACommandHandler::updateAllUICommands(true,true);
 
   Fui::okToGetUserInput(); // This block is started in FpPM::closeModel
 

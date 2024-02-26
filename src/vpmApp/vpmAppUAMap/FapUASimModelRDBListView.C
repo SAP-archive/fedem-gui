@@ -201,10 +201,10 @@ const char** FapUASimModelRDBListView::getItemPixmap(FFaListViewItem* item)
 }
 //----------------------------------------------------------------------------
 
-void FapUASimModelRDBListView::getCommands(FFuaUICommands* commands)
+FFuaUICommands* FapUASimModelRDBListView::getCommands()
 {
-  FuaItemsLVCommands* cmds = (FuaItemsLVCommands*) commands;
-  cmds->popUpMenu.clear();
+  // No commands in this list view yet
+  return new FuaItemsLVCommands();
 }
 //----------------------------------------------------------------------------
 

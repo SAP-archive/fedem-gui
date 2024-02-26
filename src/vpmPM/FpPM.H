@@ -112,6 +112,9 @@ public:
 
   static std::string createUuid();
 
+  static std::vector<std::string>& recentModels() { return recentFiles; }
+  static void removeRecent(size_t idx);
+
 private:
   static bool loadParts(const std::vector<FmPart*>& allParts);
 
@@ -143,6 +146,8 @@ private:
 
   // Do we have results or not, and what kind
   static int resultsFlag;
+
+  static std::vector<std::string> recentFiles;
 
   // Signal handling interface
   static void signalHandler(int sig);

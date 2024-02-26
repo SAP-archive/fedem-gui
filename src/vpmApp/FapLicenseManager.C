@@ -17,7 +17,7 @@
 #include "FFaLib/FFaDefinitions/FFaMsg.H"
 
 
-bool FapLicenseManager::hasCtrlLicense(int creating, int msgType)
+bool FapLicenseManager::hasCtrlLicense(int creating, int /*msgType*/)
 {
   if (FapLicenseManager::checkCtrlLicense(true,creating)) return true;
 
@@ -28,7 +28,7 @@ bool FapLicenseManager::hasCtrlLicense(int creating, int msgType)
 }
 
 
-bool FapLicenseManager::checkCtrlLicense(bool checkOut, int creating)
+bool FapLicenseManager::checkCtrlLicense(bool checkOut, int /*creating*/)
 {
   return FapLicenseManager::checkLicense("FA-CTR",checkOut);
 }
@@ -40,7 +40,7 @@ bool FapLicenseManager::checkExtCtrlLicense(bool checkOut)
 }
 
 
-bool FapLicenseManager::hasTireLicense(int msgType)
+bool FapLicenseManager::hasTireLicense(int /*msgType*/)
 {
   if (FapLicenseManager::checkTireLicense(true)) return true;
 
@@ -112,12 +112,13 @@ bool FapLicenseManager::checkLicense(const char* feature, bool checkOut)
   if (!strcmp(feature,"FA-SAP")) return true;
 #endif
   // Dummy statement to suppress compiler warning
-  if (checkOut) std::cout <<"Unavailable feature "<< feature << std::endl;
+  if (feature && checkOut) return false;
+
   return false;
 }
 
 
-bool FapLicenseManager::hasDurabilityLicense(int msgType)
+bool FapLicenseManager::hasDurabilityLicense(int /*msgType*/)
 {
   if (FapLicenseManager::checkLicense("FA-DRB")) return true;
 
@@ -128,7 +129,7 @@ bool FapLicenseManager::hasDurabilityLicense(int msgType)
 }
 
 
-bool FapLicenseManager::hasVTFExportLicense(int msgType)
+bool FapLicenseManager::hasVTFExportLicense(int /*msgType*/)
 {
   if (FapLicenseManager::checkVTFExportLicense(true)) return true;
 
@@ -147,12 +148,7 @@ bool FapLicenseManager::checkVTFExportLicense(bool checkOut)
 
 bool FapLicenseManager::hasUserGuide()
 {
-  if (FapLicenseManager::checkWindpowerLicense(false))
-    return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUsersGuide-WindPower.pdf"));
-  else if (FapLicenseManager::checkOffshoreLicense(false))
-    return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUsersGuide-WindPower.pdf"));
-  else
-    return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUsersGuide.pdf"));
+  return FpFileSys::isReadable(FpPM::getFullFedemPath("Doc/FedemUsersGuide.pdf"));
 }
 
 

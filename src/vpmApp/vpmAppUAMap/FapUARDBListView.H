@@ -41,7 +41,7 @@ protected:
 
 private:
   // Reimplementations from FapUACommandHandler
-  virtual void getCommands(FFuaUICommands* commands);
+  virtual FFuaUICommands* getCommands();
 
 protected:
   FpExtractor* extractor;

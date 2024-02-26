@@ -26,8 +26,7 @@ public:
   virtual ~FapUAMainWindow() {}
 
 private:
-  virtual FFuaUICommands* createCommandsObject();
-  virtual void getCommands(FFuaUICommands* commands);
+  virtual FFuaUICommands* getCommands();
   virtual void finishUI();
 
 private:
@@ -35,6 +34,7 @@ private:
 
   FFuaCmdHeaderItem fileHeader;
   FFuaCmdHeaderItem fileExportHeader;
+  FFuaCmdHeaderItem fileRecentHeader;
   FFuaCmdHeaderItem editHeader;
   FFuaCmdHeaderItem viewHeader;
   FFuaCmdHeaderItem viewZoomHeader;

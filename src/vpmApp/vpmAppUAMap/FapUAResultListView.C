@@ -341,10 +341,9 @@ const char** FapUAResultListView::getItemPixmap(FFaListViewItem* item)
 }
 //----------------------------------------------------------------------------
 
-void FapUAResultListView::getCommands(FFuaUICommands* commands)
+FFuaUICommands* FapUAResultListView::getCommands()
 {
-  FuaItemsLVCommands* cmds = (FuaItemsLVCommands*) commands;
-  cmds->popUpMenu.clear();
+  FuaItemsLVCommands* cmds = new FuaItemsLVCommands();
 
   this->importItemHeader.clear();
   this->exportItemHeader.clear();
@@ -419,6 +418,8 @@ void FapUAResultListView::getCommands(FFuaUICommands* commands)
 
   cmds->popUpMenu.push_back(&this->separator);
   cmds->popUpMenu.push_back(FFuaCmdItem::getCmdItem("cmdId_edit_erase"));
+
+  return cmds;
 }
 //----------------------------------------------------------------------------
 

@@ -274,13 +274,12 @@ template<class T> static bool isObjectOfTypeSelected(const T&)
 
 //----------------------------------------------------------------------------
 
-void FapUASimModelListView::getCommands(FFuaUICommands* commands)
+FFuaUICommands* FapUASimModelListView::getCommands()
 {
-  FuaItemsLVCommands* cmds = (FuaItemsLVCommands*)commands;
+  FuaItemsLVCommands* cmds = new FuaItemsLVCommands();
 
   // Clearing sub menu entries
 
-  cmds->popUpMenu.clear();
   this->createHeader.clear();
   this->createSpringFunctionHeader.clear();
   this->createDamperFunctionHeader.clear();
@@ -484,4 +483,6 @@ void FapUASimModelListView::getCommands(FFuaUICommands* commands)
     cmds->popUpMenu.push_back(&this->separator);
     cmds->popUpMenu.push_back(FFuaCmdItem::getCmdItem("cmdId_edit_erase"));
   }
+
+  return cmds;
 }

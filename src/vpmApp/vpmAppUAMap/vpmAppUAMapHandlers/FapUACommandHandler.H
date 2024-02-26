@@ -38,13 +38,12 @@ public:
   FapUACommandHandler(FFuUACommandHandler* ui);
   virtual ~FapUACommandHandler() {}
 
-  void updateUICommands();
-  void updateUICommandsSensitivity();
-  void updateUICommandsToggle();
+  void updateUICommands() { this->updateUICommands(true); }
+  void updateUICommands(bool setNew, bool sens = false, bool toggle = false);
 
-  static void updateAllUICommands();
-  static void updateAllUICommandsSensitivity();
-  static void updateAllUICommandsToggle();
+  static void updateAllUICommands(bool sens = false, bool toggle = false);
+  static void updateAllUICommandsSensitivity() { updateAllUICommands(true); }
+  static void updateAllUICommandsToggle() { updateAllUICommands(false,true); }
 
 private:
   // slots from EventManager
@@ -57,12 +56,11 @@ private:
   void onProcessGroupChanged(int groupId);
 
   // Methods to reimplement if you want this functionality in your model view.
-  // This method should be re-implemented and is supposed to heapallocate
+  // This method should be re-implemented and is supposed to heap-allocate
   // a FFuaUICommands object. Remember to delete it.
-  virtual FFuaUICommands* createCommandsObject() { return NULL; }
+  virtual FFuaUICommands* getCommands() { return NULL; }
   // shouldn't be necessary for ordinary appl commands
   virtual void executeCommand(FFuaCmdItem*) {}
-  virtual void getCommands(FFuaUICommands*) {}
 
 protected:
   FFuaCmdSeparatorItem separator;

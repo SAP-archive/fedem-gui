@@ -27,8 +27,8 @@ public:
   FapUAExistenceHandler(FFuUAExistenceHandler* ui = NULL);
   virtual ~FapUAExistenceHandler();
 
-  // This initiation must be done before the creation of ui's. It sets up the
-  // creation process between ui and UA.
+  // This initialization must be done before the creation of UI's.
+  // It sets up the creation process between UI and UA.
 
   static void init();
 
@@ -46,8 +46,7 @@ public:
   // Sending application events :
 
   static void doUpdateState(int oldState, int newState, int mode);
-  static void doUpdateUI(const std::set<int>& uiTypesToUpdate);
-  static void doUpdateUI();
+  static void doUpdateUI(int typeUpdate = -1);
   static void doUpdateSession();
 
 protected:

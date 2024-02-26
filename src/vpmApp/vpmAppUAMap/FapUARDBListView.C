@@ -137,8 +137,9 @@ const char** FapUARDBListView::getItemPixmap(FFaListViewItem* item)
 }
 //----------------------------------------------------------------------------
 
-void FapUARDBListView::getCommands(FFuaUICommands* commands)
+FFuaUICommands* FapUARDBListView::getCommands()
 {
-  ((FuaItemsLVCommands*)commands)->popUpMenu.clear();
+  // No commands in this list view yet
+  return new FuaItemsLVCommands();
 }
 //----------------------------------------------------------------------------
