@@ -88,11 +88,6 @@ set ( SOURCE_FILES ${CPP_SOURCE_FILES} ${QT_MOC_SOURCE_FILES} )
 find_package ( Qt4 REQUIRED )
 include ( ${QT_USE_FILE} )
 
-if ( WIN AND Coin_library )
-  string ( APPEND CMAKE_CXX_FLAGS " -DCOIN_DLL -DSOQT_DLL" )
-  include_directories ( "$ENV{COIN_ROOT}/include" )
-endif ( WIN AND Coin_library )
-
 set ( DEPENDENCY_LIST vpmUITopLevels vpmUIQtComponents FFuQtComponents FFuQtBaseClasses FFuComponents )
 if ( USE_WINDPOW )
   list ( APPEND DEPENDENCY_LIST FFuInputTables )

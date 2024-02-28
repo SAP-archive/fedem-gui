@@ -12,7 +12,7 @@
 #include "vpmUI/vpmUITopLevels/vpmUIQtTopLevels/FuiQtCtrlModeller.H"
 #include "vpmUI/vpmUITopLevels/vpmUIQtTopLevels/FuiQtCtrlGridAttributes.H"
 #ifdef USE_INVENTOR
-#include "vpmDisplay/qtViewers/FdQtViewer.H"
+#include "vpmDisplay/FdViewer.H"
 #else
 #include <iostream>
 #endif
@@ -39,11 +39,7 @@ FuiQtCtrlModeller::FuiQtCtrlModeller(QWidget* parent,
   : FFuQtMDIWindow(parent,xpos,ypos,width,height,title,name)
 {
 #ifdef USE_INVENTOR
-  FdQtViewer* qtViewer;
-  myQtViewer = qtViewer = new FdQtViewer(this);
-  qtViewer->parallellView();
-  qtViewer->disableRotation(true);
-  this->setFocusProxy(qtViewer->getGLWidget());
+  myViewer = FdViewer::create(this,true);
 #else
   std::cerr <<" *** FuiQtCtrlModeller: No viewer in this build."<< std::endl;
 #endif
