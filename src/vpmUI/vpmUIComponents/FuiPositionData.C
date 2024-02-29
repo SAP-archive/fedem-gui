@@ -553,11 +553,8 @@ void FuiPositionData::onTriadsFollowToggled(bool)
 
 void FuiPositionData::prepareRefCSSelection()
 {
-  std::vector<FapUAExistenceHandler*> uas;
-  FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),uas);
-
-  if (!uas.empty())
-    ((FapUAProperties*)uas.front())->setIgnorePickNotify(true);
+  FapUAProperties* uap = FapUAProperties::getPropertiesHandler();
+  if (uap) uap->setIgnorePickNotify(true);
 
   FapEventManager::pushPermSelection();
   FapSelectRefCSCmds::selectRefCS(this);
@@ -590,13 +587,10 @@ void FuiPositionData::finishRefCSSelection()
   ImAwareOfPosRefSelections = false;
   ImAwareOfRotRefSelections = false;
 
-  std::vector<FapUAExistenceHandler*> uas;
-  FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),uas);
-
   FapEventManager::popPermSelection();
 
-  if (!uas.empty())
-    ((FapUAProperties*)uas.front())->setIgnorePickNotify(false);
+  FapUAProperties* uap = FapUAProperties::getPropertiesHandler();
+  if (uap) uap->setIgnorePickNotify(false);
 }
 
 

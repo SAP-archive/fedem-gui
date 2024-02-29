@@ -38,6 +38,8 @@ public:
   void setIgnorePickNotifyNotCurves(bool ignore = true)
   { IAmIgnoringPickNotifyNotCurves = ignore; }
 
+  static FapUAProperties* getPropertiesHandler();
+
   // Mode and state handling
 
 private:

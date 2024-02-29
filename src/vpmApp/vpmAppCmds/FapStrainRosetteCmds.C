@@ -425,8 +425,6 @@ void FapStrainRosetteCmds::flipStrainRosetteZDirection()
   ros->flipFaceNormal();
   ros->draw();
 
-  std::vector<FapUAExistenceHandler*> propUAs;
-  FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),propUAs);
-  for (FapUAExistenceHandler* uaexh : propUAs)
-    static_cast<FapUAProperties*>(uaexh)->updateUIValues();
+  FapUAProperties* uap = FapUAProperties::getPropertiesHandler();
+  if (uap) uap->updateUIValues();
 }

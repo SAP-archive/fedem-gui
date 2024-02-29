@@ -188,6 +188,12 @@ FapUAProperties::FapUAProperties(FuiProperties* uic)
 }
 
 
+FapUAProperties* FapUAProperties::getPropertiesHandler()
+{
+  return dynamic_cast<FapUAProperties*>(FapUAExistenceHandler::getFirstOfType(FapUAProperties::getClassTypeID()));
+}
+
+
 FFuaUIValues* FapUAProperties::createValuesObject()
 {
   FuaPropertiesValues* vals = new FuaPropertiesValues();

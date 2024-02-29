@@ -58,7 +58,6 @@
 #ifdef FT_HAS_GRAPHVIEW
 #include "vpmUI/vpmUITopLevels/FuiGraphView.H"
 #endif
-#include "vpmApp/vpmAppUAMap/vpmAppUAMapHandlers/FapUAExistenceHandler.H"
 #include "vpmApp/vpmAppUAMap/FapUAMainWindow.H"
 #include "vpmApp/vpmAppUAMap/FapUAModeller.H"
 #include "vpmApp/vpmAppUAMap/FapUAProperties.H"
@@ -353,6 +352,7 @@ void Fui::updateState(int newState)
 
 void Fui::cancel()
 {
+  FapUAProperties* uap = NULL;
   switch (FuiModes::getMode())
     {
     case FuiModes::APPEARANCE_MODE:
@@ -362,13 +362,10 @@ void Fui::cancel()
     case FuiModes::PICKLOADATTACKPOINT_MODE:
     case FuiModes::PICKLOADFROMPOINT_MODE:
     case FuiModes::PICKLOADTOPOINT_MODE:
+      if ((uap = FapUAProperties::getPropertiesHandler()))
       {
-	std::vector<FapUAExistenceHandler*> uas;
-	FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),uas);
-	if (!uas.empty()) {
-	  ((FapUAProperties*)uas.front())->setIgnorePickNotify(false);
-	  ((FapUAProperties*)uas.front())->updateUIValues();
-	}
+        uap->setIgnorePickNotify(false);
+        uap->updateUIValues();
       }
     default:
       break;

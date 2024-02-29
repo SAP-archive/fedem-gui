@@ -143,11 +143,9 @@ void FapUACurveDefine::onPermSelectionStackChanged(bool pushed)
 {
   if (!IAmEditingCurveAxis) return;
 
-  std::vector<FapUAExistenceHandler*> uas;
-  FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),uas);
-
   this->ignoreEverythingButCurves = pushed;
-  ((FapUAProperties*)uas.front())->setIgnorePickNotifyNotCurves(pushed);
+  FapUAProperties* uap = FapUAProperties::getPropertiesHandler();
+  if (uap) uap->setIgnorePickNotifyNotCurves(pushed);
   if (!pushed) IAmEditingCurveAxis = false;
 }
 

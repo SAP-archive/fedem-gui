@@ -485,6 +485,7 @@ void FapUAResultListView::dropItems(int droppedOnItemIdx, bool isCopy, void*)
   if (!rdbSel || !rdbSel->isUIPoppedUp()) return;
 
   FFaResultDescription result = static_cast<FapUARDBSelector*>(rdbSel)->getSelectedResultDescr();
+  int axis = static_cast<FapUARDBSelector*>(rdbSel)->getCurrentAxis();
 
   curve = new FmCurveSet();
   if (!graph) {
@@ -495,8 +496,8 @@ void FapUAResultListView::dropItems(int droppedOnItemIdx, bool isCopy, void*)
   }
   graph->addCurveSet(curve);
   curve->setColor(graph->getCurveDefaultColor());
-  curve->setResult(rdbSel->getCurrentAxis(),result);
-  curve->setResultOper(rdbSel->getCurrentAxis(),FFaOpUtils::getDefaultOper(result.varRefType));
+  curve->setResult(axis,result);
+  curve->setResultOper(axis,FFaOpUtils::getDefaultOper(result.varRefType));
   curve->onDataChanged();
 
   this->ensureItemVisible(curve);
