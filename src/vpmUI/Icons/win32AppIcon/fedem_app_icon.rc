@@ -35,8 +35,8 @@ IDI_ICON1    ICON    DISCARDABLE    "fedem_app_icon_ng.ico"
 //
 
 1 VERSIONINFO
-FILEVERSION    8,0,1,5
-PRODUCTVERSION 8,0,1,5
+FILEVERSION    8,0,2,0
+PRODUCTVERSION 8,0,2,0
 FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 FILEFLAGS 0x1L
@@ -53,12 +53,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName",     "SAP SE"
             VALUE "FileDescription", "FEDEM"
-            VALUE "FileVersion",     "8.0.1.5"
+            VALUE "FileVersion",     "8.0.2.0"
             VALUE "InternalName",    "Fedem.exe"
             VALUE "LegalCopyright",  "Copyright (C) 2024 SAP SE"
             VALUE "OriginalFilename","Fedem.exe"
             VALUE "ProductName",     "FEDEM"
-            VALUE "ProductVersion",  "8.0.1.5"
+            VALUE "ProductVersion",  "8.0.2.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -73,6 +73,6 @@ END
 // Type Library
 //
 
-#ifdef FT_HAS_COMAPI
+#ifdef FT_HAS_COM
 1 TYPELIB "CaMain.tlb"
 #endif

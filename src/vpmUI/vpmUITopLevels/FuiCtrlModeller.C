@@ -18,6 +18,9 @@ Fmd_SOURCE_INIT(FUI_CTRLMODELLER, FuiCtrlModeller, FFuMDIWindow);
 FuiCtrlModeller::FuiCtrlModeller()
 {
   Fmd_CONSTRUCTOR_INIT(FuiCtrlModeller);
+
+  myViewer = NULL;
+  myCtrlGridAttributes = NULL;
 }
 
 
@@ -41,7 +44,7 @@ void FuiCtrlModeller::onPoppedUp()
 
 void FuiCtrlModeller::placeWidgets(int width, int height)
 {
-  myQtViewer->setEdgeGeometry(0,width,0,height);
+  if (myViewer) myViewer->setEdgeGeometry(0,width,0,height);
 }
 
 

@@ -85,7 +85,7 @@ set ( COMPONENT_FILE_LIST  FaDOF Fd2dPictureNode Fd2DPoints
                            FdUserDefinedElement qtViewers/FdQtViewer
 )
 ## Pure header files, i.e., header files without a corresponding source file
-set ( HEADER_FILE_LIST FdLogoPicture FdMarkerPicture FdAnimatedBase FdConverter )
+set ( HEADER_FILE_LIST FdLogoPicture FdMarkerPicture FdAnimatedBase FdConverter FdViewer )
 ## Pure implementation files, i.e., source files without corresponding header
 set ( SOURCE_FILE_LIST )
 

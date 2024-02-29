@@ -33,11 +33,25 @@
 #include "Cursors/rotateZ.xpm"
 
 #include "vpmDisplay/FdMultiplyTransforms.H"
+#include "vpmDisplay/FdViewer.H"
 #include "vpmDisplay/qtViewers/FdQtViewer.H"
 
 SoSFTime* FdQtViewer::viewerRealTime = NULL;
 
 SOQT_OBJECT_SOURCE(FdQtViewer);
+
+
+FFuComponentBase* FdViewer::create(QWidget* parent, bool noRotation)
+{
+  FdQtViewer* viewer = new FdQtViewer(parent);
+  if (noRotation)
+  {
+    viewer->parallellView();
+    viewer->disableRotation(true);
+  }
+  parent->setFocusProxy(viewer->getGLWidget());
+  return viewer;
+}
 
 
 // Constructor for the viewer

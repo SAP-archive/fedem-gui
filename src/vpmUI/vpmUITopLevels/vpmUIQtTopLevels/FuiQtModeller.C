@@ -13,7 +13,7 @@
 #include "vpmUI/vpmUIComponents/vpmUIQtComponents/FuiQtPlayPanel.H"
 #include "vpmUI/vpmUIComponents/vpmUIQtComponents/FuiQt3DPoint.H"
 #ifdef USE_INVENTOR
-#include "vpmDisplay/qtViewers/FdQtViewer.H"
+#include "vpmDisplay/FdViewer.H"
 #else
 #include <iostream>
 #endif
@@ -42,11 +42,9 @@ FuiQtModeller::FuiQtModeller(QWidget* parent,
   this->myPlayPanel = new FuiQtPlayPanel(this);
   this->my3Dpoint = new FuiQt3DPoint(this);
 #ifdef USE_INVENTOR
-  FdQtViewer* qtViewer;
-  this->myViewer = qtViewer = new FdQtViewer(this);
-  this->setFocusProxy(qtViewer->getGLWidget());
+  this->myViewer = FdViewer::create(this);
 #else
-  std::cerr <<" *** FuiQtMOdeller: No viewer in this build."<< std::endl;
+  std::cerr <<" *** FuiQtModeller: No viewer in this build."<< std::endl;
 #endif
   myQtSubWindow->setWindowIcon(QIcon(QPixmap(openMechModeller_xpm)));
 

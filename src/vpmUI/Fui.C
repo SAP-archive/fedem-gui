@@ -80,7 +80,7 @@ int   Fui::titleBarHeight = 0;
 FuiMainWindow* Fui::mainWindow = NULL;
 
 
-void Fui::init(int argc, char** argv)
+void Fui::init(int& argc, char** argv)
 {
   bool consoleOnly = FFaAppInfo::isConsole();
 
