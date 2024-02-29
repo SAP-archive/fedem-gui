@@ -480,15 +480,11 @@ void FapUAResultListView::dropItems(int droppedOnItemIdx, bool isCopy, void*)
 
   if (graph && graph->isBeamDiagram()) return;
 
-  std::vector<FapUAExistenceHandler*> RDBSelectors;
-  FapUAExistenceHandler::getAllOfType(FapUARDBSelector::getClassTypeID(),RDBSelectors);
-  if (RDBSelectors.empty()) return;
+  // There should only be one
+  FapUAExistenceHandler* rdbSel = FapUAExistenceHandler::getFirstOfType(FapUARDBSelector::getClassTypeID());
+  if (!rdbSel || !rdbSel->isUIPoppedUp()) return;
 
-  // Assuming only one
-  if (!RDBSelectors.front()->isUIPoppedUp()) return;
-
-  FapUARDBSelector* rdbSel = dynamic_cast<FapUARDBSelector*>(RDBSelectors.front());
-  FFaResultDescription result = rdbSel->getSelectedResultDescr();
+  FFaResultDescription result = static_cast<FapUARDBSelector*>(rdbSel)->getSelectedResultDescr();
 
   curve = new FmCurveSet();
   if (!graph) {

@@ -35,8 +35,9 @@ public:
   // Bookkeeping interface
 
   static void getAllOfType(int typeId, std::vector<FapUAExistenceHandler*>& toFillUp);
+  static FapUAExistenceHandler* getFirstOfType(int typeId);
 
-  static FapUAExistenceHandler* getUA(FFuUAExistenceHandler* ui);
+  // Used as call-back for associated UI object
   void getUA(FapUAExistenceHandler*& ua) { ua = this; }
 
   FFuUAExistenceHandler* getUI() { return this->ui; }
