@@ -73,6 +73,6 @@ END
 // Type Library
 //
 
-#ifdef FT_HAS_COMAPI
+#ifdef FT_HAS_COM
 1 TYPELIB "CaMain.tlb"
 #endif
