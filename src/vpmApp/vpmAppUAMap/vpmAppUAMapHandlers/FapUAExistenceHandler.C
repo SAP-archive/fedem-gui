@@ -198,10 +198,12 @@ void FapUAExistenceHandler::getAllOfType(int typeId, std::vector<FapUAExistenceH
 }
 //----------------------------------------------------------------------------
 
-FapUAExistenceHandler* FapUAExistenceHandler::getUA(FFuUAExistenceHandler* ui)
+FapUAExistenceHandler* FapUAExistenceHandler::getFirstOfType(int typeId)
 {
-  std::map<FFuUAExistenceHandler*,FapUAExistenceHandler*>::iterator it = ourUIToUAMap.find(ui);
-  return it == ourUIToUAMap.end() ? NULL : it->second;
+  for (FapUAExistenceHandler* self : ourSelfSet)
+    if (self->isOfType(typeId))
+      return self;
+  return NULL;
 }
 //----------------------------------------------------------------------------
 

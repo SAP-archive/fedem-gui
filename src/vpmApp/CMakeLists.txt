@@ -9,6 +9,8 @@
 set ( LIB_ID vpmApp )
 set ( LIB_ID_LIST vpmAppCmds vpmAppDisplay vpmAppProcess vpmAppUAMap )
 
+string ( APPEND CMAKE_CXX_FLAGS " -DFT_USE_CONNECTORS" )
+
 foreach ( FOLDER ${LIB_ID_LIST} )
   add_subdirectory ( ${FOLDER} )
 endforeach ( FOLDER ${LIB_ID_LIST} )

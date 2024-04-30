@@ -240,10 +240,6 @@ void FapEditStrainRosetteNodesCmd::setStrainRosetteNodes()
   ourStrainRosette->syncWithFEModel();
   ourStrainRosette->draw();
 
-  std::vector<FapUAExistenceHandler*> propUAs;
-  FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),propUAs);
-  FapUAProperties* uaprop;
-  for (size_t i = 0; i < propUAs.size(); i++)
-    if ((uaprop = dynamic_cast<FapUAProperties*>(propUAs[i])))
-      uaprop->updateUIValues();
+  FapUAProperties* uap = FapUAProperties::getPropertiesHandler();
+  if (uap) uap->updateUIValues();
 }

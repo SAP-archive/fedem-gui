@@ -480,15 +480,12 @@ void FapUAResultListView::dropItems(int droppedOnItemIdx, bool isCopy, void*)
 
   if (graph && graph->isBeamDiagram()) return;
 
-  std::vector<FapUAExistenceHandler*> RDBSelectors;
-  FapUAExistenceHandler::getAllOfType(FapUARDBSelector::getClassTypeID(),RDBSelectors);
-  if (RDBSelectors.empty()) return;
+  // There should only be one
+  FapUAExistenceHandler* rdbSel = FapUAExistenceHandler::getFirstOfType(FapUARDBSelector::getClassTypeID());
+  if (!rdbSel || !rdbSel->isUIPoppedUp()) return;
 
-  // Assuming only one
-  if (!RDBSelectors.front()->isUIPoppedUp()) return;
-
-  FapUARDBSelector* rdbSel = dynamic_cast<FapUARDBSelector*>(RDBSelectors.front());
-  FFaResultDescription result = rdbSel->getSelectedResultDescr();
+  FFaResultDescription result = static_cast<FapUARDBSelector*>(rdbSel)->getSelectedResultDescr();
+  int axis = static_cast<FapUARDBSelector*>(rdbSel)->getCurrentAxis();
 
   curve = new FmCurveSet();
   if (!graph) {
@@ -499,8 +496,8 @@ void FapUAResultListView::dropItems(int droppedOnItemIdx, bool isCopy, void*)
   }
   graph->addCurveSet(curve);
   curve->setColor(graph->getCurveDefaultColor());
-  curve->setResult(rdbSel->getCurrentAxis(),result);
-  curve->setResultOper(rdbSel->getCurrentAxis(),FFaOpUtils::getDefaultOper(result.varRefType));
+  curve->setResult(axis,result);
+  curve->setResultOper(axis,FFaOpUtils::getDefaultOper(result.varRefType));
   curve->onDataChanged();
 
   this->ensureItemVisible(curve);

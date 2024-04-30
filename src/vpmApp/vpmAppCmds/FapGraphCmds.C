@@ -204,10 +204,8 @@ void FapGraphCmds::editAxis(int axis, FmCurveSet* curve)
 {
   Fui::rdbSelectorUI(true);
 
-  std::vector<FapUAExistenceHandler*> v;
-  FapUAExistenceHandler::getAllOfType(FapUARDBSelector::getClassTypeID(), v);
-  if (!v.empty())
-    ((FapUARDBSelector*)v.front())->edit(curve,axis);
+  FapUAExistenceHandler* uas = FapUAExistenceHandler::getFirstOfType(FapUARDBSelector::getClassTypeID());
+  if (uas) static_cast<FapUARDBSelector*>(uas)->edit(curve,axis);
 }
 
 //----------------------------------------------------------------------------

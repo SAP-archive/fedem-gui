@@ -58,7 +58,6 @@
 #ifdef FT_HAS_GRAPHVIEW
 #include "vpmUI/vpmUITopLevels/FuiGraphView.H"
 #endif
-#include "vpmApp/vpmAppUAMap/vpmAppUAMapHandlers/FapUAExistenceHandler.H"
 #include "vpmApp/vpmAppUAMap/FapUAMainWindow.H"
 #include "vpmApp/vpmAppUAMap/FapUAModeller.H"
 #include "vpmApp/vpmAppUAMap/FapUAProperties.H"
@@ -353,6 +352,7 @@ void Fui::updateState(int newState)
 
 void Fui::cancel()
 {
+  FapUAProperties* uap = NULL;
   switch (FuiModes::getMode())
     {
     case FuiModes::APPEARANCE_MODE:
@@ -362,13 +362,10 @@ void Fui::cancel()
     case FuiModes::PICKLOADATTACKPOINT_MODE:
     case FuiModes::PICKLOADFROMPOINT_MODE:
     case FuiModes::PICKLOADTOPOINT_MODE:
+      if ((uap = FapUAProperties::getPropertiesHandler()))
       {
-	std::vector<FapUAExistenceHandler*> uas;
-	FapUAExistenceHandler::getAllOfType(FapUAProperties::getClassTypeID(),uas);
-	if (!uas.empty()) {
-	  ((FapUAProperties*)uas.front())->setIgnorePickNotify(false);
-	  ((FapUAProperties*)uas.front())->updateUIValues();
-	}
+        uap->setIgnorePickNotify(false);
+        uap->updateUIValues();
       }
     default:
       break;
@@ -853,6 +850,30 @@ void Fui::modellerUI(bool onScreen, bool inMem)
     }
 
   if (uic) uic->manage(onScreen,inMem);
+
+  // Show 3D views toolbar
+  mainWindow->showToolBar(FuiMainWindow::THREEDVIEWS, onScreen);
+  // Show view control toolbar including zoom-to
+  if (mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL))
+  {
+    if (!onScreen)
+    {
+      // Hide the zoom-to button
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL, false);
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL2, true);
+    }
+  }
+  else if (mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL2))
+  {
+    if (onScreen)
+    {
+      // Show the zoom-to button
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL2, false);
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL, true);
+    }
+  }
+  else
+    mainWindow->showToolBar(FuiMainWindow::VIEWCTRL1, onScreen);
 }
 
 
@@ -872,10 +893,8 @@ void Fui::ctrlModellerUI(bool onScreen, bool inMem)
   if (uic) uic->manage(onScreen,inMem);
 
   // Show toolbars (control design and creation)
-  if (onScreen) {
-    mainWindow->showToolBar(/*CTRLCREATE*/ 8, true);
-    mainWindow->showToolBar(/*CTRLMODELLINGTOOLS*/ 9, true);
-  }
+  mainWindow->showToolBar(FuiMainWindow::CTRLCREATE, onScreen);
+  mainWindow->showToolBar(FuiMainWindow::CTRLMODELLINGTOOLS, onScreen);
 }
 
 
